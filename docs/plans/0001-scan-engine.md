@@ -175,6 +175,11 @@ npm run dev           # wrangler dev, for GET /.well-known/agent-card.json + POS
   explicitly (`env: GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}`, or `github.token`) and grant
   `permissions: issues: write` before `src/remediation/github.ts` can create/update issues.
   This is row 11's job (`.github/workflows/scan.yml`), not yet done.
+- **`worker/` is deliberately not deployed to a live Cloudflare URL** — owner decision
+  (2026-09-16): no `wrangler deploy`, no Cloudflare account/token provisioned for this. It's
+  built, unit-tested, and verified locally via `wrangler dev` only. This is not a row 11 gap —
+  row 11's owner-gated secrets are for the scan engine's own ora.ai/Cloudflare API calls, a
+  separate concern from hosting the Worker. Don't add a deploy row unless this decision changes.
 
 **Also see (standalone issues, intentionally not rows in the table below — they're proposals or
 support material, not committed arc scope):**

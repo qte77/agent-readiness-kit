@@ -87,6 +87,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- `docs/plans/0001-scan-engine.md`: added a Watch-out recording the owner decision that
+  `worker/` is not deployed to a live Cloudflare URL (no `wrangler deploy`) — built and
+  verified locally only
 - `docs/plans/0001-scan-engine.md`: restructured with a `## Status` opening section (what
   shipped, what's next, the loop, owner-gates, commands, watch-outs) and a `Depends on` column
   on the remaining-work table identifying which rows are parallel-worktree-safe

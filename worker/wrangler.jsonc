@@ -1,0 +1,16 @@
+{
+  // Thin, stateless, read-only MCP projection of agent-readiness-kit scan results.
+  // No bindings, no Durable Object, no secrets — every route reads public data
+  // (raw.githubusercontent.com) or serves a static document. See docs/architecture.md's
+  // "Read-only MCP worker" section for the full spec this mirrors.
+  "name": "agent-readiness-kit-worker",
+  "main": "src/index.ts",
+  // Pinned to a date the locally installed wrangler's workerd runtime supports — bump
+  // alongside wrangler upgrades (a "today" date can exceed the installed binary's support).
+  "compatibility_date": "2026-09-01",
+  // @modelcontextprotocol/server pulls in Node built-ins.
+  "compatibility_flags": ["nodejs_compat"],
+  "observability": {
+    "enabled": true
+  }
+}

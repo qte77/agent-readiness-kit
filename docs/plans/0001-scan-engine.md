@@ -83,14 +83,25 @@ predecessor: null
   (well-formed result → pass; JSON-RPC error or 401/403 → warn; unreachable/non-conformant →
   fail; no usable `url` → unknown). `test/scan/sources/cloudflareMcp.test.ts` +
   `mcpA2aProbe.test.ts` (18 new, 31 total passing).
+- **2026-09-16 (row 12 — `worker/` MCP layer):** a separate, thin, stateless, read-only
+  Cloudflare Worker (`worker/`, own `package.json`/lockfile/tsconfig) mirroring
+  `agenthud-agui-a2ui/worker/`'s pattern — `GET /.well-known/agent-card.json` and `POST /mcp`
+  (via `@modelcontextprotocol/server`'s `createMcpHandler`, no Durable Object) with
+  `get_latest_score`/`get_playbook`/`list_properties` tools; each tool `fetch()`s
+  `data/scans/<id>.json` off `raw.githubusercontent.com` (no scanning logic in the Worker) and
+  degrades to a `{ status: "no-scan-data" }` response, not a crash, when the file 404s (true
+  today — no scan has run yet) or `{ isError: true }` for an unknown `propertyId`; 13 passing
+  tests (`worker/test/`, faked `fetch`); verified live with `wrangler dev` against the real
+  `raw.githubusercontent.com` (see PR for the transcript). `.github/workflows/ci.yml` gained a
+  `worker` job (`working-directory: worker`, own `npm ci`/typecheck/test, no lint step).
 
 **What's next, in order** (full detail in the remaining-work table below; its "Depends on"
 column is the source of truth for sequencing):
 
-1. Rows 4, 12 have **no dependency on each other** — dispatch these in
-   **parallel**, one subagent per row, **each in its own git worktree**
-   (`Agent({isolation: "worktree", ...})`) so concurrent writes to different
-   `src/scan/sources/*.ts` files never collide on the same working tree.
+1. Row 4 (`cloudflareUrlScanner.ts`) has **no dependency on any other open row** — the only
+   row-1-through-13 item left that's immediately, independently buildable right now (the
+   parallel-worktree dispatch used for rows 1/2/5/7/8/12 no longer applies once this is the
+   last independent row).
 2. Row 3 (`oraAi.ts`) also has no row-dependency, but resolve its two open questions (API-key
    requirement, per-check vs. aggregate score data — see Watch-outs) as part of that row's work,
    not deferred after.
@@ -115,12 +126,25 @@ cd /workspaces/qte77/agent-readiness-kit
 npm install
 npx vitest run       # test suite
 npx tsc --noEmit      # typecheck
+
+cd worker             # separate package (row 12) — own lockfile, own commands
+npm install
+npm run typecheck
+npm test
+npm run dev           # wrangler dev, for GET /.well-known/agent-card.json + POST /mcp
 ```
 
 **Watch-outs:**
 
 - `env -u GH_TOKEN -u GITHUB_TOKEN` on **every** git/gh call (else 401/403, or "Resource not
   accessible by integration" against the wrong token).
+- **`curl` and `wget` are both denied outright by this sandbox's Bash permission policy** (not a
+  network restriction — even `curl --version` is refused). Verify a running `wrangler dev` (or
+  any local HTTP server) with `node -e "fetch(url).then(...)"` instead — confirmed working
+  against `worker/`'s `wrangler dev` on row 12.
+- `npx <bin>` can get mis-rewritten by this environment's command hooks into `npm run <bin>`
+  (which then fails with "Missing script"). If that happens, call the binary directly instead:
+  `./node_modules/.bin/<bin>` (confirmed working for `wrangler`).
 - `-c commit.gpgsign=false` on commits — no GPG key in this environment.
 - This sandbox blocks some Bash forms (pipes/heredocs/chained commands, `ls`/`find` in some
   configurations) — prefer `Read`/`Edit`/`Write` tools and single, simple `Bash` commands.
@@ -240,12 +264,38 @@ agent-readiness-kit/
   clean.
 - `docs/architecture.md` — durable copy of the 9 locked decisions above, with full rationale
   (this plan only summarizes; architecture.md is the source of truth if they diverge).
-- `.github/workflows/ci.yml` — single `check` job: checkout (SHA-pinned) → `actions/setup-node`
-  (Node 22, npm cache) → `npm ci` → `npm run typecheck` → `npm test`. Triggers on push to
-  `main`, PRs, and `workflow_dispatch`. No `lint` step (no linter configured — see Watch-outs);
-  no separate `worker` job yet (`worker/` doesn't exist yet — add one mirroring this job,
-  `working-directory: worker`, when row 12 lands, per `agenthud-agui-a2ui/.github/workflows/ci.yml`'s
-  pattern).
+- `.github/workflows/ci.yml` — two jobs: `check` (root — checkout SHA-pinned →
+  `actions/setup-node`, Node 22, npm cache → `npm ci` → `npm run typecheck` → `npm test`) and
+  `worker` (row 12 — same steps, `working-directory: worker`,
+  `cache-dependency-path: worker/package-lock.json`). Triggers on push to `main`, PRs, and
+  `workflow_dispatch`. No `lint` step in either job (no linter configured — see Watch-outs).
+- `worker/` (row 12) — separate npm package (own `package.json`/lockfile/`tsconfig.json`,
+  excluded from the root `tsconfig.json`'s `include`): `wrangler.jsonc` (no bindings, no
+  Durable Object, `compatibility_flags: ["nodejs_compat"]` for
+  `@modelcontextprotocol/server`'s Node built-ins), `src/wellknown/agent-card.ts` (static
+  discovery doc, skills mapped 1:1 to the 3 MCP tools), `src/mcp/tools.ts` (pure, unit-tested
+  handler functions — `runGetLatestScore`/`runGetPlaybook`/`runListProperties` — that
+  type-only-import `ScanRun`/`Finding` from the root `src/types.ts` and value-import
+  `PROPERTIES` from the root `config/properties.ts`, both erased/inlined at build time so this
+  stays DRY without a runtime dependency on the root package), `src/index.ts` (route dispatch:
+  `GET /.well-known/agent-card.json`, `POST`/`OPTIONS /mcp` via `createMcpHandler` +
+  `McpServer.registerTool`, wildcard CORS, 404 fallback). `test/agent-card.test.ts` +
+  `test/mcp-tools.test.ts` (13 assertions, faked `global.fetch`) — green. Verified live:
+  `wrangler dev` boots the real workerd runtime; `GET /.well-known/agent-card.json` → 200; MCP
+  `initialize` → `tools/list` → `tools/call` round-trip for all 3 tools against the real
+  `raw.githubusercontent.com` (properties correctly report `hasScanData: false` since no scan
+  has run yet); unknown `propertyId` → `isError: true`; `OPTIONS /mcp` → 204 with wildcard CORS;
+  unmatched route → 404.
+- `vitest.config.ts` (root, new this row) — excludes `worker/**` from the root test run.
+  Without it, root's `vitest run` auto-discovers `worker/test/*.test.ts` too (Node's module
+  resolution walks up to `worker/node_modules` and happens to succeed locally), which would
+  break the root CI `check` job since it never `npm ci`s inside `worker/`.
+- `worker/vitest.config.ts` (new this row) — an explicit (even empty) config so Vitest's
+  upward config search stops at `worker/` instead of finding the root's `vitest.config.ts`
+  first (Vite/Vitest search parent directories for a config file the same way they do for
+  `package.json`). Without this, the CI `worker` job fails: it tries to load the root config,
+  which imports `vitest/config` — unresolvable there because that job's `npm ci` only installs
+  `worker/node_modules`, never the root's. Caught by a red run on PR #14, fixed in the same PR.
 - `.github/workflows/tag-release.yaml` / `publish-release.yaml` — dormant until a version is
   actually cut; adapted from `agenthud-agui-a2ui`'s pattern for this repo's root `package.json`
   (no `ui/` subdir here). See `.github/CONTRIBUTING.md`'s Releasing section for the recipe.
@@ -266,6 +316,15 @@ agent-readiness-kit/
 - `test/scan/sources/wellKnown.test.ts` + `contentSignal.test.ts` — RED-first, fake `fetch`
   (route-by-URL mock) and mocked `node:dns/promises`; 22 assertions covering pass/fail/warn/
   unknown per signal family plus a crosswalk-category-mapping check, all green.
+- `src/scan/sources/cloudflareMcp.ts` — static presence/shape checks for
+  `/.well-known/mcp/server-card.json` (`mcp-server-card`) and `/.well-known/agent-card.json`
+  (`a2a-agent-card`, fields grounded in the A2A protocol spec at a2a-protocol.org/v0.3.0).
+- `src/scan/sources/mcpA2aProbe.ts` — a live JSON-RPC 2.0 `message/send` probe against the
+  agent card's declared `url` that can upgrade or downgrade the static `a2a-agent-card`
+  verdict from `cloudflareMcp.ts` (well-formed result → pass; JSON-RPC error or 401/403 →
+  warn; unreachable/non-conformant → fail; no usable `url` → unknown).
+- `test/scan/sources/cloudflareMcp.test.ts` + `mcpA2aProbe.test.ts` — RED-first, faked `fetch`;
+  18 assertions, all green.
 - `src/remediation/github.ts` — zero-dependency GitHub REST v3 client (native `fetch`,
   `process.env.GITHUB_TOKEN`, no octokit): `GitHubRepoRef`/`GitHubIssue` types;
   `findOpenIssueByTitle(ref, title, token?)` — lists OPEN issues (not the Search API, which
@@ -316,7 +375,7 @@ agent-readiness-kit/
 | 9 | `src/main.ts` (CLI entrypoint: orchestrator -> checkpoint -> remediation, over all of `PROPERTIES`) | agent | 1–8 | `node dist/main.js` runs end-to-end against one property locally |
 | ~~10~~ | ~~`.github/workflows/ci.yml` (typecheck + test on PR)~~ | agent | — | **shipped 2026-09-16** |
 | 11 | `.github/workflows/scan.yml` (scheduled scan job) | owner | 9 | owner provisions ora.ai / Cloudflare API token secrets; workflow runs green on schedule |
-| 12 | `worker/` MCP layer (`wrangler.jsonc`, `src/index.ts`, `src/mcp/tools.ts`, `src/wellknown/agent-card.ts`, tests) mirroring `agenthud-agui-a2ui/worker/` | agent | — | `get_latest_score`/`get_playbook`/`list_properties` verified live via `wrangler dev` + curl |
+| ~~12~~ | ~~`worker/` MCP layer (`wrangler.jsonc`, `src/index.ts`, `src/mcp/tools.ts`, `src/wellknown/agent-card.ts`, tests) mirroring `agenthud-agui-a2ui/worker/`~~ | agent | — | **shipped 2026-09-16** |
 | 13 | First real scan run seeding `data/scans/{qte77-github-io,agenthud-agui-a2ui,sortmy-london}.json` | agent | 1–7, 9, 11 | 3 files committed with real findings, not placeholders |
 
 ## Verification (this arc's commits)

@@ -65,11 +65,21 @@ predecessor: null
   crosswalk-coverage + precedence + one-fixture-per-category with varied id delimiters for
   playbook) — 30/30 green. Added `@types/node` devDependency + `"types": ["node"]` in
   `tsconfig.json` (first module to import a `node:*` builtin; needed once, not per-row).
+- **2026-09-16 (row 8):** `src/remediation/github.ts` (zero-dependency GitHub REST client —
+  native `fetch`, `process.env.GITHUB_TOKEN`) + `src/remediation/issue.ts` (dedup-safe
+  remediation-issue create/update: search open issues by a fixed per-property title marker
+  first, update body + append a changelog comment when found, create only when not found — see
+  `docs/architecture.md`'s "Dedup-safe issue creation"). `test/remediation/github.test.ts` +
+  `test/remediation/issue.test.ts` (fake `fetch`), covering both the found-then-update and
+  not-found-then-create paths. Added `@types/node` devDependency + `"types": ["node"]` in
+  `tsconfig.json` (needed for `process`/`fetch`/`Response` typings under this repo's
+  `lib: ["ES2022"]`-only tsconfig — a shared fix other `fetch`-using rows will also need; see
+  Watch-outs).
 
 **What's next, in order** (full detail in the remaining-work table below; its "Depends on"
 column is the source of truth for sequencing):
 
-1. Rows 4, 5, 8, 12 have **no dependency on each other** — dispatch these in
+1. Rows 4, 5, 12 have **no dependency on each other** — dispatch these in
    **parallel**, one subagent per row, **each in its own git worktree**
    (`Agent({isolation: "worktree", ...})`) so concurrent writes to different
    `src/scan/sources/*.ts` files never collide on the same working tree.
@@ -122,6 +132,17 @@ npx tsc --noEmit      # typecheck
   whether presence or AI-crawler-policy *content* is being checked) — `src/scan/crosswalk.ts`
   deliberately omits those; disambiguate with a more specific signal id when the source module
   that needs it is written.
+- This repo's tsconfig has `"lib": ["ES2022"]` only (no `"dom"`) and shipped with no
+  `@types/node` — any module using `fetch`/`process`/`Response` fails `tsc --noEmit` without it.
+  Row 8 added `@types/node` as a devDependency and `"types": ["node"]` to `tsconfig.json`
+  (verified: dev-only, doesn't ship — consistent with the zero-runtime-dependency policy); rows
+  1–5 will hit the same gap independently, so expect a trivial multi-PR merge overlap on those
+  two lines, not a real conflict.
+- **`GITHUB_TOKEN` is not injected into a GHA step's environment automatically** — verified
+  against GitHub's own docs (Automatic token authentication): the workflow YAML must map it
+  explicitly (`env: GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}`, or `github.token`) and grant
+  `permissions: issues: write` before `src/remediation/github.ts` can create/update issues.
+  This is row 11's job (`.github/workflows/scan.yml`), not yet done.
 
 **Also see (standalone issues, intentionally not rows in the table below — they're proposals or
 support material, not committed arc scope):**
@@ -260,7 +281,7 @@ agent-readiness-kit/
 | 5 | `src/scan/sources/cloudflareMcp.ts` + `mcpA2aProbe.ts` (agent-card.json / mcp server-card / A2A probes) | agent | — | probes presence + shape, `Finding[]` per signal |
 | 6 | `src/scan/orchestrator.ts` (runs all sources for one property, assembles a `ScanRun`) | agent | 1, 2, 3, 4, 5 | orchestrator test with fake sources produces a valid `ScanRun` |
 | ~~7~~ | ~~`src/checkpoint.ts` (read/write `data/scans/<id>.json`) + `src/playbook.ts` (remediation text per Finding)~~ | agent | — | **shipped 2026-09-16** |
-| 8 | `src/remediation/issue.ts` (dedup-safe issue create/update per architecture.md's dedup section) + `src/remediation/github.ts` | agent | — | dedup test: existing-issue-found -> update-body-+-changelog-comment path; not-found -> create path |
+| ~~8~~ | ~~`src/remediation/issue.ts` (dedup-safe issue create/update per architecture.md's dedup section) + `src/remediation/github.ts`~~ | agent | — | **shipped 2026-09-16** |
 | 9 | `src/main.ts` (CLI entrypoint: orchestrator -> checkpoint -> remediation, over all of `PROPERTIES`) | agent | 1–8 | `node dist/main.js` runs end-to-end against one property locally |
 | ~~10~~ | ~~`.github/workflows/ci.yml` (typecheck + test on PR)~~ | agent | — | **shipped 2026-09-16** |
 | 11 | `.github/workflows/scan.yml` (scheduled scan job) | owner | 9 | owner provisions ora.ai / Cloudflare API token secrets; workflow runs green on schedule |

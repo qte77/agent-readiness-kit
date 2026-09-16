@@ -40,6 +40,20 @@ npm run build        # tsc
 Run `npm run typecheck && npm test` before opening a PR (CI enforces both; no linter is
 configured yet — see the plan's remaining-work table).
 
+`worker/` (the read-only MCP layer) is a separate package with its own lockfile — run its
+own gate too when you touch it (CI enforces both jobs):
+
+```bash
+cd worker
+npm install
+npm run typecheck
+npm test
+npm run dev          # wrangler dev — GET /.well-known/agent-card.json, POST /mcp
+```
+
+`src/scan/sources/discoverSnapshot.ts` needs a polyfetch-scrape checkout to run for real
+(unit tests fake the subprocess): pass `polyfetchScrapeDir`, or set `POLYFETCH_SCRAPE_DIR`.
+
 ## Pull requests
 
 - One concern per PR, one topic per branch; reference issues (`Closes #123`).

@@ -29,3 +29,7 @@ npm install
 npx vitest run    # tests
 npx tsc --noEmit  # typecheck
 ```
+
+The read-only MCP worker in [`worker/`](worker/) is a separate package (own lockfile,
+own commands — `cd worker && npm install && npm test`); see
+[`.github/CONTRIBUTING.md`](.github/CONTRIBUTING.md) for the full command set.

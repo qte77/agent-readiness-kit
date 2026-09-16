@@ -32,6 +32,9 @@ Git history *is* the trend record — no KV store, no database, no separate hist
 - **Never** `uv add git+...` polyfetch-scrape — this poisons the lockfile with heavy deps per
   its own `USING.md`. Only the CLI env-borrow pattern (`uv run --directory polyfetch-scrape
   polyfetch discover <url> --json`) is used, invoked as a subprocess from the GHA job.
+- The polyfetch-scrape checkout's directory is never hardcoded: `src/scan/sources/discoverSnapshot.ts`
+  takes it as a `polyfetchScrapeDir` option, falling back to the `POLYFETCH_SCRAPE_DIR` env var.
+  Whichever job invokes it (a GHA workflow, a local run) must set one of the two.
 
 ## Category crosswalk
 
@@ -79,5 +82,9 @@ pattern:
 - `POST /mcp` with tools `get_latest_score`, `get_playbook`, `list_properties`
 
 Each tool just `fetch()`s the committed `data/scans/<id>.json` off
-`raw.githubusercontent.com` — there is no scanning logic inside this Worker at all. This
-Worker is not built yet; see the plan's remaining-work table.
+`raw.githubusercontent.com` — there is no scanning logic inside this Worker at all. Built,
+unit-tested, and verified live via `wrangler dev` (2026-09-16). It has its own
+`package.json`/lockfile/`tsconfig.json`, exempt from this repo's zero-runtime-dependency
+policy (that policy governs the scan engine, not this subproject). **Deliberately not
+deployed to a live Cloudflare URL** — owner decision; no `wrangler deploy`, no Cloudflare
+account/token provisioned. Don't assume it's reachable at a real URL.

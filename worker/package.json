@@ -1,0 +1,23 @@
+{
+  "name": "agent-readiness-kit-worker",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Read-only MCP projection of agent-readiness-kit scan results (GET /.well-known/agent-card.json, POST /mcp). No scanning logic lives here — every tool reads the already-committed data/scans/<id>.json off raw.githubusercontent.com. See docs/architecture.md's \"Read-only MCP worker\" section.",
+  "scripts": {
+    "dev": "wrangler dev",
+    "deploy": "wrangler deploy",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/server": "^2.0.0",
+    "zod": "^4.4.0"
+  },
+  "devDependencies": {
+    "@cloudflare/workers-types": "^5",
+    "typescript": "^7.0.2",
+    "vitest": "^4.1.11",
+    "wrangler": "^4"
+  }
+}

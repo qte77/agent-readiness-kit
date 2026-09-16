@@ -67,6 +67,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   `/.well-known/agent-card.json` (`a2a-agent-card` signal), plus a live JSON-RPC 2.0
   `message/send` protocol probe against the agent card's declared endpoint that can upgrade or
   downgrade the static verdict — RED-first tests with a faked `fetch`, zero runtime dependencies
+- `worker/` (row 12): a separate, thin, stateless, read-only Cloudflare Worker exposing scan
+  results over MCP — `GET /.well-known/agent-card.json` and `POST /mcp` (via
+  `@modelcontextprotocol/server`'s `createMcpHandler`, no Durable Object) with
+  `get_latest_score`/`get_playbook`/`list_properties` tools, each reading
+  `data/scans/<id>.json` off `raw.githubusercontent.com` and degrading gracefully to a
+  `no-scan-data` response when the file doesn't exist yet; mirrors
+  `agenthud-agui-a2ui/worker/`'s pattern; own `package.json`/lockfile/tsconfig (the "zero
+  runtime dependencies" rule applies to the scan engine, not this subproject); 13 passing
+  tests (`worker/test/`); verified live with `wrangler dev` against the real
+  `raw.githubusercontent.com`. Also extends `.github/workflows/ci.yml` with a `worker` job.
+- `vitest.config.ts` (root): excludes `worker/**` from the root test run — without it, `vitest
+  run` at the repo root auto-discovers `worker/test/*.test.ts` too (found while adding
+  `worker/`), which would break the root CI job since it never `npm ci`s inside `worker/`
 
 ### Changed
 

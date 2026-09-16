@@ -258,6 +258,29 @@ agent-readiness-kit/
 - `test/scan/sources/wellKnown.test.ts` + `contentSignal.test.ts` — RED-first, fake `fetch`
   (route-by-URL mock) and mocked `node:dns/promises`; 22 assertions covering pass/fail/warn/
   unknown per signal family plus a crosswalk-category-mapping check, all green.
+- `src/remediation/github.ts` — zero-dependency GitHub REST v3 client (native `fetch`,
+  `process.env.GITHUB_TOKEN`, no octokit): `GitHubRepoRef`/`GitHubIssue` types;
+  `findOpenIssueByTitle(ref, title, token?)` — lists OPEN issues (not the Search API, which
+  has indexing lag), paginates `per_page=100` until a short page, filters out pull requests,
+  matches by exact title equality only, and returns the **lowest issue number** when more
+  than one open issue matches (deterministic tiebreak for the exact duplicate-issue state
+  this exists to prevent); `createIssue`, `updateIssueBody` (body only, never touches title),
+  `addIssueComment`. Every exported function accepts an optional `token` param that always
+  wins over `process.env.GITHUB_TOKEN` — this is how tests inject a fake token without
+  touching `GITHUB_TOKEN`/`GH_TOKEN`.
+- `src/remediation/issue.ts` — `remediationIssueTitle(propertyId)` (the fixed, deterministic
+  per-property title marker — dynamic content like score/timestamp never goes in the title,
+  only the body/changelog); `buildIssueBody`/`buildChangelogComment` (render from a
+  `ScanRun`, filtering to `fail`/`warn` findings only); `upsertRemediationIssue(ref, scanRun,
+  propertyLabel, token?)` — the dedup gate itself: always searches
+  `findOpenIssueByTitle` first; found → `updateIssueBody` + `addIssueComment`; not found →
+  `createIssue`. See `docs/architecture.md`'s "Dedup-safe issue creation".
+- `test/remediation/github.test.ts` + `test/remediation/issue.test.ts` — RED-first, fake
+  `fetch` (`vi.stubGlobal`): 15 assertions covering the found→update+comment path, the
+  not-found→create path, exact-title/PR-filter/pagination/duplicate-tiebreak behavior in
+  `github.ts`, and body/changelog content. All green (`npx vitest run`, 28/28 total);
+  `npx tsc --noEmit` clean. Added `@types/node` devDependency + `"types": ["node"]` in
+  `tsconfig.json` to make `process`/`fetch`/`Response` typecheck (see Watch-outs).
 
 ## Tests (strict RED-first; modules only)
 

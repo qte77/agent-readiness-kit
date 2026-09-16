@@ -27,6 +27,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   automation, adapted from `agenthud-agui-a2ui`'s pattern for this repo's root `package.json`
 - `AGENTS.md`, `CLAUDE.md` (pointer to `AGENTS.md`), `.github/CONTRIBUTING.md`: behavioral
   rules, dev commands, and contributor workflow, modeled on `agenthud-agui-a2ui`'s conventions
+- `src/scan/sources/discoverSnapshot.ts`: row 2 of the plan — polyfetch-scrape CLI env-borrow
+  subprocess wrapper (`uv run --directory <dir> polyfetch discover <url> --json`, directory
+  configurable via `POLYFETCH_SCRAPE_DIR`/option, never hardcoded); owns the `schema-type-breadth`
+  Content signal scored from `json_ld_types` breadth, with `sitemaps`/`feeds`/`llms_txt` attached
+  as auxiliary evidence for a future orchestrator cross-check — RED-first test suite
+  (`test/scan/sources/discoverSnapshot.test.ts`)
 
 ### Changed
 

@@ -87,6 +87,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- `docs/architecture.md`: worker section updated to reflect it's built/verified (was "not
+  built yet"), plus the not-deployed decision and the `POLYFETCH_SCRAPE_DIR` env var
+- `README.md`, `.github/CONTRIBUTING.md`: document `worker/`'s separate dev commands and
+  `POLYFETCH_SCRAPE_DIR`, now that both exist
 - `docs/plans/0001-scan-engine.md`: added a Watch-out recording the owner decision that
   `worker/` is not deployed to a live Cloudflare URL (no `wrangler deploy`) — built and
   verified locally only

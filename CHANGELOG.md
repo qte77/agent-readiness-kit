@@ -9,6 +9,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- `src/checkpoint.ts`: read/write `data/scans/<propertyId>.json`, round-tripping a `ScanRun`
+  verbatim (`baseDir`-parameterized so tests never touch the real `data/scans/` directory)
+- `src/playbook.ts`: `remediationFor(finding)` maps any `Finding` to concrete remediation text
+  — source-supplied `remediation` wins, then a pass short-circuit, then a per-signal template
+  table covering all 18 `src/scan/crosswalk.ts` signal ids (grounded in
+  `agenthud-agui-a2ui/docs/agent-readiness.md` and verified specs: RFC 9727, RFC 9728, RFC
+  9421 + web-bot-auth, DNS-AID, Cloudflare Content Signals, OIDC Discovery), then an honest
+  generic fallback for unmatched ids
+- `test/checkpoint.test.ts`, `test/playbook.test.ts`: RED-first TDD, 17 new assertions
+  (30/30 total)
+- `@types/node` devDependency + `"types": ["node"]` in `tsconfig.json`, needed once any module
+  imports a `node:*` builtin
 - `src/types.ts`, `src/scan/crosswalk.ts`: core domain types (`Finding`/`ScanRun`/`Category`/
   `Status`/`SourceId`) and the six-category crosswalk seeded from
   `agenthud-agui-a2ui/docs/agent-readiness.md`, plus `config/properties.ts` for the 3 target

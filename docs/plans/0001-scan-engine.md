@@ -49,11 +49,27 @@ predecessor: null
   `contentSignal.test.ts` (22 passing). Also added `@types/node` devDependency +
   `tsconfig.json`'s `"types": ["node"]` (needed for `fetch`/`URL`/`node:dns/promises` types;
   dev-only, doesn't affect the zero-runtime-dependency policy).
+- **2026-09-16 (row 7):** `src/checkpoint.ts` (round-trips a `ScanRun` to/from
+  `data/scans/<propertyId>.json`, `baseDir`-parameterized for test isolation) and
+  `src/playbook.ts` (`remediationFor(finding)`: source-supplied `remediation` wins, then a
+  pass short-circuit, then a per-signal template table keyed off `src/scan/crosswalk.ts`'s
+  signal ids matched by substring against `finding.id`, then an honest generic fallback that
+  never fabricates specificity). Remediation copy for all 18 crosswalk signals grounded in
+  `agenthud-agui-a2ui/docs/agent-readiness.md`'s Crosswalk/Next-steps sections (read at
+  source) plus issue #4's worked examples and verified specs (RFC 9727, RFC 9728, RFC 9421 +
+  the web-bot-auth draft family, the AID DNS spec, Cloudflare's Content Signals policy, OpenID
+  Connect Discovery); schemas the upstream doc itself flags "emerging" (`ai-catalog.json`,
+  `agent-skills/index.json`, `mcp/server-card.json`) carry that caveat forward instead of
+  being presented as settled. `test/checkpoint.test.ts` + `test/playbook.test.ts` add 17
+  assertions (round-trip/overwrite/mkdir-recursive/rejects-on-missing for checkpoint;
+  crosswalk-coverage + precedence + one-fixture-per-category with varied id delimiters for
+  playbook) — 30/30 green. Added `@types/node` devDependency + `"types": ["node"]` in
+  `tsconfig.json` (first module to import a `node:*` builtin; needed once, not per-row).
 
 **What's next, in order** (full detail in the remaining-work table below; its "Depends on"
 column is the source of truth for sequencing):
 
-1. Rows 4, 5, 7, 8, 12 have **no dependency on each other** — dispatch these in
+1. Rows 4, 5, 8, 12 have **no dependency on each other** — dispatch these in
    **parallel**, one subagent per row, **each in its own git worktree**
    (`Agent({isolation: "worktree", ...})`) so concurrent writes to different
    `src/scan/sources/*.ts` files never collide on the same working tree.
@@ -243,7 +259,7 @@ agent-readiness-kit/
 | 4 | `src/scan/sources/cloudflareUrlScanner.ts` (async result poll) | agent | — | same poll pattern, unit test with mocked `fetch` |
 | 5 | `src/scan/sources/cloudflareMcp.ts` + `mcpA2aProbe.ts` (agent-card.json / mcp server-card / A2A probes) | agent | — | probes presence + shape, `Finding[]` per signal |
 | 6 | `src/scan/orchestrator.ts` (runs all sources for one property, assembles a `ScanRun`) | agent | 1, 2, 3, 4, 5 | orchestrator test with fake sources produces a valid `ScanRun` |
-| 7 | `src/checkpoint.ts` (read/write `data/scans/<id>.json`) + `src/playbook.ts` (remediation text per Finding) | agent | — | round-trips a `ScanRun` to/from `data/scans/*.json` |
+| ~~7~~ | ~~`src/checkpoint.ts` (read/write `data/scans/<id>.json`) + `src/playbook.ts` (remediation text per Finding)~~ | agent | — | **shipped 2026-09-16** |
 | 8 | `src/remediation/issue.ts` (dedup-safe issue create/update per architecture.md's dedup section) + `src/remediation/github.ts` | agent | — | dedup test: existing-issue-found -> update-body-+-changelog-comment path; not-found -> create path |
 | 9 | `src/main.ts` (CLI entrypoint: orchestrator -> checkpoint -> remediation, over all of `PROPERTIES`) | agent | 1–8 | `node dist/main.js` runs end-to-end against one property locally |
 | ~~10~~ | ~~`.github/workflows/ci.yml` (typecheck + test on PR)~~ | agent | — | **shipped 2026-09-16** |

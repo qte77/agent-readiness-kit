@@ -32,11 +32,28 @@ predecessor: null
   **This plan absorbed the former `docs/handoffs/0001-scan-engine.md`; that file and the
   `docs/handoffs/` pattern are retired for this project — this Status section is the one
   onboarding surface from now on, per this estate's single-file-per-arc convention.**
+- **2026-09-16 (row 2):** `src/scan/sources/discoverSnapshot.ts` — wraps the polyfetch-scrape
+  `discover --json` CLI (env-borrow subprocess, directory configurable via
+  `POLYFETCH_SCRAPE_DIR`/option, never hardcoded); owns `schema-type-breadth` scored from
+  `json_ld_types` breadth, with `sitemaps`/`feeds`/`llms_txt` attached as auxiliary evidence for
+  a future orchestrator cross-check against row 1's `agent-instruction` finding (no competing
+  Finding emitted). `test/scan/sources/discoverSnapshot.test.ts` (10 new, 23 total passing).
+- **2026-09-16 (row 1):** `src/scan/sources/wellKnown.ts` + `contentSignal.ts` — all 15 signal
+  ids the row owns are implemented (see Source map below); `dns-aid` is always emitted as
+  `"unknown"` with an explanatory note rather than graded, because research at implementation
+  time found three competing, non-RFC individual IETF drafts with incompatible record formats
+  (draft-mozleywilliams-dnsop-dnsaid/"DNS-AID" (SVCB-based), draft-nemethi-aid-agent-identity-
+  discovery/"AID" (a `_agent.<domain>` TXT record), draft-ihsanullah-dnsid/"DNSid") and no
+  settled/stable format to check against — per this row's explicit instruction to mark
+  `"unknown"` rather than invent one. `test/scan/sources/wellKnown.test.ts` +
+  `contentSignal.test.ts` (22 passing). Also added `@types/node` devDependency +
+  `tsconfig.json`'s `"types": ["node"]` (needed for `fetch`/`URL`/`node:dns/promises` types;
+  dev-only, doesn't affect the zero-runtime-dependency policy).
 
 **What's next, in order** (full detail in the remaining-work table below; its "Depends on"
 column is the source of truth for sequencing):
 
-1. Rows 1, 2, 4, 5, 7, 8, 12 have **no dependency on each other** — dispatch these in
+1. Rows 4, 5, 7, 8, 12 have **no dependency on each other** — dispatch these in
    **parallel**, one subagent per row, **each in its own git worktree**
    (`Agent({isolation: "worktree", ...})`) so concurrent writes to different
    `src/scan/sources/*.ts` files never collide on the same working tree.
@@ -189,6 +206,21 @@ agent-readiness-kit/
   (no `ui/` subdir here). See `.github/CONTRIBUTING.md`'s Releasing section for the recipe.
 - `AGENTS.md` / `CLAUDE.md` (pointer) / `.github/CONTRIBUTING.md` — behavioral rules, dev
   commands, branch/PR/commit conventions; modeled on `agenthud-agui-a2ui`'s shape.
+- `src/scan/sources/wellKnown.ts` — `scanWellKnown(url)`; owns `agent-instruction`,
+  `ai-catalog`, `agent-skills-index`, `api-catalog`, `auth-md`, `oauth-protected-resource`,
+  `oauth-oidc-discovery`, `openapi-spec`, `dev-resource-discovery` (all resolved against the
+  URL's origin, per RFC 8615 / the "at site root" convention) and `dns-aid` (a best-effort
+  `node:dns/promises` `resolveTxt` probe against `_agent.<hostname>`, always reported
+  `"unknown"` — see the module's docstring for why). Internal `evaluateTextPresence` /
+  `evaluateJsonPresence` helpers classify each fetch as pass/fail/warn/unknown.
+- `src/scan/sources/contentSignal.ts` — `scanContentSignal(url)`; owns `content-signal` +
+  `bot-rules` (one shared `/robots.txt` fetch, resolved against origin), `web-bot-auth`
+  (`/.well-known/http-message-signatures-directory`, origin-resolved), and `markdown-twins` +
+  `markdown-negotiation` (evaluated against the given page URL itself, not the origin, since
+  a page's markdown twin is a per-page concern).
+- `test/scan/sources/wellKnown.test.ts` + `contentSignal.test.ts` — RED-first, fake `fetch`
+  (route-by-URL mock) and mocked `node:dns/promises`; 22 assertions covering pass/fail/warn/
+  unknown per signal family plus a crosswalk-category-mapping check, all green.
 
 ## Tests (strict RED-first; modules only)
 
@@ -205,7 +237,7 @@ agent-readiness-kit/
 
 | # | Item | Gate | Depends on | Done-when |
 |---|------|------|------------|-----------|
-| 1 | `src/scan/sources/wellKnown.ts` + `contentSignal.ts` (robots.txt / `.well-known/*` / Content-Signal fetch) | agent | — | typed source module, RED-first test, returns `Finding[]` |
+| ~~1~~ | ~~`src/scan/sources/wellKnown.ts` + `contentSignal.ts` (robots.txt / `.well-known/*` / Content-Signal fetch)~~ | agent | — | **shipped 2026-09-16** |
 | ~~2~~ | ~~`src/scan/sources/discoverSnapshot.ts` (polyfetch-scrape CLI env-borrow subprocess: `uv run --directory polyfetch-scrape polyfetch discover <url> --json`)~~ | agent | — | **shipped 2026-09-16** |
 | 3 | `src/scan/sources/oraAi.ts` (two-phase `POST /api/scan` then `GET /api/score/<url>` ~45s later) | agent | — | await/poll implemented per architecture.md, unit test with mocked `fetch`; API-key and per-check-data questions (Watch-outs) resolved |
 | 4 | `src/scan/sources/cloudflareUrlScanner.ts` (async result poll) | agent | — | same poll pattern, unit test with mocked `fetch` |

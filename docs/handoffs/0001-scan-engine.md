@@ -2,7 +2,7 @@
 plan: docs/plans/0001-scan-engine.md
 issue: 1
 status: open
-updated: 2026-09-01
+updated: 2026-09-16
 ---
 
 # Handoff — Scan Engine + MCP Worker Scaffold
@@ -59,6 +59,20 @@ full build): `src/scan/sources/*`, `src/scan/orchestrator.ts`, `src/checkpoint.t
    the repo was brand new with nothing to protect and no CI yet; once row 10 (`ci.yml`)
    lands, switch to the estate's normal branch-per-topic + PR + squash-merge convention.
 
+## Also see (not in the remaining-work table — standalone proposal/support issues)
+
+- [#3](https://github.com/qte77/agent-readiness-kit/issues/3) — generalize `PROPERTIES` beyond
+  the 3 hardcoded entries. Deferred; doesn't block this arc.
+- [#4](https://github.com/qte77/agent-readiness-kit/issues/4) — row-1 detector patterns
+  (markdown-negotiation/content-signal/api-catalog/openapi-spec), generalized to avoid naming an
+  unverified-visibility external repo (see watch-out below).
+- [#5](https://github.com/qte77/agent-readiness-kit/issues/5) — candidate crosswalk signal gaps
+  (a11y, WebMCP, Link response headers, ARD) surfaced by comparing ora.ai and isitagentready.com
+  against `crosswalk.ts`. Upstream-crosswalk call, not actionable here yet.
+- [#6](https://github.com/qte77/agent-readiness-kit/issues/6) — `api-catalog` category-placement
+  disagreement (Discovery here vs. "Protocol Discovery" on isitagentready.com) to reconcile
+  against the real upstream table.
+
 ## Owner-gates (batch into one sitting, per remaining-work table)
 
 - **Row 11** (`scan.yml`): owner must provision ora.ai / Cloudflare API token secrets on the
@@ -87,6 +101,18 @@ npx tsc --noEmit      # typecheck
   presence or AI-crawler-policy *content* is being checked) — `src/scan/crosswalk.ts`
   deliberately omits those bare ids; disambiguate with a more specific signal id when the
   source module that needs it is written (see the comment in `crosswalk.ts`).
+- **Verify an external repo's visibility (`gh api repos/<owner>/<name> -q '.visibility'`) before
+  naming it in any issue/doc in this public repo.** Issues #3 and #4 originally named specific
+  external repos/paths that turned out not to resolve publicly (qte77 has zero private repos, so
+  they're either private-to-someone-else or gone) — both were generalized on 2026-09-16.
+- **Row 3 (`oraAi.ts`) has two open questions to resolve before implementing**, surfaced reading
+  ora.ai's `/docs` page directly: whether `POST /api/scan` requires an API key (decides if the
+  row stays agent-gated or needs to move under row 11's owner-provisioned secrets), and whether
+  `GET /api/score/<url>` returns per-check results or only the aggregate score/grade (decides
+  whether a Finding can compare against ora.ai per-signal, or only at the category level).
+- **No lint tooling is configured** (`package.json` has `test`/`typecheck` scripts only, no
+  eslint/biome, no lint script) — decide this once, when row 10 (`ci.yml`) is built, rather than
+  assuming "strict lint" is already covered.
 
 ## At arc close
 

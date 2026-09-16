@@ -54,6 +54,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   explanatory note (no settled DNS agent-identity record format exists yet — see the module
   docstring); `test/scan/sources/wellKnown.test.ts` + `contentSignal.test.ts` (22 passing,
   RED-first, fake `fetch`/`node:dns/promises`)
+- `src/remediation/github.ts`, `src/remediation/issue.ts`: row 8 of the plan — a minimal,
+  zero-dependency GitHub REST client (native `fetch`, `process.env.GITHUB_TOKEN`) and the
+  dedup-safe remediation-issue create/update logic it backs: search open issues by a fixed
+  per-property title marker first, update the existing issue's body plus a changelog comment
+  when found, create a new issue only when not found — never a silent duplicate or a stale
+  reuse (see `docs/architecture.md`'s "Dedup-safe issue creation") — with unit tests covering
+  both the found and not-found paths (`test/remediation/github.test.ts`,
+  `test/remediation/issue.test.ts`)
 
 ### Changed
 

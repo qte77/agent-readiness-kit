@@ -62,6 +62,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   reuse (see `docs/architecture.md`'s "Dedup-safe issue creation") — with unit tests covering
   both the found and not-found paths (`test/remediation/github.test.ts`,
   `test/remediation/issue.test.ts`)
+- `src/scan/sources/cloudflareMcp.ts` + `mcpA2aProbe.ts`: row 5 of the plan — static
+  presence/shape checks for `/.well-known/mcp/server-card.json` (`mcp-server-card` signal) and
+  `/.well-known/agent-card.json` (`a2a-agent-card` signal), plus a live JSON-RPC 2.0
+  `message/send` protocol probe against the agent card's declared endpoint that can upgrade or
+  downgrade the static verdict — RED-first tests with a faked `fetch`, zero runtime dependencies
 
 ### Changed
 

@@ -75,11 +75,19 @@ predecessor: null
   `tsconfig.json` (needed for `process`/`fetch`/`Response` typings under this repo's
   `lib: ["ES2022"]`-only tsconfig — a shared fix other `fetch`-using rows will also need; see
   Watch-outs).
+- **2026-09-16 (row 5):** `src/scan/sources/cloudflareMcp.ts` — static presence/shape checks
+  for `/.well-known/mcp/server-card.json` (`mcp-server-card`) and `/.well-known/agent-card.json`
+  (`a2a-agent-card`, fields grounded in the A2A protocol spec at a2a-protocol.org/v0.3.0) — and
+  `src/scan/sources/mcpA2aProbe.ts`, a live JSON-RPC 2.0 `message/send` probe against the agent
+  card's declared `url` that can upgrade or downgrade the static `a2a-agent-card` verdict
+  (well-formed result → pass; JSON-RPC error or 401/403 → warn; unreachable/non-conformant →
+  fail; no usable `url` → unknown). `test/scan/sources/cloudflareMcp.test.ts` +
+  `mcpA2aProbe.test.ts` (18 new, 31 total passing).
 
 **What's next, in order** (full detail in the remaining-work table below; its "Depends on"
 column is the source of truth for sequencing):
 
-1. Rows 4, 5, 12 have **no dependency on each other** — dispatch these in
+1. Rows 4, 12 have **no dependency on each other** — dispatch these in
    **parallel**, one subagent per row, **each in its own git worktree**
    (`Agent({isolation: "worktree", ...})`) so concurrent writes to different
    `src/scan/sources/*.ts` files never collide on the same working tree.
@@ -301,7 +309,7 @@ agent-readiness-kit/
 | ~~2~~ | ~~`src/scan/sources/discoverSnapshot.ts` (polyfetch-scrape CLI env-borrow subprocess: `uv run --directory polyfetch-scrape polyfetch discover <url> --json`)~~ | agent | — | **shipped 2026-09-16** |
 | 3 | `src/scan/sources/oraAi.ts` (two-phase `POST /api/scan` then `GET /api/score/<url>` ~45s later) | agent | — | await/poll implemented per architecture.md, unit test with mocked `fetch`; API-key and per-check-data questions (Watch-outs) resolved |
 | 4 | `src/scan/sources/cloudflareUrlScanner.ts` (async result poll) | agent | — | same poll pattern, unit test with mocked `fetch` |
-| 5 | `src/scan/sources/cloudflareMcp.ts` + `mcpA2aProbe.ts` (agent-card.json / mcp server-card / A2A probes) | agent | — | probes presence + shape, `Finding[]` per signal |
+| ~~5~~ | ~~`src/scan/sources/cloudflareMcp.ts` + `mcpA2aProbe.ts` (agent-card.json / mcp server-card / A2A probes)~~ | agent | — | **shipped 2026-09-16** |
 | 6 | `src/scan/orchestrator.ts` (runs all sources for one property, assembles a `ScanRun`) | agent | 1, 2, 3, 4, 5 | orchestrator test with fake sources produces a valid `ScanRun` |
 | ~~7~~ | ~~`src/checkpoint.ts` (read/write `data/scans/<id>.json`) + `src/playbook.ts` (remediation text per Finding)~~ | agent | — | **shipped 2026-09-16** |
 | ~~8~~ | ~~`src/remediation/issue.ts` (dedup-safe issue create/update per architecture.md's dedup section) + `src/remediation/github.ts`~~ | agent | — | **shipped 2026-09-16** |

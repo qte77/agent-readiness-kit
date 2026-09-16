@@ -11,10 +11,9 @@ this repo links to it rather than duplicating the table.
 
 ## Status
 
-Early scaffold. See [`docs/plans/0001-scan-engine.md`](docs/plans/0001-scan-engine.md) for
-the locked architecture decisions and the single remaining-work table, and
-[`docs/handoffs/0001-scan-engine.md`](docs/handoffs/0001-scan-engine.md) for onboarding into
-the next session.
+Early scaffold. See [`docs/plans/0001-scan-engine.md`](docs/plans/0001-scan-engine.md) — its
+opening `## Status` section onboards the next session (what shipped, what's next, commands,
+watch-outs), followed by the locked architecture decisions and the single remaining-work table.
 
 ## Architecture
 

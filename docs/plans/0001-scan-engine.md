@@ -32,7 +32,6 @@ predecessor: null
   **This plan absorbed the former `docs/handoffs/0001-scan-engine.md`; that file and the
   `docs/handoffs/` pattern are retired for this project — this Status section is the one
   onboarding surface from now on, per this estate's single-file-per-arc convention.**
-<<<<<<< HEAD
 - **2026-09-16 (row 2):** `src/scan/sources/discoverSnapshot.ts` — wraps the polyfetch-scrape
   `discover --json` CLI (env-borrow subprocess, directory configurable via
   `POLYFETCH_SCRAPE_DIR`/option, never hardcoded); owns `schema-type-breadth` scored from
@@ -291,6 +290,12 @@ agent-readiness-kit/
   Without it, root's `vitest run` auto-discovers `worker/test/*.test.ts` too (Node's module
   resolution walks up to `worker/node_modules` and happens to succeed locally), which would
   break the root CI `check` job since it never `npm ci`s inside `worker/`.
+- `worker/vitest.config.ts` (new this row) — an explicit (even empty) config so Vitest's
+  upward config search stops at `worker/` instead of finding the root's `vitest.config.ts`
+  first (Vite/Vitest search parent directories for a config file the same way they do for
+  `package.json`). Without this, the CI `worker` job fails: it tries to load the root config,
+  which imports `vitest/config` — unresolvable there because that job's `npm ci` only installs
+  `worker/node_modules`, never the root's. Caught by a red run on PR #14, fixed in the same PR.
 - `.github/workflows/tag-release.yaml` / `publish-release.yaml` — dormant until a version is
   actually cut; adapted from `agenthud-agui-a2ui`'s pattern for this repo's root `package.json`
   (no `ui/` subdir here). See `.github/CONTRIBUTING.md`'s Releasing section for the recipe.

@@ -80,6 +80,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `vitest.config.ts` (root): excludes `worker/**` from the root test run — without it, `vitest
   run` at the repo root auto-discovers `worker/test/*.test.ts` too (found while adding
   `worker/`), which would break the root CI job since it never `npm ci`s inside `worker/`
+- `worker/vitest.config.ts`: an explicit (even empty) config so Vitest's upward config search
+  stops at `worker/` instead of picking up the root's `vitest.config.ts` — found via a red CI
+  run on PR #14 (the worker job's `npm ci` never installs the root's `node_modules`, so
+  resolving `vitest/config` from the root config failed there)
 
 ### Changed
 

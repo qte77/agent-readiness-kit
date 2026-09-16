@@ -33,6 +33,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   Content signal scored from `json_ld_types` breadth, with `sitemaps`/`feeds`/`llms_txt` attached
   as auxiliary evidence for a future orchestrator cross-check — RED-first test suite
   (`test/scan/sources/discoverSnapshot.test.ts`)
+- `src/scan/sources/wellKnown.ts` + `contentSignal.ts` (plan row 1): well-known-URI and
+  robots.txt/content-negotiation scan sources covering all 15 signal ids the row owns
+  (`agent-instruction`, `ai-catalog`, `agent-skills-index`, `api-catalog`, `auth-md`,
+  `oauth-protected-resource`, `oauth-oidc-discovery`, `openapi-spec`,
+  `dev-resource-discovery`, `dns-aid`, `content-signal`, `bot-rules`, `web-bot-auth`,
+  `markdown-twins`, `markdown-negotiation`); `dns-aid` is always reported `"unknown"` with an
+  explanatory note (no settled DNS agent-identity record format exists yet — see the module
+  docstring); `test/scan/sources/wellKnown.test.ts` + `contentSignal.test.ts` (22 passing,
+  RED-first, fake `fetch`/`node:dns/promises`)
 
 ### Changed
 
@@ -40,6 +49,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   shipped, what's next, the loop, owner-gates, commands, watch-outs) and a `Depends on` column
   on the remaining-work table identifying which rows are parallel-worktree-safe
 - `.gitignore`: added `MEMORY.md` (a Claude Code meta-artifact, not project content)
+- `tsconfig.json`: added `"types": ["node"]` and `@types/node` devDependency so `fetch`, `URL`,
+  `Response`/`Headers`/`RequestInit`, and `node:dns/promises` typecheck — needed by the first
+  scan source modules (plan row 1); dev-only, no runtime dependency added
+  (`docs/architecture.md`'s zero-runtime-dependency policy still holds)
 
 ### Removed
 

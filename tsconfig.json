@@ -12,7 +12,8 @@
     "resolveJsonModule": true,
     "types": ["node"],
     "outDir": "dist",
-    "rootDir": "."
+    "rootDir": ".",
+    "types": ["node"]
   },
   "include": ["src/**/*.ts", "config/**/*.ts", "test/**/*.ts"],
   "exclude": ["node_modules", "dist", "worker"]

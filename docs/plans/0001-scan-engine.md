@@ -206,7 +206,7 @@ agent-readiness-kit/
 | # | Item | Gate | Depends on | Done-when |
 |---|------|------|------------|-----------|
 | 1 | `src/scan/sources/wellKnown.ts` + `contentSignal.ts` (robots.txt / `.well-known/*` / Content-Signal fetch) | agent | — | typed source module, RED-first test, returns `Finding[]` |
-| 2 | `src/scan/sources/discoverSnapshot.ts` (polyfetch-scrape CLI env-borrow subprocess: `uv run --directory polyfetch-scrape polyfetch discover <url> --json`) | agent | — | subprocess wrapped, parses `discover --json` output into `Finding[]`, never imports `easter_hunt` |
+| ~~2~~ | ~~`src/scan/sources/discoverSnapshot.ts` (polyfetch-scrape CLI env-borrow subprocess: `uv run --directory polyfetch-scrape polyfetch discover <url> --json`)~~ | agent | — | **shipped 2026-09-16** |
 | 3 | `src/scan/sources/oraAi.ts` (two-phase `POST /api/scan` then `GET /api/score/<url>` ~45s later) | agent | — | await/poll implemented per architecture.md, unit test with mocked `fetch`; API-key and per-check-data questions (Watch-outs) resolved |
 | 4 | `src/scan/sources/cloudflareUrlScanner.ts` (async result poll) | agent | — | same poll pattern, unit test with mocked `fetch` |
 | 5 | `src/scan/sources/cloudflareMcp.ts` + `mcpA2aProbe.ts` (agent-card.json / mcp server-card / A2A probes) | agent | — | probes presence + shape, `Finding[]` per signal |

@@ -2,13 +2,101 @@
 title: Agent-Readiness Kit — scan engine + MCP worker scaffold
 description: Build the estate's agent-native-readiness scanner — a GHA-only scan engine over 3 qte77 properties, one committed JSON per property as the trend record, dedup-safe remediation issues, and a read-only MCP worker exposing results. This arc ships the repo scaffold, core types, and the category crosswalk.
 date: 2026-09-01
+updated: 2026-09-16
 status: open
-issues: [1]
+issues: [1, 3, 4, 5, 6]
 predecessor: null
-handoff: docs/handoffs/0001-scan-engine.md
 ---
 
 # Arc 0001 — Scan Engine + MCP Worker Scaffold
+
+## Status (read this first — onboards the next session)
+
+**What shipped:**
+- **2026-09-01 (scaffold):** repo created (public), tracking [#1](https://github.com/qte77/agent-readiness-kit/issues/1);
+  `package.json`/`tsconfig.json`, `src/types.ts`, `src/scan/crosswalk.ts` (seeded from
+  `agenthud-agui-a2ui/docs/agent-readiness.md`), `config/properties.ts` (3 target properties),
+  `test/types.test.ts` (13 passing), `docs/architecture.md`.
+- **2026-09-16 (docs/process + row 10):** `.github/workflows/ci.yml` (row 10 — typecheck+test on
+  PR); `.github/workflows/tag-release.yaml` + `publish-release.yaml` (dormant until a version is
+  actually cut — see `.github/CONTRIBUTING.md`'s Releasing section); `AGENTS.md`, `CLAUDE.md`
+  (pointer to `AGENTS.md`), `.github/CONTRIBUTING.md` — modeled on `agenthud-agui-a2ui`'s
+  conventions, scoped for this repo's single-package, pre-v1 state; `MEMORY.md` gitignored (a
+  Claude Code meta-artifact, not project content). Issues #3 and #4 had unverified-visibility
+  external-repo references generalized (see Watch-outs). Opened
+  [#5](https://github.com/qte77/agent-readiness-kit/issues/5) (candidate crosswalk signal gaps:
+  a11y, WebMCP, Link response headers, ARD) and
+  [#6](https://github.com/qte77/agent-readiness-kit/issues/6) (`api-catalog`
+  category-placement mismatch), both surfaced by comparing ora.ai/isitagentready.com against
+  `crosswalk.ts` — both are upstream-crosswalk calls, not local scope.
+  **This plan absorbed the former `docs/handoffs/0001-scan-engine.md`; that file and the
+  `docs/handoffs/` pattern are retired for this project — this Status section is the one
+  onboarding surface from now on, per this estate's single-file-per-arc convention.**
+
+**What's next, in order** (full detail in the remaining-work table below; its "Depends on"
+column is the source of truth for sequencing):
+
+1. Rows 1, 2, 4, 5, 7, 8, 12 have **no dependency on each other** — dispatch these in
+   **parallel**, one subagent per row, **each in its own git worktree**
+   (`Agent({isolation: "worktree", ...})`) so concurrent writes to different
+   `src/scan/sources/*.ts` files never collide on the same working tree.
+2. Row 3 (`oraAi.ts`) also has no row-dependency, but resolve its two open questions (API-key
+   requirement, per-check vs. aggregate score data — see Watch-outs) as part of that row's work,
+   not deferred after.
+3. Row 6 (`orchestrator.ts`) — only after rows 1–5 land (fans them out).
+4. Row 9 (`main.ts`) — only after rows 1–8 land (wires orchestrator → checkpoint → remediation).
+5. Row 11 (`scan.yml`) — owner-gated (API secrets) — only after row 9.
+6. Row 13 (first real scan run) — after rows 1–7, 9, and 11.
+
+**The loop** (per source-module row): RED-first test in `test/scan/sources/*.test.ts` (fake
+`fetch`/subprocess) → minimum implementation to pass → `npx vitest run` + `npx tsc --noEmit`
+green → commit on a `feat/TOPIC` branch → PR → CI green → squash-merge → delete branch (remote +
+local).
+
+**Owner-gates (batch into one sitting):** Row 11 — owner must provision ora.ai / Cloudflare API
+token secrets on the repo before the scheduled workflow can run green. Everything else in the
+table is agent-gated and can proceed without an owner sitting.
+
+**Commands:**
+
+```bash
+cd /workspaces/qte77/agent-readiness-kit
+npm install
+npx vitest run       # test suite
+npx tsc --noEmit      # typecheck
+```
+
+**Watch-outs:**
+
+- `env -u GH_TOKEN -u GITHUB_TOKEN` on **every** git/gh call (else 401/403, or "Resource not
+  accessible by integration" against the wrong token).
+- `-c commit.gpgsign=false` on commits — no GPG key in this environment.
+- This sandbox blocks some Bash forms (pipes/heredocs/chained commands, `ls`/`find` in some
+  configurations) — prefer `Read`/`Edit`/`Write` tools and single, simple `Bash` commands.
+- **Verify an external repo's visibility (`gh api repos/<owner>/<name> -q '.visibility'`) before
+  naming it in any issue/doc in this public repo.** Issues #3 and #4 originally named specific
+  external repos/paths that didn't resolve publicly (qte77 has zero private repos, so they were
+  either private-to-someone-else or gone); both were generalized on 2026-09-16.
+- Row 3 (`oraAi.ts`) has two open questions to resolve before/while implementing: whether
+  `POST /api/scan` requires an API key (decides if the row stays agent-gated or needs to move
+  under row 11's secrets), and whether `GET /api/score/<url>` returns per-check results or only
+  the aggregate score/grade (decides whether a Finding can compare against ora.ai per-signal, or
+  only at the category level).
+- No lint tooling is configured (`package.json` has `test`/`typecheck` scripts only) — decide
+  once, not per-row, if/when a `worker/` CI job or stricter gating is added.
+- The crosswalk table in `agenthud-agui-a2ui/docs/agent-readiness.md` has a few genuinely
+  ambiguous bare signal ids (e.g. "robots.txt" spans both Discovery and Trust depending on
+  whether presence or AI-crawler-policy *content* is being checked) — `src/scan/crosswalk.ts`
+  deliberately omits those; disambiguate with a more specific signal id when the source module
+  that needs it is written.
+
+**Also see (standalone issues, intentionally not rows in the table below — they're proposals or
+support material, not committed arc scope):**
+[#3](https://github.com/qte77/agent-readiness-kit/issues/3) generalize `PROPERTIES` beyond the 3
+hardcoded entries (deferred, doesn't block this arc),
+[#4](https://github.com/qte77/agent-readiness-kit/issues/4) row-1 detector reference patterns,
+[#5](https://github.com/qte77/agent-readiness-kit/issues/5) candidate crosswalk signal gaps,
+[#6](https://github.com/qte77/agent-readiness-kit/issues/6) `api-catalog` category mismatch.
 
 ## Context
 
@@ -56,7 +144,10 @@ drift out of sync until it's updated to match.
 ```
 agent-readiness-kit/
   package.json  tsconfig.json
-  docs/plans/0001-scan-engine.md  docs/handoffs/0001-scan-engine.md  docs/architecture.md
+  AGENTS.md  CLAUDE.md
+  .github/CONTRIBUTING.md
+  .github/workflows/{ci.yml, tag-release.yaml, publish-release.yaml, scan.yml}
+  docs/plans/0001-scan-engine.md  docs/architecture.md
   config/properties.ts
   src/{main.ts, types.ts, checkpoint.ts, playbook.ts, mcpClient.ts}
   src/scan/{orchestrator.ts, crosswalk.ts}
@@ -64,11 +155,10 @@ agent-readiness-kit/
   src/remediation/{github.ts, issue.ts}
   test/  (mirrors src/, plain vitest)
   worker/{wrangler.jsonc, package.json, src/index.ts, src/mcp/tools.ts, src/wellknown/agent-card.ts, test/}
-  .github/workflows/{ci.yml, scan.yml}
   data/scans/{qte77-github-io,agenthud-agui-a2ui,sortmy-london}.json
 ```
 
-## Source map (what exists after this arc's first commit — next session should not need to re-map)
+## Source map (what exists now — next session should not need to re-map)
 
 - `src/types.ts` — `Category` (6-value union) + `CATEGORIES` const array; `SourceId` (7-value
   union, one per planned `src/scan/sources/*.ts` module); `Status`
@@ -88,6 +178,17 @@ agent-readiness-kit/
   clean.
 - `docs/architecture.md` — durable copy of the 9 locked decisions above, with full rationale
   (this plan only summarizes; architecture.md is the source of truth if they diverge).
+- `.github/workflows/ci.yml` — single `check` job: checkout (SHA-pinned) → `actions/setup-node`
+  (Node 22, npm cache) → `npm ci` → `npm run typecheck` → `npm test`. Triggers on push to
+  `main`, PRs, and `workflow_dispatch`. No `lint` step (no linter configured — see Watch-outs);
+  no separate `worker` job yet (`worker/` doesn't exist yet — add one mirroring this job,
+  `working-directory: worker`, when row 12 lands, per `agenthud-agui-a2ui/.github/workflows/ci.yml`'s
+  pattern).
+- `.github/workflows/tag-release.yaml` / `publish-release.yaml` — dormant until a version is
+  actually cut; adapted from `agenthud-agui-a2ui`'s pattern for this repo's root `package.json`
+  (no `ui/` subdir here). See `.github/CONTRIBUTING.md`'s Releasing section for the recipe.
+- `AGENTS.md` / `CLAUDE.md` (pointer) / `.github/CONTRIBUTING.md` — behavioral rules, dev
+  commands, branch/PR/commit conventions; modeled on `agenthud-agui-a2ui`'s shape.
 
 ## Tests (strict RED-first; modules only)
 
@@ -100,38 +201,33 @@ agent-readiness-kit/
   is config/wiring — verify those by effect (`wrangler dev` + curl, a workflow run), not a
   unit test, per this estate's TDD convention.
 
-## Shipped (this arc, commit 1)
-
-Repo created (public), tracking Issue #1 opened, scaffold committed to `main`: `package.json`
-(zero runtime deps, `vitest`+`typescript` dev deps), `tsconfig.json` (strict, NodeNext),
-`.gitignore`, `src/types.ts`, `src/scan/crosswalk.ts`, `config/properties.ts`,
-`test/types.test.ts` (13 passing tests), `docs/architecture.md`, this plan, and its paired
-handoff.
-
 ## Remaining-work table (SINGLE source of open work)
 
-| # | Item | Gate | Done-when |
-|---|------|------|-----------|
-| 1 | `src/scan/sources/wellKnown.ts` + `contentSignal.ts` (robots.txt / `.well-known/*` / Content-Signal fetch) | agent | typed source module, RED-first test, returns `Finding[]` |
-| 2 | `src/scan/sources/discoverSnapshot.ts` (polyfetch-scrape CLI env-borrow subprocess: `uv run --directory polyfetch-scrape polyfetch discover <url> --json`) | agent | subprocess wrapped, parses `discover --json` output into `Finding[]`, never imports `easter_hunt` |
-| 3 | `src/scan/sources/oraAi.ts` (two-phase `POST /api/scan` then `GET /api/score/<url>` ~45s later) | agent | await/poll implemented per architecture.md, unit test with mocked `fetch` |
-| 4 | `src/scan/sources/cloudflareUrlScanner.ts` (async result poll) | agent | same poll pattern, unit test with mocked `fetch` |
-| 5 | `src/scan/sources/cloudflareMcp.ts` + `mcpA2aProbe.ts` (agent-card.json / mcp server-card / A2A probes) | agent | probes presence + shape, `Finding[]` per signal |
-| 6 | `src/scan/orchestrator.ts` (runs all sources for one property, assembles a `ScanRun`) | agent | orchestrator test with fake sources produces a valid `ScanRun` |
-| 7 | `src/checkpoint.ts` (read/write `data/scans/<id>.json`) + `src/playbook.ts` (remediation text per Finding) | agent | round-trips a `ScanRun` to/from `data/scans/*.json` |
-| 8 | `src/remediation/issue.ts` (dedup-safe issue create/update per architecture.md's dedup section) + `src/remediation/github.ts` | agent | dedup test: existing-issue-found -> update-body-+-changelog-comment path; not-found -> create path |
-| 9 | `src/main.ts` (CLI entrypoint: orchestrator -> checkpoint -> remediation, over all of `PROPERTIES`) | agent | `node dist/main.js` runs end-to-end against one property locally |
-| 10 | `.github/workflows/ci.yml` (typecheck + test on PR) | agent | green on the PR that adds it |
-| 11 | `.github/workflows/scan.yml` (scheduled scan job) | owner | owner provisions ora.ai / Cloudflare API token secrets; workflow runs green on schedule |
-| 12 | `worker/` MCP layer (`wrangler.jsonc`, `src/index.ts`, `src/mcp/tools.ts`, `src/wellknown/agent-card.ts`, tests) mirroring `agenthud-agui-a2ui/worker/` | agent | `get_latest_score`/`get_playbook`/`list_properties` verified live via `wrangler dev` + curl |
-| 13 | First real scan run seeding `data/scans/{qte77-github-io,agenthud-agui-a2ui,sortmy-london}.json` | agent | 3 files committed with real findings, not placeholders (depends on 1-7) |
+| # | Item | Gate | Depends on | Done-when |
+|---|------|------|------------|-----------|
+| 1 | `src/scan/sources/wellKnown.ts` + `contentSignal.ts` (robots.txt / `.well-known/*` / Content-Signal fetch) | agent | — | typed source module, RED-first test, returns `Finding[]` |
+| 2 | `src/scan/sources/discoverSnapshot.ts` (polyfetch-scrape CLI env-borrow subprocess: `uv run --directory polyfetch-scrape polyfetch discover <url> --json`) | agent | — | subprocess wrapped, parses `discover --json` output into `Finding[]`, never imports `easter_hunt` |
+| 3 | `src/scan/sources/oraAi.ts` (two-phase `POST /api/scan` then `GET /api/score/<url>` ~45s later) | agent | — | await/poll implemented per architecture.md, unit test with mocked `fetch`; API-key and per-check-data questions (Watch-outs) resolved |
+| 4 | `src/scan/sources/cloudflareUrlScanner.ts` (async result poll) | agent | — | same poll pattern, unit test with mocked `fetch` |
+| 5 | `src/scan/sources/cloudflareMcp.ts` + `mcpA2aProbe.ts` (agent-card.json / mcp server-card / A2A probes) | agent | — | probes presence + shape, `Finding[]` per signal |
+| 6 | `src/scan/orchestrator.ts` (runs all sources for one property, assembles a `ScanRun`) | agent | 1, 2, 3, 4, 5 | orchestrator test with fake sources produces a valid `ScanRun` |
+| 7 | `src/checkpoint.ts` (read/write `data/scans/<id>.json`) + `src/playbook.ts` (remediation text per Finding) | agent | — | round-trips a `ScanRun` to/from `data/scans/*.json` |
+| 8 | `src/remediation/issue.ts` (dedup-safe issue create/update per architecture.md's dedup section) + `src/remediation/github.ts` | agent | — | dedup test: existing-issue-found -> update-body-+-changelog-comment path; not-found -> create path |
+| 9 | `src/main.ts` (CLI entrypoint: orchestrator -> checkpoint -> remediation, over all of `PROPERTIES`) | agent | 1–8 | `node dist/main.js` runs end-to-end against one property locally |
+| ~~10~~ | ~~`.github/workflows/ci.yml` (typecheck + test on PR)~~ | agent | — | **shipped 2026-09-16** |
+| 11 | `.github/workflows/scan.yml` (scheduled scan job) | owner | 9 | owner provisions ora.ai / Cloudflare API token secrets; workflow runs green on schedule |
+| 12 | `worker/` MCP layer (`wrangler.jsonc`, `src/index.ts`, `src/mcp/tools.ts`, `src/wellknown/agent-card.ts`, tests) mirroring `agenthud-agui-a2ui/worker/` | agent | — | `get_latest_score`/`get_playbook`/`list_properties` verified live via `wrangler dev` + curl |
+| 13 | First real scan run seeding `data/scans/{qte77-github-io,agenthud-agui-a2ui,sortmy-london}.json` | agent | 1–7, 9, 11 | 3 files committed with real findings, not placeholders |
 
-## Verification (this arc's commit)
+## Verification (this arc's commits)
 
-- `cd agent-readiness-kit && npm install && npx vitest run` → all green (13/13).
+- `cd agent-readiness-kit && npm install && npx vitest run` → all green (13/13 as of the
+  scaffold commit; grows as each row lands).
 - `npx tsc --noEmit` → clean.
-- **Gotchas:** `env -u GH_TOKEN -u GITHUB_TOKEN` on every git/gh call; `-c
-  commit.gpgsign=false` on commits (no GPG key in this environment); this repo is brand new
-  with no collaborators/CI to disrupt, so the first scaffold commit went direct to `main` —
-  every commit after this one should branch + PR per this estate's normal convention once CI
-  exists (row 10 above).
+- `.github/workflows/ci.yml` runs both on every push/PR from 2026-09-16 onward — treat a red CI
+  run as blocking, not advisory.
+
+## At arc close
+
+Tick the remaining-work table against what merged, update this Status section, note any
+deviations from the locked decisions, and migrate any still-open rows to the next `NNNN` pair.

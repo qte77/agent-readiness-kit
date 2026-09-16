@@ -18,7 +18,24 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   runtime, one committed JSON file per property as the trend record, the polyfetch-scrape
   dependency policy, dedup-safe remediation issue creation, the v1 scope boundary, and the
   read-only MCP worker design
-- `docs/plans/0001-scan-engine.md` + `docs/handoffs/0001-scan-engine.md`: the arc's plan and
-  handoff, carrying the remaining-work table for scan sources, the GHA workflow, and the
-  `worker/` MCP layer
+- `docs/plans/0001-scan-engine.md`: the arc's plan, carrying the remaining-work table for scan
+  sources, the GHA workflow, and the `worker/` MCP layer
 - `README.md`: project overview, status, and development commands
+- `.github/workflows/ci.yml`: row 10 of the plan — typecheck + test on every push to `main`,
+  every PR, and manual dispatch
+- `.github/workflows/tag-release.yaml` + `publish-release.yaml`: dormant bump→tag→release
+  automation, adapted from `agenthud-agui-a2ui`'s pattern for this repo's root `package.json`
+- `AGENTS.md`, `CLAUDE.md` (pointer to `AGENTS.md`), `.github/CONTRIBUTING.md`: behavioral
+  rules, dev commands, and contributor workflow, modeled on `agenthud-agui-a2ui`'s conventions
+
+### Changed
+
+- `docs/plans/0001-scan-engine.md`: restructured with a `## Status` opening section (what
+  shipped, what's next, the loop, owner-gates, commands, watch-outs) and a `Depends on` column
+  on the remaining-work table identifying which rows are parallel-worktree-safe
+- `.gitignore`: added `MEMORY.md` (a Claude Code meta-artifact, not project content)
+
+### Removed
+
+- `docs/handoffs/0001-scan-engine.md` and the `docs/handoffs/` pattern — this project keeps one
+  file per arc; onboarding content now lives in the plan's own `## Status` section

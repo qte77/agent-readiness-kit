@@ -18,8 +18,8 @@
  * only sees the latest commit per file, which would silently produce single-point history
  * instead of loudly failing.
  *
- * Deviation from docs/plans/2026-09-17's arc-0002 plan (recorded here and in
- * docs/plans/0002-readiness-dashboard.md): the plan specified `git log --follow --reverse
+ * Deviation from this arc's dispatch spec (recorded here and in
+ * docs/plans/0002-readiness-dashboard.md's Status section): the spec specified `git log --follow --reverse
  * --format=%H -- <path>`. Verified at source before implementing: `--follow`'s rename-detection
  * heuristic false-positives across this repo's `data/scans/*.json` files, because they're
  * structurally near-identical JSON (confirmed live — `git log --follow` for

@@ -110,19 +110,41 @@ predecessor: null
   detail; `docs/architecture.md`'s locked decision 5 (Cloudflare URL Scanner's "async
   result"/poll) needs a matching update in the post-milestone doc-sync pass — see the docs
   audit below.
+- **2026-09-17 (row 3):** `src/scan/sources/oraAi.ts` — the two-phase `POST /api/scan` then
+  `GET /api/score/<url>` source. Before implementing, live-verified the real response shape
+  with a GET-only call against `https://qte77.github.io` (doesn't consume the scan-family
+  rate limit): confirmed `encodeURIComponent(url)` is the correct score-path encoding,
+  confirmed the real per-check `status` vocabulary is `"pass"|"fail"|"warning"|"na"|"error"`
+  (not `"warn"` — mapped `"warning"` to warn, `"na"`/`"error"` to unknown, since neither is a
+  graded verdict), and confirmed `scannedAt`/`analysisStatus`/`pendingChecks` fields exist —
+  the fetched response was a stale (`scannedAt` three weeks old) but `analysisStatus:
+  "complete"` cached result, consistent with architecture.md's "POST echoes a stale cached
+  score" note. Per Design decision 1: registered check ids resolve via `assignCategory`
+  (independent of ora.ai's own `layers[].id` grouping — verified with a real check whose
+  ora.ai layer differs from its crosswalk category) and unregistered ones are silently
+  skipped, never thrown; the module returns `{findings, score?, grade?}`. Implements
+  architecture.md's decision-5 "~45s" settle window as one injectable `sleep(settleDelayMs)`
+  between POST and GET (default 45000ms) rather than a repeated poll loop — no
+  repeated-polling behavior was verified at source, so none was invented; if the GET still
+  isn't `analysisStatus: "complete"` after that single wait, the module uses whatever it
+  returned rather than blocking further. 429/network/parse failures on either call collapse
+  to one `"unknown"`-status Finding (category `"Trust"`, documented as a pragmatic
+  placeholder, mirroring isitAgentReady.ts's Design decision 2 precedent), carrying
+  `Retry-After` in evidence when present; never throws. `test/scan/sources/oraAi.test.ts` (17
+  new, 112 total passing) uses a trimmed real captured response as its main fixture. Of the
+  12 checks in that trimmed fixture, 7 matched the crosswalk and 5 were skipped; the real,
+  untrimmed response had 124 total checks, 7 matched / 117 skipped.
 
 **What's next, in order** (full detail in the remaining-work table below; its "Depends on"
 column is the source of truth for sequencing):
 
-1. **Rows 3 and 4 are both independent of each other and of every other open row** — dispatch
-   both in **parallel**, one subagent per row, **each in its own git worktree**
-   (`Agent({isolation: "worktree", ...})`), exactly like rows 1/2/5/7/8/12 earlier in this arc.
-   See `## Design decisions (rows 3, 4, 6)` for what each row must implement — don't let the
-   dispatched agents re-derive or diverge on the category-handling approach.
-2. **Rows 6 and 9 go to one agent, one worktree, sequentially** (row 9's only unmet dependency
-   is row 6; two separate merge cycles buy nothing here) — after rows 3 and 4 both land.
-3. Row 11 (`scan.yml`) — **owner-gated** — only after row 9.
-4. Row 13 (first real scan run) — after rows 1–7, 9, and 11.
+1. **Rows 6 and 9 go to one agent, one worktree, sequentially** (row 9's only unmet dependency
+   is row 6; two separate merge cycles buy nothing here) — rows 3 and 4 both shipped
+   2026-09-17, so row 6 is unblocked now. See `## Design decisions (rows 3, 4, 6)` for what
+   row 6 must implement (the `oraAi` return-shape special-case, no cross-source dedup) — don't
+   let the dispatched agent re-derive or diverge on that.
+2. Row 11 (`scan.yml`) — **owner-gated** — only after row 9.
+3. Row 13 (first real scan run) — after rows 1–7, 9, and 11.
 
 **The loop** (per row, non-trivial module logic only — see Quality gates below): RED-first
 test modeling the expected/desired behavior first, in `test/scan/sources/*.test.ts` (fake
@@ -526,6 +548,25 @@ agent-readiness-kit/
   `github.ts`, and body/changelog content. All green (`npx vitest run`, 28/28 total);
   `npx tsc --noEmit` clean. Added `@types/node` devDependency + `"types": ["node"]` in
   `tsconfig.json` to make `process`/`fetch`/`Response` typecheck (see Watch-outs).
+- `src/scan/sources/oraAi.ts` — two-phase `POST https://ora.ai/api/scan` then
+  `GET https://ora.ai/api/score/<url>` (URL-encoded), a single injectable
+  `sleep(settleDelayMs)` (default 45000ms) between them. Returns `{ findings, score?, grade?
+  }` — the one source special-cased in `orchestrator.ts` (Design decision 1). Maps ora.ai's
+  real check `status` vocabulary (`pass`/`fail`/`warning`/`na`/`error`) onto this repo's
+  `Status`, routes registered check ids through `assignCategory` and silently skips
+  unregistered ones, and collapses any 429/network/parse failure to one `"unknown"` Finding.
+  Optional `oraAiApiKey` param, never required.
+- `test/scan/sources/oraAi.test.ts` — RED-first, fake `fetch` for both calls; 17 assertions
+  built from a trimmed real response captured live against `https://qte77.github.io`.
+- `src/scan/sources/isitAgentReady.ts` — single unauthenticated
+  `POST https://isitagentready.com/api/scan` call (`{ url }`), synchronous, no poll. Emits
+  exactly one `Trust`-category Finding (`isitAgentReady.agent-readiness-scan`) with status
+  derived from the response's `level` (0–5: pass at 4–5, warn at 2–3, fail at 0–1) and the
+  full `checks`/`level`/`levelName`/`scannedAt` response attached as evidence verbatim — no
+  sub-check fan-out (Design decision 2). Returns one `"unknown"` Finding on any
+  network/parse failure.
+- `test/scan/sources/isitAgentReady.test.ts` — RED-first, fake `fetch`; 16 assertions
+  covering all three status bands plus failure handling.
 
 ## Tests (strict RED-first; modules only)
 
@@ -544,7 +585,7 @@ agent-readiness-kit/
 |---|------|------|------------|-----------|
 | ~~1~~ | ~~`src/scan/sources/wellKnown.ts` + `contentSignal.ts` (robots.txt / `.well-known/*` / Content-Signal fetch)~~ | agent | — | **shipped 2026-09-16** |
 | ~~2~~ | ~~`src/scan/sources/discoverSnapshot.ts` (polyfetch-scrape CLI env-borrow subprocess: `uv run --directory polyfetch-scrape polyfetch discover <url> --json`)~~ | agent | — | **shipped 2026-09-16** |
-| 3 | `src/scan/sources/oraAi.ts` (two-phase `POST /api/scan` then `GET /api/score/<url>`) | agent | — | per Design decision 1: `{findings, score, grade}` return shape; registered check ids pass through `assignCategory`, unregistered ones skipped; unit test with mocked `fetch` |
+| ~~3~~ | ~~`src/scan/sources/oraAi.ts` (two-phase `POST /api/scan` then `GET /api/score/<url>`)~~ | agent | — | **shipped 2026-09-17** |
 | ~~4~~ | ~~`src/scan/sources/isitAgentReady.ts` (`POST https://isitagentready.com/api/scan`, no key — renamed from the originally-planned `cloudflareUrlScanner.ts`, see External API contracts)~~ | agent | — | **shipped 2026-09-17** |
 | ~~5~~ | ~~`src/scan/sources/cloudflareMcp.ts` + `mcpA2aProbe.ts` (agent-card.json / mcp server-card / A2A probes)~~ | agent | — | **shipped 2026-09-16** |
 | 6 | `src/scan/orchestrator.ts` (runs all sources for one property, assembles a `ScanRun`) | agent | 1, 2, 3, 4, 5 | orchestrator test with fake sources produces a valid `ScanRun` |

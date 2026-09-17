@@ -22,6 +22,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   `"isitAgentReady"` (a free rename — nothing referenced the old literal yet).
   RED-first test suite (`test/scan/sources/isitAgentReady.test.ts`, 16 new assertions,
   111 total passing)
+- `src/scan/sources/oraAi.ts` (plan row 3): two-phase `POST https://ora.ai/api/scan` then
+  `GET https://ora.ai/api/score/<url>` scan source — the only source returning
+  `{findings, score?, grade?}` instead of a bare `Finding[]`, since ora.ai is the sole
+  producer of `ScanRun`-level score/grade. Registered check ids (7 of ora.ai's ~124 checks
+  overlap the crosswalk) resolve via `assignCategory`; unregistered ids are silently
+  skipped. ora.ai's live-verified `status` vocabulary (`pass`/`fail`/`warning`/`na`/`error`)
+  maps onto this repo's `Status` union, with `na`/`error` treated as `unknown` rather than a
+  guessed grade. A single injectable `sleep(settleDelayMs)` (default 45000ms) between the
+  two calls matches architecture.md's observed "~45s" freshness window. Never throws: a 429
+  or any other fetch/parse failure on either call collapses to one `unknown`-status Finding
+  carrying `Retry-After` in evidence. Optional `oraAiApiKey` sent only as
+  `Authorization: Bearer <key>`, never required. `test/scan/sources/oraAi.test.ts` (17 new,
+  112 total passing), using a trimmed real response captured live against
+  `https://qte77.github.io` as its main fixture
 - `src/checkpoint.ts`: read/write `data/scans/<propertyId>.json`, round-tripping a `ScanRun`
   verbatim (`baseDir`-parameterized so tests never touch the real `data/scans/` directory)
 - `src/playbook.ts`: `remediationFor(finding)` maps any `Finding` to concrete remediation text

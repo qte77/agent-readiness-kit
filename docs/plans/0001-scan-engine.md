@@ -188,6 +188,33 @@ predecessor: null
   added — unconfirmed whether `discover` needs the browser tier at all; if the first real run
   shows `discoverSnapshot` findings staying `"unknown"` for a reason other than a genuinely
   JS-gated site, add that step then, don't guess now).
+- **2026-09-17 (row 11 fix — direct push replaced with a PR+auto-merge commit path):**
+  triggering `scan.yml` for real (`workflow_dispatch`, run `35208042692`) surfaced two things
+  this plan's earlier text got wrong. First, **a repository ruleset now exists** (id
+  `23548331`, created `2026-09-16T14:15:59Z` — after this plan's session-start check, which
+  correctly found `[]` at the time; the earlier "no rulesets" claim was accurate then, not
+  false, but is now stale) requiring PR-only changes to `main`, a linear history, verified
+  commit signatures, and a required `CodeFactor` status check, with `bypass_actors: []` /
+  `current_user_can_bypass: "never"` — no one, including `--admin`, can bypass it. This is why
+  every prior merge this arc succeeded: each one went through a real PR with CI+CodeFactor
+  already green, and GitHub's own server-side squash-merge commit is auto-signed/verified —
+  none of them ever actually needed a bypass. Row 11's raw `git push` from inside the workflow
+  had none of that (no PR, no status check, an unsigned local commit) and was rejected with
+  `GH013` ("Changes must be made through a pull request", "Required status check \"CodeFactor\"
+  is expected", "Commits must have verified signatures"). The `Run scan` step itself succeeded
+  first — real ora.ai/isitagentready.com calls, real scores, 3 real `data/scans/*.json` files
+  produced locally in that job — only the final push failed. Second, confirmed
+  `allow_auto_merge` was `false` on the repo and enabled it
+  (`gh api repos/qte77/agent-readiness-kit -X PATCH -f allow_auto_merge=true`). Fix: rewrote
+  `scan.yml`'s "Commit scan results" step to branch (`chore/scan-results-<UTC timestamp>`),
+  push, `gh pr create`, then `gh pr merge --squash --auto --delete-branch` instead of pushing
+  directly; added `pull-requests: write` to the job's `permissions`. This relies on
+  `CodeFactor`'s GitHub-App webhook firing on the PR independent of Actions' own
+  same-token-can't-retrigger-workflows restriction (that restriction only suppresses further
+  *Actions workflow* runs from a `GITHUB_TOKEN`-authored event, not other GitHub Apps'
+  subscriptions) — **not yet live-verified**; the next `workflow_dispatch` run is the real test
+  (does `gh pr merge --auto` actually complete once CodeFactor reports, or does it hang waiting
+  on a check that never got triggered).
 
 **What's next, in order** (full detail in the remaining-work table below; its "Depends on"
 column is the source of truth for sequencing):
@@ -308,6 +335,15 @@ npm run dev           # wrangler dev, for GET /.well-known/agent-card.json + POS
   built, unit-tested, and verified locally via `wrangler dev` only. This is not a row 11 gap —
   row 11's owner-gated secrets are for the scan engine's own ora.ai/Cloudflare API calls, a
   separate concern from hosting the Worker. Don't add a deploy row unless this decision changes.
+- **A repository ruleset is active on `main`** (id `23548331`, added 2026-09-16, found via
+  `gh api repos/qte77/agent-readiness-kit/rulesets` on 2026-09-17 — this plan's earlier "no
+  rulesets" note was accurate only at session start): PR-only changes, linear history, verified
+  commit signatures, a required `CodeFactor` status check, squash merge, 0 required approving
+  reviews, `bypass_actors: []` (nothing bypasses it, `--admin` included). Any direct
+  `git push` to `main` — from a workflow or a person — will be rejected; always go through a PR
+  with a passing `CodeFactor` check. `allow_auto_merge` is now `true` on the repo (flipped
+  2026-09-17 for row 11's fix) so `gh pr merge --auto` works without a human click once checks
+  pass.
 
 **Also see (standalone issues, intentionally not rows in the table below — they're proposals or
 support material, not committed arc scope):**
@@ -647,12 +683,16 @@ agent-readiness-kit/
   (see `## Tests` below). `"scan": "node dist/src/main.js"` in `package.json` (see the
   Status section above for why it's `dist/src/main.js`, not `dist/main.js`).
 - `.github/workflows/scan.yml` — weekly cron (`0 6 * * 1`) + `workflow_dispatch`;
-  `permissions: contents: write, issues: write`. Checks out this repo and
-  `qte77/polyfetch-scrape` (to `polyfetch-scrape/`), installs `uv` (`astral-sh/setup-uv`,
+  `permissions: contents: write, issues: write, pull-requests: write`. Checks out this repo
+  and `qte77/polyfetch-scrape` (to `polyfetch-scrape/`), installs `uv` (`astral-sh/setup-uv`,
   SHA-pinned), sets `POLYFETCH_SCRAPE_DIR`, runs `npm ci && npm run build && npm run scan`
-  with `GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}`, then commits+pushes any changed
-  `data/scans/*.json` to `main` directly (no PR — this is the trend-record commit
-  architecture.md's locked decision 2 describes). No `polyfetch doctor --fix`/Chromium
+  with `GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}`, then — if `data/scans/*.json` changed —
+  commits on a fresh `chore/scan-results-<UTC timestamp>` branch, pushes it, opens a PR
+  (`gh pr create`), and merges it (`gh pr merge --squash --auto --delete-branch`) instead of
+  pushing to `main` directly. The direct-push version was tried first and rejected by the
+  repo's active ruleset (see the 2026-09-17 Status entry above) — `data/scans/*.json` still
+  ends up as individual commits on `main`'s history (architecture.md's locked decision 2), just
+  arriving via a squash-merged PR instead of a bare push. No `polyfetch doctor --fix`/Chromium
   install step — unconfirmed whether `discover` needs the patchright tier (see Watch-outs).
 
 ## Tests (strict RED-first; modules only)

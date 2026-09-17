@@ -11,9 +11,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - `.github/workflows/scan.yml` (plan row 11): weekly-cron + `workflow_dispatch` scheduled
   scan job — checks out `qte77/polyfetch-scrape` and installs `uv` so `discoverSnapshot.ts`
-  has something to call, builds, runs `npm run scan`, and commits+pushes any changed
-  `data/scans/*.json` to `main` directly. No new API secrets required (both ora.ai and
-  isitagentready.com are key-less); `GITHUB_TOKEN` is wired via `env:`/`permissions:` only
+  has something to call, builds, runs `npm run scan`, and commits any changed
+  `data/scans/*.json` via a branch + PR + auto-merge (see Fixed below — a direct push doesn't
+  clear the repo's ruleset). No new API secrets required (both ora.ai and isitagentready.com
+  are key-less); `GITHUB_TOKEN` is wired via `env:`/`permissions:` only
 - `src/main.ts` (plan row 9): CLI entrypoint — for every property in
   `config/properties.ts`'s `PROPERTIES`, runs the row-6 orchestrator, writes the resulting
   `ScanRun` to `data/scans/<propertyId>.json`, then files/updates a dedup-safe remediation
@@ -142,6 +143,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- `.github/workflows/scan.yml`: the "Commit scan results" step pushed directly to `main`,
+  which a repository ruleset (added 2026-09-16, discovered via a live failed
+  `workflow_dispatch` run on 2026-09-17) rejects outright (`GH013`: PR-only changes, a
+  required `CodeFactor` status check, verified commit signatures — no bypass actors). Rewrote
+  the step to branch, push, open a PR, and merge it (`gh pr merge --squash --auto
+  --delete-branch`) instead; added `pull-requests: write` to the job's `permissions` and
+  enabled `allow_auto_merge` on the repo
 - `vitest.config.ts`: excludes `dist/**` (vitest v4's own `configDefaults.exclude` is just
   `node_modules`/`.git`, not `dist`). Found while verifying row 9's `npm run build && node
   dist/src/main.js`: this repo's `tsconfig.json` also compiles `test/**/*.ts` (needed for

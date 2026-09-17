@@ -134,17 +134,52 @@ predecessor: null
   new, 112 total passing) uses a trimmed real captured response as its main fixture. Of the
   12 checks in that trimmed fixture, 7 matched the crosswalk and 5 were skipped; the real,
   untrimmed response had 124 total checks, 7 matched / 117 skipped.
+- **2026-09-17 (rows 6 & 9):** `src/scan/orchestrator.ts` (`scanProperty(property):
+  Promise<ScanRun>`) fans out to all 7 sources concurrently (`Promise.all`), concatenates
+  every source's `Finding[]` as-is (no cross-source dedup, Design decision 3), and
+  special-cases `scanOraAi`'s `{findings, score?, grade?}` return shape onto the assembled
+  `ScanRun`'s own `score`/`grade` (Design decision 1). `test/scan/orchestrator.test.ts` (8
+  new, 136 total passing) uses faked/stubbed versions of all 7 source functions — no real
+  network in this test — and asserts the concatenation, the ora.ai special-case, and that a
+  finding sharing a signal-id suffix with another source's finding is never dropped.
+  `src/main.ts` loops over `config/properties.ts`'s `PROPERTIES`, calling `scanProperty` ->
+  `writeCheckpoint` -> `upsertRemediationIssue` (hardcoded `{owner: "qte77", repo:
+  "agent-readiness-kit"}`) per property, with per-property console output (score/grade,
+  finding counts by status, checkpoint path, issue action) — config/wiring, verified by
+  effect (see below), not a unit test, per this plan's own Quality gates. Added an `npm run
+  scan` script alias and documented it in README.md/`.github/CONTRIBUTING.md`'s Development
+  sections in this same PR (row 9's docs-audit condition).
+  **Correction to this plan's own text, found while verifying by effect**: the plan and its
+  remaining-work table both said "`node dist/main.js`", but `tsconfig.json`'s `"rootDir": "."`
+  (set to also cover `config/**` and `test/**`, both siblings of `src/`) means `tsc` actually
+  emits `dist/src/main.js`, not `dist/main.js` — verified by running a real `npm run build`
+  and inspecting the output, not assumed. `npm run scan` is `node dist/src/main.js`; the
+  README/CONTRIBUTING additions use the correct path. Not changing `rootDir` to force
+  `dist/main.js` — that would break compilation of `config/**`/`test/**`, which sit outside a
+  narrower `rootDir: "src"`, for zero benefit over just naming the real path.
+  **Verified end-to-end against the real `PROPERTIES` and real external APIs (not a fixture)**:
+  `npm run build && node dist/src/main.js` completed for all 3 properties. Real ora.ai scores
+  came back for all 3 (`qte77-github-io`: 60/C, `agenthud-agui-a2ui`: 66/C, `sortmy-london`:
+  10/F), all 7 sources produced findings (27 per property), `isitAgentReady` returned a real
+  `warn`-status Finding for all 3 (no fallback), `discoverSnapshot` reported `"unknown"` for
+  all 3 as expected (`POLYFETCH_SCRAPE_DIR` isn't set locally — documented degrade-gracefully
+  behavior, not a bug), and `mcpA2aProbe` passed a real live A2A probe for the first two
+  properties. `data/scans/*.json` were written with real, non-placeholder content for all 3
+  properties (inspected directly) but **were not committed** — seeding them for real is row
+  13's job (depends on row 11 too), not this batch's; they're written locally and
+  deliberately left untracked/unstaged in this PR (not gitignored — `.gitignore` has no
+  entry for `data/`, on purpose, since row 13 must commit them for real). The
+  remediation-issue step failed with
+  the expected, clear `GITHUB_TOKEN is not set` message for all 3 properties (no
+  `GITHUB_TOKEN` in this environment) — an accepted local-run gap per Design decision 2, not
+  a bug worked around.
 
 **What's next, in order** (full detail in the remaining-work table below; its "Depends on"
 column is the source of truth for sequencing):
 
-1. **Rows 6 and 9 go to one agent, one worktree, sequentially** (row 9's only unmet dependency
-   is row 6; two separate merge cycles buy nothing here) — rows 3 and 4 both shipped
-   2026-09-17, so row 6 is unblocked now. See `## Design decisions (rows 3, 4, 6)` for what
-   row 6 must implement (the `oraAi` return-shape special-case, no cross-source dedup) — don't
-   let the dispatched agent re-derive or diverge on that.
-2. Row 11 (`scan.yml`) — **owner-gated** — only after row 9.
-3. Row 13 (first real scan run) — after rows 1–7, 9, and 11.
+1. Row 11 (`scan.yml`) — **owner-gated** — rows 6 and 9 both shipped 2026-09-17, so row 11 is
+   unblocked now.
+2. Row 13 (first real scan run, committing `data/scans/*.json` for real) — after row 11.
 
 **The loop** (per row, non-trivial module logic only — see Quality gates below): RED-first
 test modeling the expected/desired behavior first, in `test/scan/sources/*.test.ts` (fake
@@ -187,6 +222,9 @@ cd /workspaces/qte77/agent-readiness-kit
 npm install
 npx vitest run       # test suite
 npx tsc --noEmit      # typecheck
+npm run build && npm run scan  # row 9: real end-to-end scan over PROPERTIES (writes
+                                # data/scans/*.json; needs GITHUB_TOKEN for the issue step,
+                                # else that step logs a clear skip message per property)
 
 cd worker             # separate package (row 12) — own lockfile, own commands
 npm install
@@ -244,6 +282,12 @@ npm run dev           # wrangler dev, for GET /.well-known/agent-card.json + POS
   explicitly (`env: GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}`, or `github.token`) and grant
   `permissions: issues: write` before `src/remediation/github.ts` can create/update issues.
   This is row 11's job (`.github/workflows/scan.yml`), not yet done.
+- **`vitest.config.ts` excludes `dist/**`** (added alongside row 9) — vitest v4's own
+  `configDefaults.exclude` is just `node_modules`/`.git`, and this repo's `tsconfig.json`
+  compiles `test/**/*.ts` too, so a local `npm run build` (row 9's own verification step)
+  leaves compiled test files under `dist/test/**` that `npx vitest run` would otherwise
+  double-discover and double-run. Never surfaced in CI (the `check` job doesn't build before
+  testing) — only bites a local run after a build.
 - **`worker/` is deliberately not deployed to a live Cloudflare URL** — owner decision
   (2026-09-16): no `wrangler deploy`, no Cloudflare account/token provisioned for this. It's
   built, unit-tested, and verified locally via `wrangler dev` only. This is not a row 11 gap —
@@ -567,6 +611,26 @@ agent-readiness-kit/
   network/parse failure.
 - `test/scan/sources/isitAgentReady.test.ts` — RED-first, fake `fetch`; 16 assertions
   covering all three status bands plus failure handling.
+- `src/scan/orchestrator.ts` — `scanProperty(property: PropertyConfig): Promise<ScanRun>`;
+  runs all 7 sources concurrently (`Promise.all`), concatenates their `Finding[]`s with no
+  cross-source dedup (Design decision 3), and special-cases `scanOraAi`'s
+  `{findings, score?, grade?}` onto the assembled `ScanRun`'s `score`/`grade` (Design
+  decision 1). Sets `propertyId`/`url` from the `PropertyConfig`, `scannedAt` from
+  `new Date().toISOString()`.
+- `test/scan/orchestrator.test.ts` — RED-first, all 7 source modules mocked via `vi.mock`
+  (no real network); 8 assertions covering propertyId/url/scannedAt, one call per source with
+  the property's url, findings concatenation, the ora.ai score/grade special-case (present and
+  absent), no-dedup (two sources sharing a signal-id suffix both survive), and concurrent
+  (not serial) dispatch.
+- `src/main.ts` — CLI entrypoint; loops over `config/properties.ts`'s `PROPERTIES`, calling
+  `scanProperty` -> `writeCheckpoint` -> `upsertRemediationIssue` (hardcoded
+  `GitHubRepoRef {owner: "qte77", repo: "agent-readiness-kit"}`) per property, with
+  console output per property (score/grade, finding counts by status, checkpoint path,
+  issue action). Each property's remediation-issue step is wrapped so a missing
+  `GITHUB_TOKEN` (or any other upsert failure) logs a clear warning and moves on to the next
+  property instead of crashing the run. Config/wiring — verified by effect, not unit-tested
+  (see `## Tests` below). `"scan": "node dist/src/main.js"` in `package.json` (see the
+  Status section above for why it's `dist/src/main.js`, not `dist/main.js`).
 
 ## Tests (strict RED-first; modules only)
 
@@ -588,10 +652,10 @@ agent-readiness-kit/
 | ~~3~~ | ~~`src/scan/sources/oraAi.ts` (two-phase `POST /api/scan` then `GET /api/score/<url>`)~~ | agent | — | **shipped 2026-09-17** |
 | ~~4~~ | ~~`src/scan/sources/isitAgentReady.ts` (`POST https://isitagentready.com/api/scan`, no key — renamed from the originally-planned `cloudflareUrlScanner.ts`, see External API contracts)~~ | agent | — | **shipped 2026-09-17** |
 | ~~5~~ | ~~`src/scan/sources/cloudflareMcp.ts` + `mcpA2aProbe.ts` (agent-card.json / mcp server-card / A2A probes)~~ | agent | — | **shipped 2026-09-16** |
-| 6 | `src/scan/orchestrator.ts` (runs all sources for one property, assembles a `ScanRun`) | agent | 1, 2, 3, 4, 5 | orchestrator test with fake sources produces a valid `ScanRun` |
+| ~~6~~ | ~~`src/scan/orchestrator.ts` (runs all sources for one property, assembles a `ScanRun`)~~ | agent | 1, 2, 3, 4, 5 | **shipped 2026-09-17** |
 | ~~7~~ | ~~`src/checkpoint.ts` (read/write `data/scans/<id>.json`) + `src/playbook.ts` (remediation text per Finding)~~ | agent | — | **shipped 2026-09-16** |
 | ~~8~~ | ~~`src/remediation/issue.ts` (dedup-safe issue create/update per architecture.md's dedup section) + `src/remediation/github.ts`~~ | agent | — | **shipped 2026-09-16** |
-| 9 | `src/main.ts` (CLI entrypoint: orchestrator -> checkpoint -> remediation, over all of `PROPERTIES`) | agent | 1–8 | `node dist/main.js` runs end-to-end against one property locally |
+| ~~9~~ | ~~`src/main.ts` (CLI entrypoint: orchestrator -> checkpoint -> remediation, over all of `PROPERTIES`)~~ | agent | 1–8 | **shipped 2026-09-17** |
 | ~~10~~ | ~~`.github/workflows/ci.yml` (typecheck + test on PR)~~ | agent | — | **shipped 2026-09-16** |
 | 11 | `.github/workflows/scan.yml` (scheduled scan job) | owner | 9 | owner provisions ora.ai / Cloudflare API token secrets; workflow runs green on schedule |
 | ~~12~~ | ~~`worker/` MCP layer (`wrangler.jsonc`, `src/index.ts`, `src/mcp/tools.ts`, `src/wellknown/agent-card.ts`, tests) mirroring `agenthud-agui-a2ui/worker/`~~ | agent | — | **shipped 2026-09-16** |

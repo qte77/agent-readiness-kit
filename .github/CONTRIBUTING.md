@@ -35,6 +35,11 @@ npm install         # dependencies
 npm test             # vitest
 npm run typecheck    # tsc --noEmit
 npm run build        # tsc
+npm run scan         # node dist/src/main.js — run a real scan locally (needs `npm run build`
+                      # first); files/updates a remediation issue per property, which needs
+                      # GITHUB_TOKEN set — without it, that step fails gracefully with a clear
+                      # message and the loop moves on to the next property (an accepted
+                      # local-run gap, not a bug)
 ```
 
 Run `npm run typecheck && npm test` before opening a PR (CI enforces both; no linter is

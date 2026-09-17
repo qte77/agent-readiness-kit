@@ -9,6 +9,29 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- `src/main.ts` (plan row 9): CLI entrypoint — for every property in
+  `config/properties.ts`'s `PROPERTIES`, runs the row-6 orchestrator, writes the resulting
+  `ScanRun` to `data/scans/<propertyId>.json`, then files/updates a dedup-safe remediation
+  issue against this repo (`{owner: "qte77", repo: "agent-readiness-kit"}`); per-property
+  console output (score/grade, finding counts by status, checkpoint path, issue action); a
+  missing `GITHUB_TOKEN` (or any other issue-upsert failure) logs a clear warning and moves
+  on to the next property instead of crashing the run — an accepted local-run gap, not a
+  bug. Added an `npm run scan` alias (`node dist/src/main.js`) and documented it in
+  README.md/`.github/CONTRIBUTING.md`'s Development sections. Config/wiring — verified by
+  effect: a real `npm run build && node dist/src/main.js` run against all 3 real
+  `PROPERTIES` and real external APIs completed for every property, produced real ora.ai
+  scores/grades and 27 findings per property across all 7 sources, and wrote real,
+  non-placeholder `data/scans/*.json` content (not committed — seeding that data for real is
+  row 13's job).
+- `src/scan/orchestrator.ts` (plan row 6): `scanProperty(property): Promise<ScanRun>` runs
+  all 7 `src/scan/sources/*.ts` modules concurrently (`Promise.all`) for one property,
+  concatenates every source's `Finding[]` into `ScanRun.findings` with no cross-source dedup
+  (`Finding.id` is already unique per source — see the plan's Design decision 3), and
+  special-cases `scanOraAi`'s `{findings, score?, grade?}` return shape by also assigning its
+  `score`/`grade` onto the assembled `ScanRun` (Design decision 1). Sets `propertyId`/`url`
+  from the property config and `scannedAt` from `new Date().toISOString()`.
+  `test/scan/orchestrator.test.ts` (8 new, 136 total passing), RED-first, all 7 sources
+  mocked via `vi.mock` — no real network in this test.
 - `src/scan/sources/isitAgentReady.ts`: row 4 of the plan — a single unauthenticated call to
   `POST https://isitagentready.com/api/scan` (`{ url }`, synchronous, no submit-then-poll,
   no API key/account/auth of any kind), superseding the originally-planned Cloudflare URL
@@ -111,6 +134,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   stops at `worker/` instead of picking up the root's `vitest.config.ts` — found via a red CI
   run on PR #14 (the worker job's `npm ci` never installs the root's `node_modules`, so
   resolving `vitest/config` from the root config failed there)
+
+### Fixed
+
+- `vitest.config.ts`: excludes `dist/**` (vitest v4's own `configDefaults.exclude` is just
+  `node_modules`/`.git`, not `dist`). Found while verifying row 9's `npm run build && node
+  dist/src/main.js`: this repo's `tsconfig.json` also compiles `test/**/*.ts` (needed for
+  `tsc --noEmit` to typecheck the test suite), so a local `npm run build` left compiled test
+  files at `dist/test/**/*.test.js` that a subsequent `npx vitest run` silently
+  double-discovered and double-ran (136 tests became 272). Never surfaced in CI (the `check`
+  job never runs `npm run build` before `npm test`), but pollutes any local run after a build.
 
 ### Changed
 

@@ -173,13 +173,27 @@ predecessor: null
   the expected, clear `GITHUB_TOKEN is not set` message for all 3 properties (no
   `GITHUB_TOKEN` in this environment) — an accepted local-run gap per Design decision 2, not
   a bug worked around.
+- **2026-09-17 (row 11):** `.github/workflows/scan.yml` — weekly cron (Monday 06:00 UTC) +
+  `workflow_dispatch`. `permissions: contents: write, issues: write` at workflow level (no
+  new secrets — `GITHUB_TOKEN` is GHA's own automatic token, just needs the explicit
+  `env:`/`permissions:` wiring this row provides, per the Watch-out on this that's existed
+  since row 8). Checks out both this repo and `qte77/polyfetch-scrape` (into `polyfetch-scrape/`),
+  installs `uv` via `astral-sh/setup-uv` (SHA-pinned, verified against the real repo's latest
+  release tag), sets `POLYFETCH_SCRAPE_DIR` to the checked-out path, builds, runs `npm run
+  scan`, then commits+pushes any changed `data/scans/*.json` directly to `main` (git history
+  as the trend record, per architecture.md's locked decision 2). **Not yet verified live** —
+  a `workflow_dispatch` run (or waiting for the schedule) is needed to confirm the polyfetch
+  checkout + `uv run` actually resolves in the GHA sandbox, and whether `discoverSnapshot.ts`'s
+  `discover` command needs the patchright/Chromium tier (no `polyfetch doctor --fix` step was
+  added — unconfirmed whether `discover` needs the browser tier at all; if the first real run
+  shows `discoverSnapshot` findings staying `"unknown"` for a reason other than a genuinely
+  JS-gated site, add that step then, don't guess now).
 
 **What's next, in order** (full detail in the remaining-work table below; its "Depends on"
 column is the source of truth for sequencing):
 
-1. Row 11 (`scan.yml`) — **owner-gated** — rows 6 and 9 both shipped 2026-09-17, so row 11 is
-   unblocked now.
-2. Row 13 (first real scan run, committing `data/scans/*.json` for real) — after row 11.
+1. Row 13 (first real scan run, committing `data/scans/*.json` for real) — trigger row 11 via
+   `workflow_dispatch` (or wait for the schedule) now that it's shipped.
 
 **The loop** (per row, non-trivial module logic only — see Quality gates below): RED-first
 test modeling the expected/desired behavior first, in `test/scan/sources/*.test.ts` (fake
@@ -260,10 +274,11 @@ npm run dev           # wrangler dev, for GET /.well-known/agent-card.json + POS
   favor of `POST https://isitagentready.com/api/scan`, a plain unauthenticated JSON endpoint
   confirmed live against a real property. See `## External API contracts` for the full
   rationale — this also means row 11 provisions **zero API secrets** now (see Owner-gates).
-- **Row 11 also needs a `qte77/polyfetch-scrape` checkout + `uv` install in the workflow**,
-  with `POLYFETCH_SCRAPE_DIR` pointed at it — nothing currently checks that repo out in CI, so
-  row 2's `discoverSnapshot.ts` would silently degrade to `"unknown"` on every scheduled run
-  without this.
+- **Row 11's `qte77/polyfetch-scrape` checkout + `uv` install is done** (2026-09-17) but
+  **not yet live-verified** — trigger a `workflow_dispatch` run once this merges and check
+  whether `discoverSnapshot.ts` actually gets non-`"unknown"` findings, or whether the
+  `discover` command needs the patchright/Chromium tier (`polyfetch doctor --fix`) that this
+  workflow doesn't install.
 - No lint tooling is configured (`package.json` has `test`/`typecheck` scripts only) — decide
   once, not per-row, if/when a `worker/` CI job or stricter gating is added.
 - The crosswalk table in `agenthud-agui-a2ui/docs/agent-readiness.md` has a few genuinely
@@ -631,6 +646,14 @@ agent-readiness-kit/
   property instead of crashing the run. Config/wiring — verified by effect, not unit-tested
   (see `## Tests` below). `"scan": "node dist/src/main.js"` in `package.json` (see the
   Status section above for why it's `dist/src/main.js`, not `dist/main.js`).
+- `.github/workflows/scan.yml` — weekly cron (`0 6 * * 1`) + `workflow_dispatch`;
+  `permissions: contents: write, issues: write`. Checks out this repo and
+  `qte77/polyfetch-scrape` (to `polyfetch-scrape/`), installs `uv` (`astral-sh/setup-uv`,
+  SHA-pinned), sets `POLYFETCH_SCRAPE_DIR`, runs `npm ci && npm run build && npm run scan`
+  with `GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}`, then commits+pushes any changed
+  `data/scans/*.json` to `main` directly (no PR — this is the trend-record commit
+  architecture.md's locked decision 2 describes). No `polyfetch doctor --fix`/Chromium
+  install step — unconfirmed whether `discover` needs the patchright tier (see Watch-outs).
 
 ## Tests (strict RED-first; modules only)
 
@@ -657,7 +680,7 @@ agent-readiness-kit/
 | ~~8~~ | ~~`src/remediation/issue.ts` (dedup-safe issue create/update per architecture.md's dedup section) + `src/remediation/github.ts`~~ | agent | — | **shipped 2026-09-16** |
 | ~~9~~ | ~~`src/main.ts` (CLI entrypoint: orchestrator -> checkpoint -> remediation, over all of `PROPERTIES`)~~ | agent | 1–8 | **shipped 2026-09-17** |
 | ~~10~~ | ~~`.github/workflows/ci.yml` (typecheck + test on PR)~~ | agent | — | **shipped 2026-09-16** |
-| 11 | `.github/workflows/scan.yml` (scheduled scan job) | owner | 9 | owner provisions ora.ai / Cloudflare API token secrets; workflow runs green on schedule |
+| ~~11~~ | ~~`.github/workflows/scan.yml` (scheduled scan job)~~ | owner | 9 | **shipped 2026-09-17** (weekly cron + `workflow_dispatch`, no API secrets needed — see Status/Watch-outs; not yet live-verified) |
 | ~~12~~ | ~~`worker/` MCP layer (`wrangler.jsonc`, `src/index.ts`, `src/mcp/tools.ts`, `src/wellknown/agent-card.ts`, tests) mirroring `agenthud-agui-a2ui/worker/`~~ | agent | — | **shipped 2026-09-16** |
 | 13 | First real scan run seeding `data/scans/{qte77-github-io,agenthud-agui-a2ui,sortmy-london}.json` | agent | 1–7, 9, 11 | 3 files committed with real findings, not placeholders |
 

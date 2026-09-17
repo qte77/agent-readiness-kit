@@ -9,6 +9,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- `.github/workflows/codeql.yml`: CodeQL analysis (`javascript-typescript` + `actions`
+  languages — this repo's workflow YAML included, not just its TS source) on push/PR to
+  `main`, a weekly schedule, and `workflow_dispatch`. May also resolve the ruleset's
+  `code_quality` gate that's been forcing an owner `--admin` merge on every bot-authored PR
+  (see `docs/plans/0001-scan-engine.md`'s arc-close notes) — that gate ties to code scanning,
+  which was `not-configured` on this repo; unconfirmed until the next bot-authored PR is
+  tested
+- `.github/dependabot.yml`: weekly dependency updates for the 3 real ecosystems in this repo
+  (root `npm`, `worker/`'s `npm`, and `github-actions` — which also keeps this repo's
+  SHA-pinned actions' trailing `# vX.Y.Z` comments current). Minor/patch updates are grouped
+  per ecosystem into one PR; majors stay individual since they often need manual review
 - `config/properties.ts`: added `sfclarity.com` (`sfclarity-com`) as a fourth tracked
   property; `README.md`'s intro list updated to match
 - `data/scans/{qte77-github-io,agenthud-agui-a2ui,sortmy-london}.json` (plan row 13): the
@@ -150,6 +161,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- `CONTRIBUTING.md` moved from `.github/CONTRIBUTING.md` to the repo root (GitHub recognizes
+  either location for the community-profile link; root is more discoverable); updated its own
+  internal relative links plus the reference in `AGENTS.md`. `README.md` also rewritten:
+  states current state plainly ("Live", not "early scaffold" — arc 0001 shipped a running
+  weekly pipeline), adds a short "How it works" walkthrough of the scan → orchestrate →
+  checkpoint → remediate pipeline, and points to the new `CONTRIBUTING.md` path
 - `docs/plans/0001-scan-engine.md`: row 11's automated `data/scans/*.json` commit is
   **owner-gated, not fully unattended** — every scheduled `scan.yml` run's PR needs an owner
   `--admin` squash-merge, because the active ruleset stays `blocked` even with CI, CodeFactor,
@@ -163,6 +180,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- `vitest.config.ts`: excludes `.claude/**` — this harness's per-agent worktrees live under
+  `.claude/worktrees/<id>/` inside the repo root, and a concurrent worktree's own
+  `worker/test/*.test.ts` was otherwise getting swept into the root's local test run,
+  failing with an unrelated "Cannot find package 'zod'" error (found while running tests
+  locally alongside an in-progress dispatched agent)
 - `.github/workflows/scan.yml`: the "Commit scan results" step pushed directly to `main`,
   which a repository ruleset (added 2026-09-16, discovered via a live failed
   `workflow_dispatch` run on 2026-09-17) rejects outright (`GH013`: PR-only changes, a

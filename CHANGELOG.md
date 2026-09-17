@@ -9,6 +9,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- `config/properties.ts`: added `sfclarity.com` (`sfclarity-com`) as a fourth tracked
+  property; `README.md`'s intro list updated to match
 - `data/scans/{qte77-github-io,agenthud-agui-a2ui,sortmy-london}.json` (plan row 13): the
   first real scan run, seeded with real ora.ai/isitagentready.com findings for all 3
   properties via the merged `scan.yml` run (PR #27) — arc 0001 is complete, all 13 rows

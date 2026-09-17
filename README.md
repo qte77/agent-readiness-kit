@@ -1,7 +1,7 @@
 # agent-readiness-kit
 
 Scans qte77-owned properties (`qte77.github.io`, `agenthud-agui-a2ui`,
-`sortmy.london`/`ldnmxx-hack`) for "agent-native readiness" against six categories
+`sortmy.london`/`ldnmxx-hack`, `sfclarity.com`) for "agent-native readiness" against six categories
 (Discovery / Content / Trust / Execution / Agent-to-Agent / Identity & Auth) and produces
 concrete remediation — not just a score.
 

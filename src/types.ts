@@ -30,7 +30,7 @@ export const CATEGORIES: readonly Category[] = [
  */
 export type SourceId =
   | "cloudflareMcp"
-  | "cloudflareUrlScanner"
+  | "isitAgentReady"
   | "oraAi"
   | "wellKnown"
   | "contentSignal"

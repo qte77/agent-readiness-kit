@@ -11,6 +11,9 @@ not just a score.
 - Read [docs/architecture.md](docs/architecture.md) and
   [docs/plans/0001-scan-engine.md](docs/plans/0001-scan-engine.md) before touching scan-engine
   code — several decisions there are locked and verified at source, not to be re-derived.
+- Read [docs/plans/0002-readiness-dashboard.md](docs/plans/0002-readiness-dashboard.md) before
+  touching `site/`, `scripts/buildSite*.ts`, or `.github/workflows/pages.yml` — same convention,
+  a different arc.
 
 ## Documentation hierarchy
 
@@ -40,7 +43,16 @@ npm run scan         # node dist/src/main.js — run a real scan locally (needs 
                       # GITHUB_TOKEN set — without it, that step fails gracefully with a clear
                       # message and the loop moves on to the next property (an accepted
                       # local-run gap, not a bug)
+npm run site:build    # node dist/scripts/buildSiteCli.js — builds site-dist/ (the GitHub
+                      # Pages dashboard + its data) from data/scans/ and site/; needs
+                      # `npm run build` first. Preview locally with `npx serve site-dist`
+                      # (dev-only, adds no dependency) or any other static file server.
 ```
+
+The dashboard itself (`https://qte77.github.io/agent-readiness-kit/`) is deployed by
+[`.github/workflows/pages.yml`](.github/workflows/pages.yml) on every push to `main` touching
+`data/scans/**` or `site/**` — see
+[docs/plans/0002-readiness-dashboard.md](docs/plans/0002-readiness-dashboard.md).
 
 Run `npm run typecheck && npm test` before opening a PR (CI enforces both; no linter is
 configured yet — see the plan's remaining-work table).

@@ -25,9 +25,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   properties in `site/style.css`, cited to `qte77/qte77/brand/DESIGN.md` (same pattern
   `paperverse/ui/src/theme.css` already uses). New `npm run site:build` script;
   `.gitignore` adds `site-dist/`. Deviates from the plan's `git log --follow` spec — verified at
-  source that `--follow`'s rename-detection heuristic misattributes an unrelated commit to
-  `data/scans/redacted-property-com.json`'s history; uses a plain `git log --reverse` instead (see the
-  plan doc's Status section for the full detail).
+  source that `--follow`'s rename-detection heuristic misattributes an unrelated commit to a
+  tracked property's history; uses a plain `git log --reverse` instead (see the plan doc's
+  Status section for the full detail).
 - `.github/workflows/codeql.yml`: CodeQL analysis (`javascript-typescript` + `actions`
   languages — this repo's workflow YAML included, not just its TS source) on push/PR to
   `main`, a weekly schedule, and `workflow_dispatch`. May also resolve the ruleset's
@@ -39,8 +39,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   (root `npm`, `worker/`'s `npm`, and `github-actions` — which also keeps this repo's
   SHA-pinned actions' trailing `# vX.Y.Z` comments current). Minor/patch updates are grouped
   per ecosystem into one PR; majors stay individual since they often need manual review
-- `config/properties.ts`: added `redacted-property.com` (`redacted-property-com`) as a fourth tracked
-  property; `README.md`'s intro list updated to match
 - `data/scans/{qte77-github-io,agenthud-agui-a2ui,sortmy-london}.json` (plan row 13): the
   first real scan run, seeded with real ora.ai/isitagentready.com findings for all 3
   properties via the merged `scan.yml` run (PR #27) — arc 0001 is complete, all 13 rows
@@ -256,5 +254,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Removed
 
+- A previously-tracked property was dropped from `config/properties.ts` — not an appropriate
+  scan target for this public repo. Removed its committed scan-data file, its README mention,
+  and its remediation-tracker issue; a full git history rewrite to purge all past traces of it
+  is tracked separately, not done in this commit
 - `docs/handoffs/0001-scan-engine.md` and the `docs/handoffs/` pattern — this project keeps one
   file per arc; onboarding content now lives in the plan's own `## Status` section

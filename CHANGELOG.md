@@ -141,6 +141,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   run on PR #14 (the worker job's `npm ci` never installs the root's `node_modules`, so
   resolving `vitest/config` from the root config failed there)
 
+### Changed
+
+- `docs/plans/0001-scan-engine.md`: row 13 is now **owner-gated, not agent-gated** — the
+  first real `scan.yml` run succeeded end-to-end (real ora.ai/isitagentready.com scores for
+  all 3 properties) and opened PR #27 with auto-merge armed, but the active ruleset's
+  `require_extra_approval_for_unattributed_changes` requires a human "Approve" click on
+  bot-authored PRs regardless of passing checks or `--admin`/`--auto` — this recurs on every
+  future scheduled run, not just this one. PR #27 is left open, unmerged, for the repo owner.
+
 ### Fixed
 
 - `.github/workflows/scan.yml`: the "Commit scan results" step pushed directly to `main`,

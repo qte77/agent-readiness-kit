@@ -1,7 +1,7 @@
 {
   "propertyId": "sfclarity-com",
   "url": "https://sfclarity.com",
-  "scannedAt": "2026-09-17T15:09:10.844Z",
+  "scannedAt": "2026-09-17T15:45:57.674Z",
   "findings": [
     {
       "id": "wellKnown.agent-instruction",
@@ -260,7 +260,7 @@
       "evidence": {
         "level": 4,
         "levelName": "Agent-Integrated",
-        "scannedAt": "2026-09-17T15:08:30.867Z",
+        "scannedAt": "2026-09-17T15:45:19.120Z",
         "checks": {
           "discoverability": {
             "robotsTxt": {
@@ -280,7 +280,7 @@
                     "headers": {
                       "content-type": "text/plain; charset=utf-8",
                       "content-length": "2826",
-                      "cf-ray": "a3c906b299e2f40e-LHR"
+                      "cf-ray": "a3c93c969efad825-ORD"
                     },
                     "bodyPreview": "# sfclarity — a public directory of SF tech events. Crawling is welcome.\n#\n# LLMs: https://sfclarity.com/llms.txt\n# Agents: https://sfclarity.com/AGENTS.md\n# API: https://sfclarity.com/openapi.json\n#\n# The Content-Signal block below was previously injected by Cloudflare's managed robots.txt. It\n# vanished on 2026-08-17 when that setting was turned off to lift the per-crawler `Disallow: /`\n# rules, taking the rights reservation with it. It lives here now instead: this is our policy, not\n# the CDN..."
                   },
@@ -338,7 +338,7 @@
                     "headers": {
                       "content-type": "application/xml",
                       "content-length": "1329",
-                      "cf-ray": "a3c906b2ca1cf40e-LHR"
+                      "cf-ray": "a3c93c970f9fd825-ORD"
                     }
                   },
                   "finding": {
@@ -355,7 +355,7 @@
                   }
                 }
               ],
-              "durationMs": 27
+              "durationMs": 52
             },
             "linkHeaders": {
               "status": "pass",
@@ -394,7 +394,7 @@
                     "headers": {
                       "content-type": "text/html; charset=utf-8",
                       "link": "</openapi.json>; rel=\"service-desc\"; type=\"application/json\", </.well-known/api-catalog>; rel=\"api-catalog\"; type=\"application/linkset+json\", </index.md>; rel=\"alternate\"; type=\"text/markdown\"",
-                      "cf-ray": "a3c906b3fb9df40e-LHR"
+                      "cf-ray": "a3c93c98091ed825-ORD"
                     }
                   },
                   "finding": {
@@ -427,7 +427,7 @@
                   }
                 }
               ],
-              "durationMs": 220
+              "durationMs": 193
             },
             "dnsAid": {
               "status": "fail",
@@ -469,7 +469,7 @@
                     "headers": {
                       "content-type": "application/dns-json"
                     },
-                    "bodyPreview": "{\"Status\":0,\"TC\":false,\"RD\":true,\"RA\":true,\"AD\":true,\"CD\":false,\"Question\":[{\"name\":\"_index._agents.sfclarity.com\",\"type\":64}],\"Authority\":[{\"name\":\"sfclarity.com\",\"type\":6,\"TTL\":1800,\"data\":\"cullen.ns.cloudflare.com. dns.cloudflare.com. 2415052943 10000 2400 604800 1800\"},{\"name\":\"sfclarity.com\",\"type\":46,\"TTL\":1800,\"data\":\"SOA 13 2 1800 1789747705 1789567705 34505 sfclarity.com. mqTS16aOffGyC29VCEVWzcpJM2c8ErD4mNun3Wb4rQbF98WwqLMSnY5rIv8z7xDJRsKZYWPJ2nB70FwdYEwSLQ==\"},{\"name\":\"_index._agents.s..."
+                    "bodyPreview": "{\"Status\":0,\"TC\":false,\"RD\":true,\"RA\":true,\"AD\":true,\"CD\":false,\"Question\":[{\"name\":\"_index._agents.sfclarity.com\",\"type\":64}],\"Authority\":[{\"name\":\"sfclarity.com\",\"type\":6,\"TTL\":1800,\"data\":\"cullen.ns.cloudflare.com. dns.cloudflare.com. 2415052943 10000 2400 604800 1800\"},{\"name\":\"sfclarity.com\",\"type\":46,\"TTL\":1800,\"data\":\"SOA 13 2 1800 1789749912 1789569912 34505 sfclarity.com. sB7PIN7KOuKRLp/J3FxuZRFw20RS0Dro3jJyt+Qvtoa/k3VGhahl6E5aXr3UJUibec0RX7TetOik9pDhfb+vNQ==\"},{\"name\":\"_index._agents.s..."
                   },
                   "finding": {
                     "outcome": "neutral",
@@ -492,7 +492,7 @@
                     "headers": {
                       "content-type": "application/dns-json"
                     },
-                    "bodyPreview": "{\"Status\":0,\"TC\":false,\"RD\":true,\"RA\":true,\"AD\":true,\"CD\":false,\"Question\":[{\"name\":\"_index._agents.sfclarity.com\",\"type\":65}],\"Authority\":[{\"name\":\"sfclarity.com\",\"type\":6,\"TTL\":1800,\"data\":\"cullen.ns.cloudflare.com. dns.cloudflare.com. 2415052943 10000 2400 604800 1800\"},{\"name\":\"sfclarity.com\",\"type\":46,\"TTL\":1800,\"data\":\"SOA 13 2 1800 1789747705 1789567705 34505 sfclarity.com. GqyNIrsNQFLK7H0UOoCnR8lmissWP7c/9q+GKkwf8OLUWajJ0WF2mdZQUBxjF3uvjLbJDL5sETw+xDy9u5qYVA==\"},{\"name\":\"_index._agents.s..."
+                    "bodyPreview": "{\"Status\":0,\"TC\":false,\"RD\":true,\"RA\":true,\"AD\":true,\"CD\":false,\"Question\":[{\"name\":\"_index._agents.sfclarity.com\",\"type\":65}],\"Authority\":[{\"name\":\"sfclarity.com\",\"type\":6,\"TTL\":1800,\"data\":\"cullen.ns.cloudflare.com. dns.cloudflare.com. 2415052943 10000 2400 604800 1800\"},{\"name\":\"sfclarity.com\",\"type\":46,\"TTL\":1800,\"data\":\"SOA 13 2 1800 1789749912 1789569912 34505 sfclarity.com. qNLdMav2boI51u1drHc3RhxB4IAVtFVpFJdDD+u2f5m/tj4QIoa+eAmis66GFMYqkMZc5OyYEzwJTNTY98MjRg==\"},{\"name\":\"_index._agents.s..."
                   },
                   "finding": {
                     "outcome": "neutral",
@@ -515,7 +515,7 @@
                     "headers": {
                       "content-type": "application/dns-json"
                     },
-                    "bodyPreview": "{\"Status\":0,\"TC\":false,\"RD\":true,\"RA\":true,\"AD\":true,\"CD\":false,\"Question\":[{\"name\":\"_a2a._agents.sfclarity.com\",\"type\":64}],\"Authority\":[{\"name\":\"sfclarity.com\",\"type\":6,\"TTL\":1800,\"data\":\"cullen.ns.cloudflare.com. dns.cloudflare.com. 2415052943 10000 2400 604800 1800\"},{\"name\":\"sfclarity.com\",\"type\":46,\"TTL\":1800,\"data\":\"SOA 13 2 1800 1789747705 1789567705 34505 sfclarity.com. t//reD1nxqcF7CPf7f1/5FfwosrjKDqyw/TOaP+5TAmVveptQ0Gy28+sJ4thG2KRGd/tFEiwgZRRlpUDQ0t25Q==\"},{\"name\":\"_a2a._agents.sfcla..."
+                    "bodyPreview": "{\"Status\":0,\"TC\":false,\"RD\":true,\"RA\":true,\"AD\":true,\"CD\":false,\"Question\":[{\"name\":\"_a2a._agents.sfclarity.com\",\"type\":64}],\"Authority\":[{\"name\":\"sfclarity.com\",\"type\":6,\"TTL\":1800,\"data\":\"cullen.ns.cloudflare.com. dns.cloudflare.com. 2415052943 10000 2400 604800 1800\"},{\"name\":\"sfclarity.com\",\"type\":46,\"TTL\":1800,\"data\":\"SOA 13 2 1800 1789749912 1789569912 34505 sfclarity.com. 1Fn8G7G67mgsclaswZwftLJDjLiSyfILD9Mqs0uuwjUODymqM0xCJg8TA5MEdtHc20XTzwAMZFF5Kb4A9xZdnA==\"},{\"name\":\"_a2a._agents.sfcla..."
                   },
                   "finding": {
                     "outcome": "neutral",
@@ -538,7 +538,7 @@
                     "headers": {
                       "content-type": "application/dns-json"
                     },
-                    "bodyPreview": "{\"Status\":0,\"TC\":false,\"RD\":true,\"RA\":true,\"AD\":true,\"CD\":false,\"Question\":[{\"name\":\"_a2a._agents.sfclarity.com\",\"type\":65}],\"Authority\":[{\"name\":\"sfclarity.com\",\"type\":6,\"TTL\":1800,\"data\":\"cullen.ns.cloudflare.com. dns.cloudflare.com. 2415052943 10000 2400 604800 1800\"},{\"name\":\"sfclarity.com\",\"type\":46,\"TTL\":1800,\"data\":\"SOA 13 2 1800 1789747705 1789567705 34505 sfclarity.com. 4fBzJPvRypcnIaXexWkuayFiRxY8LZN/TTr8Y6XCYt7m3eQZvODddm1EHOetQ9O5dEiX7qxwxvrXjnm3bMqClg==\"},{\"name\":\"_a2a._agents.sfcla..."
+                    "bodyPreview": "{\"Status\":0,\"TC\":false,\"RD\":true,\"RA\":true,\"AD\":true,\"CD\":false,\"Question\":[{\"name\":\"_a2a._agents.sfclarity.com\",\"type\":65}],\"Authority\":[{\"name\":\"sfclarity.com\",\"type\":6,\"TTL\":1800,\"data\":\"cullen.ns.cloudflare.com. dns.cloudflare.com. 2415052943 10000 2400 604800 1800\"},{\"name\":\"sfclarity.com\",\"type\":46,\"TTL\":1800,\"data\":\"SOA 13 2 1800 1789749912 1789569912 34505 sfclarity.com. WAWDPNQzSKvHpeganATtVI1WKon72Z1gpGS3iXXEEQyYONuz9uDS6PM5IQxn3hp6gmz9OGC9xu9/KzlgVkxtJw==\"},{\"name\":\"_a2a._agents.sfcla..."
                   },
                   "finding": {
                     "outcome": "neutral",
@@ -561,7 +561,7 @@
                     "headers": {
                       "content-type": "application/dns-json"
                     },
-                    "bodyPreview": "{\"Status\":0,\"TC\":false,\"RD\":true,\"RA\":true,\"AD\":true,\"CD\":false,\"Question\":[{\"name\":\"_mcp._agents.sfclarity.com\",\"type\":64}],\"Authority\":[{\"name\":\"sfclarity.com\",\"type\":6,\"TTL\":1800,\"data\":\"cullen.ns.cloudflare.com. dns.cloudflare.com. 2415052943 10000 2400 604800 1800\"},{\"name\":\"sfclarity.com\",\"type\":46,\"TTL\":1800,\"data\":\"SOA 13 2 1800 1789747705 1789567705 34505 sfclarity.com. vylnE7Y991dtQxGIS+Nza4hhmh094N6npCuJm38+O5mWvShdDj4T5iwYwvwPicy2rEW/CMK54+XkCzQTcRF8SA==\"},{\"name\":\"_mcp._agents.sfcla..."
+                    "bodyPreview": "{\"Status\":0,\"TC\":false,\"RD\":true,\"RA\":true,\"AD\":true,\"CD\":false,\"Question\":[{\"name\":\"_mcp._agents.sfclarity.com\",\"type\":64}],\"Authority\":[{\"name\":\"sfclarity.com\",\"type\":6,\"TTL\":1800,\"data\":\"cullen.ns.cloudflare.com. dns.cloudflare.com. 2415052943 10000 2400 604800 1800\"},{\"name\":\"sfclarity.com\",\"type\":46,\"TTL\":1800,\"data\":\"SOA 13 2 1800 1789749912 1789569912 34505 sfclarity.com. RYOQhVDa6FSLVlrKgVJZCIUmkIfnLXtCh3yiMmsHs9T5qyXOb3ZEMRiR+d7WcgECQv6ZThiCqelOiPnPc/z8Gg==\"},{\"name\":\"_mcp._agents.sfcla..."
                   },
                   "finding": {
                     "outcome": "neutral",
@@ -584,7 +584,7 @@
                     "headers": {
                       "content-type": "application/dns-json"
                     },
-                    "bodyPreview": "{\"Status\":0,\"TC\":false,\"RD\":true,\"RA\":true,\"AD\":true,\"CD\":false,\"Question\":[{\"name\":\"_mcp._agents.sfclarity.com\",\"type\":65}],\"Authority\":[{\"name\":\"sfclarity.com\",\"type\":6,\"TTL\":1800,\"data\":\"cullen.ns.cloudflare.com. dns.cloudflare.com. 2415052943 10000 2400 604800 1800\"},{\"name\":\"sfclarity.com\",\"type\":46,\"TTL\":1800,\"data\":\"SOA 13 2 1800 1789747705 1789567705 34505 sfclarity.com. QqPnu36LjHVfgqdYkIbaFAKYqY7tPsmXJrVp0ylE40WNJbto8qgc22+BNjefnK3DiheDMsygCfFEIDw1XGjeDg==\"},{\"name\":\"_mcp._agents.sfcla..."
+                    "bodyPreview": "{\"Status\":0,\"TC\":false,\"RD\":true,\"RA\":true,\"AD\":true,\"CD\":false,\"Question\":[{\"name\":\"_mcp._agents.sfclarity.com\",\"type\":65}],\"Authority\":[{\"name\":\"sfclarity.com\",\"type\":6,\"TTL\":1800,\"data\":\"cullen.ns.cloudflare.com. dns.cloudflare.com. 2415052943 10000 2400 604800 1800\"},{\"name\":\"sfclarity.com\",\"type\":46,\"TTL\":1800,\"data\":\"SOA 13 2 1800 1789749912 1789569912 34505 sfclarity.com. 1iWHm4027qJDfsimhHkoLcWIiWcKWZztfWfU0hzX0Lu2v8dfwJSztsx1FbDO1D4Ka9r+uPQ27XKYl+sukpgz+g==\"},{\"name\":\"_mcp._agents.sfcla..."
                   },
                   "finding": {
                     "outcome": "neutral",
@@ -607,7 +607,7 @@
                     "headers": {
                       "content-type": "application/dns-json"
                     },
-                    "bodyPreview": "{\"Status\":0,\"TC\":false,\"RD\":true,\"RA\":true,\"AD\":true,\"CD\":false,\"Question\":[{\"name\":\"_index._agents.sfclarity.com\",\"type\":16}],\"Authority\":[{\"name\":\"sfclarity.com\",\"type\":6,\"TTL\":1800,\"data\":\"cullen.ns.cloudflare.com. dns.cloudflare.com. 2415052943 10000 2400 604800 1800\"},{\"name\":\"sfclarity.com\",\"type\":46,\"TTL\":1800,\"data\":\"SOA 13 2 1800 1789747705 1789567705 34505 sfclarity.com. LZz+cjpFy1XiBfyDi/Pmft24bZ3KqHhZMVbg0ioX3vi4mv5N3RTTbn4BLT/UqYGBRXENGUZmch7/Rjaqqny3Qg==\"},{\"name\":\"_index._agents.s..."
+                    "bodyPreview": "{\"Status\":0,\"TC\":false,\"RD\":true,\"RA\":true,\"AD\":true,\"CD\":false,\"Question\":[{\"name\":\"_index._agents.sfclarity.com\",\"type\":16}],\"Authority\":[{\"name\":\"sfclarity.com\",\"type\":6,\"TTL\":1800,\"data\":\"cullen.ns.cloudflare.com. dns.cloudflare.com. 2415052943 10000 2400 604800 1800\"},{\"name\":\"sfclarity.com\",\"type\":46,\"TTL\":1800,\"data\":\"SOA 13 2 1800 1789749912 1789569912 34505 sfclarity.com. 6hpduvgkZwNAoKggSs/8SxJ7dSmTqX1aDkkLBFAxHot78K9UdutFxrShapvvHo/Hc7uXhILq8heqSJhfW6POPw==\"},{\"name\":\"_index._agents.s..."
                   },
                   "finding": {
                     "outcome": "neutral",
@@ -631,7 +631,7 @@
                   }
                 }
               ],
-              "durationMs": 25
+              "durationMs": 20
             }
           },
           "contentAccessibility": {
@@ -662,7 +662,7 @@
                     "statusText": "OK",
                     "headers": {
                       "content-type": "text/markdown; charset=utf-8",
-                      "cf-ray": "a3c906bc8e15385c-LHR"
+                      "cf-ray": "a3c93ca20a06f92b-ORD"
                     }
                   }
                 },
@@ -675,7 +675,7 @@
                   }
                 }
               ],
-              "durationMs": 504
+              "durationMs": 613
             }
           },
           "botAccessControl": {
@@ -960,7 +960,7 @@
                     "headers": {
                       "content-type": "text/plain; charset=utf-8",
                       "content-length": "2826",
-                      "cf-ray": "a3c906b299e2f40e-LHR"
+                      "cf-ray": "a3c93c969efad825-ORD"
                     },
                     "bodyPreview": "# sfclarity — a public directory of SF tech events. Crawling is welcome.\n#\n# LLMs: https://sfclarity.com/llms.txt\n# Agents: https://sfclarity.com/AGENTS.md\n# API: https://sfclarity.com/openapi.json\n#\n# The Content-Signal block below was previously injected by Cloudflare's managed robots.txt. It\n# vanished on 2026-08-17 when that setting was turned off to lift the per-crawler `Disallow: /`\n# rules, taking the rights reservation with it. It lives here now instead: this is our policy, not\n# the CDN..."
                   },
@@ -1017,7 +1017,7 @@
                     "headers": {
                       "content-type": "text/plain; charset=utf-8",
                       "content-length": "2826",
-                      "cf-ray": "a3c906b299e2f40e-LHR"
+                      "cf-ray": "a3c93c969efad825-ORD"
                     },
                     "bodyPreview": "# sfclarity — a public directory of SF tech events. Crawling is welcome.\n#\n# LLMs: https://sfclarity.com/llms.txt\n# Agents: https://sfclarity.com/AGENTS.md\n# API: https://sfclarity.com/openapi.json\n#\n# The Content-Signal block below was previously injected by Cloudflare's managed robots.txt. It\n# vanished on 2026-08-17 when that setting was turned off to lift the per-crawler `Disallow: /`\n# rules, taking the rights reservation with it. It lives here now instead: this is our policy, not\n# the CDN..."
                   },
@@ -1062,7 +1062,7 @@
                     "headers": {
                       "content-type": "application/json",
                       "content-length": "112",
-                      "cf-ray": "a3c906b2ca19f40e-LHR"
+                      "cf-ray": "a3c93c970fa3d825-ORD"
                     }
                   },
                   "finding": {
@@ -1079,7 +1079,7 @@
                   }
                 }
               ],
-              "durationMs": 49
+              "durationMs": 44
             }
           },
           "discovery": {
@@ -1110,7 +1110,7 @@
                     "headers": {
                       "content-type": "application/linkset+json",
                       "content-length": "963",
-                      "cf-ray": "a3c906b36adcf40e-LHR"
+                      "cf-ray": "a3c93c97a87fd825-ORD"
                     },
                     "bodyPreview": "{\"linkset\":[{\"anchor\":\"https://sfclarity.com/\",\"service-desc\":[{\"href\":\"https://sfclarity.com/openapi.json\",\"type\":\"application/json\",\"title\":\"sfclarity public events API (OpenAPI 3.1.1)\"}],\"item\":[{\"href\":\"https://sfclarity.com/openapi.json#/paths/~1events_enriched\",\"type\":\"application/json\",\"title\":\"List published SF tech events (read-only)\"},{\"href\":\"https://sfclarity.com/openapi.json#/paths/~1stats_public\",\"type\":\"application/json\",\"title\":\"Landing-page stat strip (read-only)\"},{\"href\":\"http..."
                   },
@@ -1144,7 +1144,7 @@
                   }
                 }
               ],
-              "durationMs": 138
+              "durationMs": 110
             },
             "oauthDiscovery": {
               "status": "fail",
@@ -1163,7 +1163,7 @@
                     "headers": {
                       "content-type": "application/json",
                       "content-length": "99",
-                      "cf-ray": "a3c906b2ca18f40e-LHR"
+                      "cf-ray": "a3c93c970fa0d825-ORD"
                     }
                   },
                   "finding": {
@@ -1184,7 +1184,7 @@
                     "headers": {
                       "content-type": "application/json",
                       "content-length": "105",
-                      "cf-ray": "a3c906b2ca32f40e-LHR"
+                      "cf-ray": "a3c93c971fb8d825-ORD"
                     }
                   },
                   "finding": {
@@ -1220,7 +1220,7 @@
                     "headers": {
                       "content-type": "application/json",
                       "content-length": "103",
-                      "cf-ray": "a3c906b2da3bf40e-LHR"
+                      "cf-ray": "a3c93c971fb9d825-ORD"
                     }
                   },
                   "finding": {
@@ -1241,7 +1241,7 @@
                     "headers": {
                       "content-type": "text/html; charset=utf-8",
                       "link": "</openapi.json>; rel=\"service-desc\"; type=\"application/json\", </.well-known/api-catalog>; rel=\"api-catalog\"; type=\"application/linkset+json\", </index.md>; rel=\"alternate\"; type=\"text/markdown\"",
-                      "cf-ray": "a3c906b2ea4bf40e-LHR"
+                      "cf-ray": "a3c93c975808d825-ORD"
                     }
                   },
                   "finding": {
@@ -1258,7 +1258,7 @@
                   }
                 }
               ],
-              "durationMs": 66
+              "durationMs": 72
             },
             "authMd": {
               "status": "fail",
@@ -1280,7 +1280,7 @@
                     "headers": {
                       "content-type": "text/markdown; charset=utf-8",
                       "content-length": "8155",
-                      "cf-ray": "a3c906b2fa51f40e-LHR"
+                      "cf-ray": "a3c93c97580dd825-ORD"
                     },
                     "bodyPreview": "<!doctype html>\n<html lang=\"en\">\n  <head>\n    <meta charset=\"UTF-8\" />\n    <link rel=\"canonical\" href=\"https://sfclarity.com/\" />\n    <!-- arc 0047 F7: Organization + WebSite structured data. No `sameAs` -- no social-profile links\n         exist anywhere else in this repo to cite, and the GitHub repo itself is private (an\n         unreachable sameAs target is the exact dead-link mistake this arc's F4 already made and\n         reverted once -- not repeating it here). -->\n    <script type=\"applica..."
                   },
@@ -1306,12 +1306,33 @@
                   }
                 }
               ],
-              "durationMs": 107
+              "durationMs": 87
             },
             "mcpServerCard": {
               "status": "fail",
               "message": "MCP Server Card not found",
               "evidence": [
+                {
+                  "action": "fetch",
+                  "label": "GET /.well-known/mcp/server-card.json",
+                  "request": {
+                    "url": "https://sfclarity.com/.well-known/mcp/server-card.json",
+                    "method": "GET"
+                  },
+                  "response": {
+                    "status": 404,
+                    "statusText": "Not Found",
+                    "headers": {
+                      "content-type": "application/json",
+                      "content-length": "99",
+                      "cf-ray": "a3c93c976830d825-ORD"
+                    }
+                  },
+                  "finding": {
+                    "outcome": "negative",
+                    "summary": "/.well-known/mcp/server-card.json returned 404"
+                  }
+                },
                 {
                   "action": "fetch",
                   "label": "GET /.well-known/mcp.json",
@@ -1325,7 +1346,7 @@
                     "headers": {
                       "content-type": "application/json",
                       "content-length": "87",
-                      "cf-ray": "a3c906b31a7ff40e-LHR"
+                      "cf-ray": "a3c93c977844d825-ORD"
                     }
                   },
                   "finding": {
@@ -1346,33 +1367,12 @@
                     "headers": {
                       "content-type": "application/json",
                       "content-length": "100",
-                      "cf-ray": "a3c906b31a75f40e-LHR"
+                      "cf-ray": "a3c93c97683bd825-ORD"
                     }
                   },
                   "finding": {
                     "outcome": "negative",
                     "summary": "/.well-known/mcp/server-cards.json returned 404"
-                  }
-                },
-                {
-                  "action": "fetch",
-                  "label": "GET /.well-known/mcp/server-card.json",
-                  "request": {
-                    "url": "https://sfclarity.com/.well-known/mcp/server-card.json",
-                    "method": "GET"
-                  },
-                  "response": {
-                    "status": 404,
-                    "statusText": "Not Found",
-                    "headers": {
-                      "content-type": "application/json",
-                      "content-length": "99",
-                      "cf-ray": "a3c906b31a71f40e-LHR"
-                    }
-                  },
-                  "finding": {
-                    "outcome": "negative",
-                    "summary": "/.well-known/mcp/server-card.json returned 404"
                   }
                 },
                 {
@@ -1384,7 +1384,7 @@
                   }
                 }
               ],
-              "durationMs": 144
+              "durationMs": 104
             },
             "a2aAgentCard": {
               "status": "fail",
@@ -1403,7 +1403,7 @@
                     "headers": {
                       "content-type": "application/json",
                       "content-length": "94",
-                      "cf-ray": "a3c906b32a85f40e-LHR"
+                      "cf-ray": "a3c93c97784cd825-ORD"
                     }
                   },
                   "finding": {
@@ -1420,7 +1420,7 @@
                   }
                 }
               ],
-              "durationMs": 138
+              "durationMs": 120
             },
             "agentSkills": {
               "status": "pass",
@@ -1444,7 +1444,7 @@
                     "headers": {
                       "content-type": "application/json",
                       "content-length": "756",
-                      "cf-ray": "a3c906b32a9ef40e-LHR"
+                      "cf-ray": "a3c93c978866d825-ORD"
                     }
                   },
                   "finding": {
@@ -1485,7 +1485,7 @@
                   }
                 }
               ],
-              "durationMs": 127
+              "durationMs": 99
             },
             "webMcp": {
               "status": "fail",
@@ -1528,7 +1528,7 @@
                   }
                 }
               ],
-              "durationMs": 4246
+              "durationMs": 4838
             },
             "ard": {
               "status": "pass",
@@ -1592,7 +1592,7 @@
                     "headers": {
                       "content-type": "application/json",
                       "content-length": "1313",
-                      "cf-ray": "a3c906b2ca1bf40e-LHR"
+                      "cf-ray": "a3c93c970fa1d825-ORD"
                     },
                     "bodyPreview": "{\"specVersion\":\"1.0\",\"host\":{\"displayName\":\"sfclarity\",\"identifier\":\"sfclarity.com\"},\"entries\":[{\"identifier\":\"urn:air:sfclarity.com:api:events\",\"displayName\":\"sfclarity public events API\",\"type\":\"application/json\",\"url\":\"https://sfclarity.com/openapi.json\",\"description\":\"Read-only OpenAPI 3.1 spec for the public SF tech-events dataset (published events + landing stats).\",\"representativeQueries\":[\"what SF tech events are happening this week\",\"find AI or startup meetups in San Francisco\",\"what's ..."
                   },
@@ -1633,7 +1633,7 @@
                     "headers": {
                       "content-type": "application/dns-json"
                     },
-                    "bodyPreview": "{\"Status\":0,\"TC\":false,\"RD\":true,\"RA\":true,\"AD\":true,\"CD\":false,\"Question\":[{\"name\":\"_catalog._agents.sfclarity.com\",\"type\":16}],\"Authority\":[{\"name\":\"sfclarity.com\",\"type\":6,\"TTL\":1800,\"data\":\"cullen.ns.cloudflare.com. dns.cloudflare.com. 2415052943 10000 2400 604800 1800\"},{\"name\":\"sfclarity.com\",\"type\":46,\"TTL\":1800,\"data\":\"SOA 13 2 1800 1789747705 1789567705 34505 sfclarity.com. QyNlRPpiOb/owGElOD/aVs8pI4L0pL84DRIXH350yZOCy0S0IzU3bqi8fjX4k2tRBTlrl9I7+9A4xw1fka/amA==\"},{\"name\":\"_catalog._agen..."
+                    "bodyPreview": "{\"Status\":0,\"TC\":false,\"RD\":true,\"RA\":true,\"AD\":true,\"CD\":false,\"Question\":[{\"name\":\"_catalog._agents.sfclarity.com\",\"type\":16}],\"Authority\":[{\"name\":\"sfclarity.com\",\"type\":6,\"TTL\":1800,\"data\":\"cullen.ns.cloudflare.com. dns.cloudflare.com. 2415052943 10000 2400 604800 1800\"},{\"name\":\"sfclarity.com\",\"type\":46,\"TTL\":1800,\"data\":\"SOA 13 2 1800 1789749912 1789569912 34505 sfclarity.com. yI16nrl20Q+j/pefMHgjqfijCdsyNCt8Ck0Z5AhsD5e6giLnfvixQV0SPNHXNjaFXG/pZTAAiInf3OUJ4h/lcQ==\"},{\"name\":\"_catalog._agen..."
                   },
                   "finding": {
                     "outcome": "neutral",
@@ -1656,7 +1656,7 @@
                     "headers": {
                       "content-type": "application/dns-json"
                     },
-                    "bodyPreview": "{\"Status\":0,\"TC\":false,\"RD\":true,\"RA\":true,\"AD\":true,\"CD\":false,\"Question\":[{\"name\":\"_search._agents.sfclarity.com\",\"type\":33}],\"Authority\":[{\"name\":\"sfclarity.com\",\"type\":6,\"TTL\":1800,\"data\":\"cullen.ns.cloudflare.com. dns.cloudflare.com. 2415052943 10000 2400 604800 1800\"},{\"name\":\"sfclarity.com\",\"type\":46,\"TTL\":1800,\"data\":\"SOA 13 2 1800 1789747705 1789567705 34505 sfclarity.com. oRKAxRgdgR6o1ySiz5SQCNnbSxYjYeANIp3i9++LnuOMAZkuJe7BruSe10tX2owLU2FnoJCZNSKWTEMsEeu31w==\"},{\"name\":\"_search._agents..."
+                    "bodyPreview": "{\"Status\":0,\"TC\":false,\"RD\":true,\"RA\":true,\"AD\":true,\"CD\":false,\"Question\":[{\"name\":\"_search._agents.sfclarity.com\",\"type\":33}],\"Authority\":[{\"name\":\"sfclarity.com\",\"type\":6,\"TTL\":1800,\"data\":\"cullen.ns.cloudflare.com. dns.cloudflare.com. 2415052943 10000 2400 604800 1800\"},{\"name\":\"sfclarity.com\",\"type\":46,\"TTL\":1800,\"data\":\"SOA 13 2 1800 1789749912 1789569912 34505 sfclarity.com. j3OOtMm7usKuA9UYUKwrBLUTWK+28s12pRuqgQtPENxYIYk68C9rrFvDu1Kiq0RlbUGKdbi/gg59U1t3rvLEVA==\"},{\"name\":\"_search._agents..."
                   },
                   "finding": {
                     "outcome": "neutral",
@@ -1664,7 +1664,7 @@
                   }
                 }
               ],
-              "durationMs": 30
+              "durationMs": 62
             }
           },
           "commerce": {
@@ -1685,33 +1685,12 @@
                     "headers": {
                       "content-type": "text/html; charset=utf-8",
                       "link": "</openapi.json>; rel=\"service-desc\"; type=\"application/json\", </.well-known/api-catalog>; rel=\"api-catalog\"; type=\"application/linkset+json\", </index.md>; rel=\"alternate\"; type=\"text/markdown\"",
-                      "cf-ray": "a3c906b3ab24f40e-LHR"
+                      "cf-ray": "a3c93c97b8a6d825-ORD"
                     }
                   },
                   "finding": {
                     "outcome": "neutral",
                     "summary": "/ returned 200 (not 402)"
-                  }
-                },
-                {
-                  "action": "fetch",
-                  "label": "GET /api/v1",
-                  "request": {
-                    "url": "https://sfclarity.com/api/v1",
-                    "method": "GET"
-                  },
-                  "response": {
-                    "status": 404,
-                    "statusText": "Not Found",
-                    "headers": {
-                      "content-type": "application/json",
-                      "content-length": "73",
-                      "cf-ray": "a3c906b3ab33f40e-LHR"
-                    }
-                  },
-                  "finding": {
-                    "outcome": "neutral",
-                    "summary": "/api/v1 returned 404 (not 402)"
                   }
                 },
                 {
@@ -1727,12 +1706,33 @@
                     "headers": {
                       "content-type": "application/json",
                       "content-length": "70",
-                      "cf-ray": "a3c906b3ab26f40e-LHR"
+                      "cf-ray": "a3c93c97c8b0d825-ORD"
                     }
                   },
                   "finding": {
                     "outcome": "neutral",
                     "summary": "/api returned 404 (not 402)"
+                  }
+                },
+                {
+                  "action": "fetch",
+                  "label": "GET /api/v1",
+                  "request": {
+                    "url": "https://sfclarity.com/api/v1",
+                    "method": "GET"
+                  },
+                  "response": {
+                    "status": 404,
+                    "statusText": "Not Found",
+                    "headers": {
+                      "content-type": "application/json",
+                      "content-length": "73",
+                      "cf-ray": "a3c93c97c8c4d825-ORD"
+                    }
+                  },
+                  "finding": {
+                    "outcome": "neutral",
+                    "summary": "/api/v1 returned 404 (not 402)"
                   }
                 },
                 {
@@ -1747,7 +1747,7 @@
                     "statusText": "OK",
                     "headers": {
                       "content-type": "application/json",
-                      "cf-ray": "a3c906b3ab21f40e-LHR"
+                      "cf-ray": "a3c93c97b89cd825-ORD"
                     }
                   }
                 },
@@ -1772,7 +1772,7 @@
                   }
                 }
               ],
-              "durationMs": 1128
+              "durationMs": 1046
             },
             "mpp": {
               "status": "neutral",
@@ -1791,7 +1791,7 @@
                     "headers": {
                       "content-type": "application/json",
                       "content-length": "8601",
-                      "cf-ray": "a3c906b3ab38f40e-LHR"
+                      "cf-ray": "a3c93c97d8d9d825-ORD"
                     }
                   },
                   "finding": {
@@ -1808,7 +1808,7 @@
                   }
                 }
               ],
-              "durationMs": 186
+              "durationMs": 193
             },
             "ucp": {
               "status": "neutral",
@@ -1827,7 +1827,7 @@
                     "headers": {
                       "content-type": "application/json",
                       "content-length": "82",
-                      "cf-ray": "a3c906b38b02f40e-LHR"
+                      "cf-ray": "a3c93c97a898d825-ORD"
                     }
                   },
                   "finding": {
@@ -1844,7 +1844,7 @@
                   }
                 }
               ],
-              "durationMs": 172
+              "durationMs": 151
             },
             "acp": {
               "status": "neutral",
@@ -1863,7 +1863,7 @@
                     "headers": {
                       "content-type": "application/json",
                       "content-length": "87",
-                      "cf-ray": "a3c906b3db6ef40e-LHR"
+                      "cf-ray": "a3c93c98091cd825-ORD"
                     }
                   },
                   "finding": {
@@ -1880,7 +1880,7 @@
                   }
                 }
               ],
-              "durationMs": 216
+              "durationMs": 205
             },
             "ap2": {
               "status": "neutral",

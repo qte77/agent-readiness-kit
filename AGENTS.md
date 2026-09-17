@@ -35,6 +35,6 @@ just a score. This file is self-contained and tracked; treat it as the source of
   keeps one file per arc — no separate handoff file).
 - [src/scan/crosswalk.ts](src/scan/crosswalk.ts) — signal → category lookup, seeded from
   `agenthud-agui-a2ui/docs/agent-readiness.md`; never forked/duplicated locally.
-- Contributor dev setup + PR workflow: [.github/CONTRIBUTING.md](.github/CONTRIBUTING.md).
+- Contributor dev setup + PR workflow: [CONTRIBUTING.md](CONTRIBUTING.md).
 
 Keep this file behavioral — no infrastructure, sandbox, or CI-token recipes.

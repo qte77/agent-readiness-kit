@@ -9,6 +9,7 @@ on:
 permissions:
   contents: write
   issues: write
+  pull-requests: write
 
 jobs:
   scan:
@@ -46,13 +47,21 @@ jobs:
         run: npm run scan
 
       - name: Commit scan results
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add data/scans/
           if git diff --cached --quiet; then
             echo "No scan changes to commit."
-          else
-            git commit -m "chore(scan): update scan results"
-            git push
+            exit 0
           fi
+          branch="chore/scan-results-$(date -u +%Y%m%d%H%M%S)"
+          git checkout -b "$branch"
+          git commit -m "chore(scan): update scan results"
+          git push origin "$branch"
+          gh pr create --title "chore(scan): update scan results" \
+            --body "Automated scan results update." \
+            --base main --head "$branch"
+          gh pr merge "$branch" --squash --auto --delete-branch

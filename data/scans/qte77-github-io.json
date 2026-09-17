@@ -1,7 +1,7 @@
 {
   "propertyId": "qte77-github-io",
   "url": "https://qte77.github.io",
-  "scannedAt": "2026-09-17T15:43:20.505Z",
+  "scannedAt": "2026-09-17T17:26:50.260Z",
   "findings": [
     {
       "id": "wellKnown.agent-instruction",
@@ -256,7 +256,7 @@
       "evidence": {
         "level": 2,
         "levelName": "Bot-Aware",
-        "scannedAt": "2026-09-17T15:42:40.944Z",
+        "scannedAt": "2026-09-17T17:26:12.760Z",
         "checks": {
           "discoverability": {
             "robotsTxt": {
@@ -275,9 +275,9 @@
                     "statusText": "OK",
                     "headers": {
                       "content-type": "text/plain; charset=utf-8",
-                      "cf-ray": "a3c938c0d9f40285-ORD"
+                      "cf-ray": "a3c9d057ae757ab5-SJC"
                     },
-                    "bodyPreview": "# Content Signals (contentsignals.org) — how AI systems may use this content.\n# Estate posture: let search engines and AI answer engines\n# index and *cite* this content, but do not train on it. Hand-maintained + code-reviewed\n# on purpose — a managed-robots dashboard toggle has silently dropped such a policy before.\nUser-agent: *\nContent-Signal: search=yes, ai-input=yes, ai-train=no\nAllow: /\n\n# Answer-engine crawlers that feed *cited* AI answers are explicitly welcome.\nUs..."
+                    "bodyPreview": "# Content Signals (contentsignals.org) — how AI systems may use this content.\n# Estate posture (matches sfclarity.com): let search engines and AI answer engines\n# index and *cite* this content, but do not train on it. Hand-maintained + code-reviewed\n# on purpose — a managed-robots dashboard toggle has silently dropped such a policy before.\nUser-agent: *\nContent-Signal: search=yes, ai-input=yes, ai-train=no\nAllow: /\n\n# Answer-engine crawlers that feed *cited* AI answers are explicitly welcome.\nUs..."
                   },
                   "finding": {
                     "outcome": "positive",
@@ -332,7 +332,7 @@
                     "statusText": "OK",
                     "headers": {
                       "content-type": "application/xml",
-                      "cf-ray": "a3c938c18a380285-ORD"
+                      "cf-ray": "a3c9d0589ebf7ab5-SJC"
                     }
                   },
                   "finding": {
@@ -349,7 +349,7 @@
                   }
                 }
               ],
-              "durationMs": 54
+              "durationMs": 88
             },
             "linkHeaders": {
               "status": "fail",
@@ -367,7 +367,7 @@
                     "statusText": "OK",
                     "headers": {
                       "content-type": "text/html; charset=utf-8",
-                      "cf-ray": "a3c938c25a980285-ORD"
+                      "cf-ray": "a3c9d0596f047ab5-SJC"
                     }
                   },
                   "finding": {
@@ -384,7 +384,7 @@
                   }
                 }
               ],
-              "durationMs": 130
+              "durationMs": 138
             },
             "dnsAid": {
               "status": "fail",
@@ -564,7 +564,7 @@
                     "headers": {
                       "content-type": "application/dns-json"
                     },
-                    "bodyPreview": "{\"Status\":0,\"TC\":false,\"RD\":true,\"RA\":true,\"AD\":false,\"CD\":false,\"Question\":[{\"name\":\"_index._agents.qte77.github.io\",\"type\":16}],\"Authority\":[{\"name\":\"github.io\",\"type\":6,\"TTL\":900,\"data\":\"ns-1622.awsdns-10.co.uk. awsdns-hostmaster.amazon.com. 1 7200 900 1209600 86400\"}]}"
+                    "bodyPreview": "{\"Status\":0,\"TC\":false,\"RD\":true,\"RA\":true,\"AD\":false,\"CD\":false,\"Question\":[{\"name\":\"_index._agents.qte77.github.io\",\"type\":16}],\"Authority\":[{\"name\":\"github.io\",\"type\":6,\"TTL\":3600,\"data\":\"dns1.p05.nsone.net. hostmaster.nsone.net. 1647625169 43200 7200 1209600 3600\"}]}"
                   },
                   "finding": {
                     "outcome": "neutral",
@@ -588,7 +588,7 @@
                   }
                 }
               ],
-              "durationMs": 13
+              "durationMs": 10
             }
           },
           "contentAccessibility": {
@@ -631,7 +631,7 @@
                   }
                 }
               ],
-              "durationMs": 377
+              "durationMs": 557
             }
           },
           "botAccessControl": {
@@ -904,9 +904,9 @@
                     "statusText": "OK",
                     "headers": {
                       "content-type": "text/plain; charset=utf-8",
-                      "cf-ray": "a3c938c0d9f40285-ORD"
+                      "cf-ray": "a3c9d057ae757ab5-SJC"
                     },
-                    "bodyPreview": "# Content Signals (contentsignals.org) — how AI systems may use this content.\n# Estate posture: let search engines and AI answer engines\n# index and *cite* this content, but do not train on it. Hand-maintained + code-reviewed\n# on purpose — a managed-robots dashboard toggle has silently dropped such a policy before.\nUser-agent: *\nContent-Signal: search=yes, ai-input=yes, ai-train=no\nAllow: /\n\n# Answer-engine crawlers that feed *cited* AI answers are explicitly welcome.\nUs..."
+                    "bodyPreview": "# Content Signals (contentsignals.org) — how AI systems may use this content.\n# Estate posture (matches sfclarity.com): let search engines and AI answer engines\n# index and *cite* this content, but do not train on it. Hand-maintained + code-reviewed\n# on purpose — a managed-robots dashboard toggle has silently dropped such a policy before.\nUser-agent: *\nContent-Signal: search=yes, ai-input=yes, ai-train=no\nAllow: /\n\n# Answer-engine crawlers that feed *cited* AI answers are explicitly welcome.\nUs..."
                   },
                   "finding": {
                     "outcome": "positive",
@@ -960,9 +960,9 @@
                     "statusText": "OK",
                     "headers": {
                       "content-type": "text/plain; charset=utf-8",
-                      "cf-ray": "a3c938c0d9f40285-ORD"
+                      "cf-ray": "a3c9d057ae757ab5-SJC"
                     },
-                    "bodyPreview": "# Content Signals (contentsignals.org) — how AI systems may use this content.\n# Estate posture: let search engines and AI answer engines\n# index and *cite* this content, but do not train on it. Hand-maintained + code-reviewed\n# on purpose — a managed-robots dashboard toggle has silently dropped such a policy before.\nUser-agent: *\nContent-Signal: search=yes, ai-input=yes, ai-train=no\nAllow: /\n\n# Answer-engine crawlers that feed *cited* AI answers are explicitly welcome.\nUs..."
+                    "bodyPreview": "# Content Signals (contentsignals.org) — how AI systems may use this content.\n# Estate posture (matches sfclarity.com): let search engines and AI answer engines\n# index and *cite* this content, but do not train on it. Hand-maintained + code-reviewed\n# on purpose — a managed-robots dashboard toggle has silently dropped such a policy before.\nUser-agent: *\nContent-Signal: search=yes, ai-input=yes, ai-train=no\nAllow: /\n\n# Answer-engine crawlers that feed *cited* AI answers are explicitly welcome.\nUs..."
                   },
                   "finding": {
                     "outcome": "positive",
@@ -1004,7 +1004,7 @@
                     "statusText": "Not Found",
                     "headers": {
                       "content-type": "text/html; charset=utf-8",
-                      "cf-ray": "a3c938c18a3a0285-ORD"
+                      "cf-ray": "a3c9d0589ec17ab5-SJC"
                     }
                   },
                   "finding": {
@@ -1021,7 +1021,7 @@
                   }
                 }
               ],
-              "durationMs": 18
+              "durationMs": 11
             }
           },
           "discovery": {
@@ -1044,7 +1044,7 @@
                     "statusText": "Not Found",
                     "headers": {
                       "content-type": "text/html; charset=utf-8",
-                      "cf-ray": "a3c938c1fa710285-ORD"
+                      "cf-ray": "a3c9d058ded87ab5-SJC"
                     }
                   },
                   "finding": {
@@ -1061,7 +1061,7 @@
                   }
                 }
               ],
-              "durationMs": 90
+              "durationMs": 122
             },
             "oauthDiscovery": {
               "status": "fail",
@@ -1079,7 +1079,7 @@
                     "statusText": "Not Found",
                     "headers": {
                       "content-type": "text/html; charset=utf-8",
-                      "cf-ray": "a3c938c18a370285-ORD"
+                      "cf-ray": "a3c9d0589ec77ab5-SJC"
                     }
                   },
                   "finding": {
@@ -1099,7 +1099,7 @@
                     "statusText": "Not Found",
                     "headers": {
                       "content-type": "text/html; charset=utf-8",
-                      "cf-ray": "a3c938c19a430285-ORD"
+                      "cf-ray": "a3c9d058aec87ab5-SJC"
                     }
                   },
                   "finding": {
@@ -1116,7 +1116,7 @@
                   }
                 }
               ],
-              "durationMs": 66
+              "durationMs": 98
             },
             "oauthProtectedResource": {
               "status": "fail",
@@ -1134,7 +1134,7 @@
                     "statusText": "OK",
                     "headers": {
                       "content-type": "text/html; charset=utf-8",
-                      "cf-ray": "a3c938c1aa490285-ORD"
+                      "cf-ray": "a3c9d058aecc7ab5-SJC"
                     }
                   },
                   "finding": {
@@ -1154,7 +1154,7 @@
                     "statusText": "Not Found",
                     "headers": {
                       "content-type": "text/html; charset=utf-8",
-                      "cf-ray": "a3c938c1aa460285-ORD"
+                      "cf-ray": "a3c9d058aecb7ab5-SJC"
                     }
                   },
                   "finding": {
@@ -1171,7 +1171,7 @@
                   }
                 }
               ],
-              "durationMs": 60
+              "durationMs": 25
             },
             "authMd": {
               "status": "fail",
@@ -1192,7 +1192,7 @@
                     "statusText": "Not Found",
                     "headers": {
                       "content-type": "text/html; charset=utf-8",
-                      "cf-ray": "a3c938c1aa4d0285-ORD"
+                      "cf-ray": "a3c9d058aece7ab5-SJC"
                     }
                   },
                   "finding": {
@@ -1209,7 +1209,7 @@
                   }
                 }
               ],
-              "durationMs": 39
+              "durationMs": 25
             },
             "mcpServerCard": {
               "status": "fail",
@@ -1227,7 +1227,7 @@
                     "statusText": "Not Found",
                     "headers": {
                       "content-type": "text/html; charset=utf-8",
-                      "cf-ray": "a3c938c1ba540285-ORD"
+                      "cf-ray": "a3c9d058becf7ab5-SJC"
                     }
                   },
                   "finding": {
@@ -1247,7 +1247,7 @@
                     "statusText": "Not Found",
                     "headers": {
                       "content-type": "text/html; charset=utf-8",
-                      "cf-ray": "a3c938c1ca5a0285-ORD"
+                      "cf-ray": "a3c9d058bed17ab5-SJC"
                     }
                   },
                   "finding": {
@@ -1267,7 +1267,7 @@
                     "statusText": "Not Found",
                     "headers": {
                       "content-type": "text/html; charset=utf-8",
-                      "cf-ray": "a3c938c1ea640285-ORD"
+                      "cf-ray": "a3c9d058bed27ab5-SJC"
                     }
                   },
                   "finding": {
@@ -1284,7 +1284,7 @@
                   }
                 }
               ],
-              "durationMs": 93
+              "durationMs": 117
             },
             "a2aAgentCard": {
               "status": "pass",
@@ -1328,7 +1328,7 @@
                     "statusText": "OK",
                     "headers": {
                       "content-type": "application/json; charset=utf-8",
-                      "cf-ray": "a3c938c1ea680285-ORD"
+                      "cf-ray": "a3c9d058bed37ab5-SJC"
                     },
                     "bodyPreview": "{\"protocolVersion\":\"0.3.0\",\"name\":\"agenthud\",\"description\":\"Renders live A2UI interfaces from natural-language prompts and replays AG-UI event streams. A qte77 agent-native demo — ask it to draw a UI and it returns an A2UI component batch.\",\"version\":\"1.0.0\",\"url\":\"https://agenthud-proxy.cloudflare-driveway392.workers.dev/a2a\",\"preferredTransport\":\"JSONRPC\",\"supportedInterfaces\":[{\"transport\":\"JSONRPC\",\"url\":\"https://agenthud-proxy.cloudflare-driveway392.workers.dev/a2a\"}],\"documentationUrl\":\"ht..."
                   },
@@ -1362,7 +1362,7 @@
                   }
                 }
               ],
-              "durationMs": 75
+              "durationMs": 37
             },
             "agentSkills": {
               "status": "fail",
@@ -1380,7 +1380,7 @@
                     "statusText": "Not Found",
                     "headers": {
                       "content-type": "text/html; charset=utf-8",
-                      "cf-ray": "a3c938c1fa6b0285-ORD"
+                      "cf-ray": "a3c9d058ded67ab5-SJC"
                     }
                   },
                   "finding": {
@@ -1400,7 +1400,7 @@
                     "statusText": "Not Found",
                     "headers": {
                       "content-type": "text/html; charset=utf-8",
-                      "cf-ray": "a3c938c27a9f0285-ORD"
+                      "cf-ray": "a3c9d0596f057ab5-SJC"
                     }
                   },
                   "finding": {
@@ -1417,7 +1417,7 @@
                   }
                 }
               ],
-              "durationMs": 187
+              "durationMs": 225
             },
             "webMcp": {
               "status": "fail",
@@ -1460,7 +1460,7 @@
                   }
                 }
               ],
-              "durationMs": 4023
+              "durationMs": 4328
             },
             "ard": {
               "status": "fail",
@@ -1497,7 +1497,7 @@
                     "statusText": "Not Found",
                     "headers": {
                       "content-type": "text/html; charset=utf-8",
-                      "cf-ray": "a3c938c18a390285-ORD"
+                      "cf-ray": "a3c9d0589ebe7ab5-SJC"
                     }
                   },
                   "finding": {
@@ -1564,7 +1564,7 @@
                 "discoveryMechanisms": [],
                 "searchEndpoints": []
               },
-              "durationMs": 56
+              "durationMs": 12
             }
           },
           "commerce": {
@@ -1584,7 +1584,7 @@
                     "statusText": "OK",
                     "headers": {
                       "content-type": "text/html; charset=utf-8",
-                      "cf-ray": "a3c938c22a830285-ORD"
+                      "cf-ray": "a3c9d0593ef67ab5-SJC"
                     }
                   },
                   "finding": {
@@ -1604,7 +1604,7 @@
                     "statusText": "Not Found",
                     "headers": {
                       "content-type": "text/html; charset=utf-8",
-                      "cf-ray": "a3c938c22a860285-ORD"
+                      "cf-ray": "a3c9d0594efa7ab5-SJC"
                     }
                   },
                   "finding": {
@@ -1624,7 +1624,7 @@
                     "statusText": "Not Found",
                     "headers": {
                       "content-type": "text/html; charset=utf-8",
-                      "cf-ray": "a3c938c22a870285-ORD"
+                      "cf-ray": "a3c9d0594efb7ab5-SJC"
                     }
                   },
                   "finding": {
@@ -1644,7 +1644,7 @@
                     "statusText": "OK",
                     "headers": {
                       "content-type": "application/json",
-                      "cf-ray": "a3c938c20a790285-ORD"
+                      "cf-ray": "a3c9d0592ef27ab5-SJC"
                     }
                   }
                 },
@@ -1669,7 +1669,7 @@
                   }
                 }
               ],
-              "durationMs": 1258
+              "durationMs": 1272
             },
             "mpp": {
               "status": "neutral",
@@ -1687,7 +1687,7 @@
                     "statusText": "OK",
                     "headers": {
                       "content-type": "application/json; charset=utf-8",
-                      "cf-ray": "a3c938c23a890285-ORD"
+                      "cf-ray": "a3c9d0595eff7ab5-SJC"
                     }
                   },
                   "finding": {
@@ -1704,7 +1704,7 @@
                   }
                 }
               ],
-              "durationMs": 115
+              "durationMs": 130
             },
             "ucp": {
               "status": "neutral",
@@ -1722,7 +1722,7 @@
                     "statusText": "Not Found",
                     "headers": {
                       "content-type": "text/html; charset=utf-8",
-                      "cf-ray": "a3c938c20a7a0285-ORD"
+                      "cf-ray": "a3c9d058eedc7ab5-SJC"
                     }
                   },
                   "finding": {
@@ -1739,7 +1739,7 @@
                   }
                 }
               ],
-              "durationMs": 119
+              "durationMs": 131
             },
             "acp": {
               "status": "neutral",
@@ -1757,7 +1757,7 @@
                     "statusText": "Not Found",
                     "headers": {
                       "content-type": "text/html; charset=utf-8",
-                      "cf-ray": "a3c938c23a8d0285-ORD"
+                      "cf-ray": "a3c9d0595f017ab5-SJC"
                     }
                   },
                   "finding": {
@@ -1774,7 +1774,7 @@
                   }
                 }
               ],
-              "durationMs": 142
+              "durationMs": 200
             },
             "ap2": {
               "status": "neutral",

@@ -9,6 +9,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- `data/scans/{qte77-github-io,agenthud-agui-a2ui,sortmy-london}.json` (plan row 13): the
+  first real scan run, seeded with real ora.ai/isitagentready.com findings for all 3
+  properties via the merged `scan.yml` run (PR #27) — arc 0001 is complete, all 13 rows
+  shipped
+
 - `.github/workflows/scan.yml` (plan row 11): weekly-cron + `workflow_dispatch` scheduled
   scan job — checks out `qte77/polyfetch-scrape` and installs `uv` so `discoverSnapshot.ts`
   has something to call, builds, runs `npm run scan`, and commits any changed
@@ -143,12 +148,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
-- `docs/plans/0001-scan-engine.md`: row 13 is now **owner-gated, not agent-gated** — the
-  first real `scan.yml` run succeeded end-to-end (real ora.ai/isitagentready.com scores for
-  all 3 properties) and opened PR #27 with auto-merge armed, but the active ruleset's
-  `require_extra_approval_for_unattributed_changes` requires a human "Approve" click on
-  bot-authored PRs regardless of passing checks or `--admin`/`--auto` — this recurs on every
-  future scheduled run, not just this one. PR #27 is left open, unmerged, for the repo owner.
+- `docs/plans/0001-scan-engine.md`: row 11's automated `data/scans/*.json` commit is
+  **owner-gated, not fully unattended** — every scheduled `scan.yml` run's PR needs an owner
+  `--admin` squash-merge, because the active ruleset stays `blocked` even with CI, CodeFactor,
+  and a real owner approval all green (confirmed on PR #27: approval alone didn't clear it,
+  only `--admin` did). Best-supported explanation is the ruleset's `code_quality` rule, tied
+  to code scanning that's `not-configured` on this repo — not confirmed with certainty. An
+  earlier version of this entry attributed the block to
+  `require_extra_approval_for_unattributed_changes`; that theory was tested directly (a real
+  owner approval was added to PR #27 and did not unblock the merge) and is now considered
+  disproven, not just superseded.
 
 ### Fixed
 

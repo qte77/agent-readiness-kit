@@ -28,6 +28,11 @@ exposing the computed results.
 npm install
 npx vitest run    # tests
 npx tsc --noEmit  # typecheck
+npm run build     # compiles to dist/
+npm run scan      # node dist/src/main.js — runs a real scan over config/properties.ts's
+                   # PROPERTIES, writes data/scans/<propertyId>.json, and files/updates a
+                   # remediation issue per property (needs GITHUB_TOKEN for the issue step —
+                   # fails gracefully with a clear message when unset, e.g. a local run)
 ```
 
 The read-only MCP worker in [`worker/`](worker/) is a separate package (own lockfile,

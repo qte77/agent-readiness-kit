@@ -9,6 +9,25 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- `site/{index.html,style.css,app.js}`, `scripts/{buildSite.ts,buildSiteCli.ts}`,
+  `.github/workflows/pages.yml` (arc 0002 — see
+  `docs/plans/0002-readiness-dashboard.md`): a static GitHub Pages dashboard for scan results,
+  deployed to `https://qte77.github.io/agent-readiness-kit/`. `scripts/buildSite.ts` is
+  pure-logic (`summarizeScanRun`, `capHistory`), RED-first tested
+  (`test/scripts/buildSite.test.ts`); `scripts/buildSiteCli.ts` is the config/wiring that walks
+  git log per `data/scans/*.json` file to reconstruct trend history (capped at 52 entries),
+  copies `site/` and the current scan snapshots into `site-dist/`, and writes a
+  `data/index.json` manifest (a static page can't list a directory, and the property list is
+  never hardcoded). The dashboard shows one card per property with score/grade, a
+  threshold-colored status badge, the six-category pass/fail/warn/unknown breakdown, and an
+  inline SVG sparkline; a client-side, display-only High/Mid/Low pass/warn/fail threshold
+  preset persists via `localStorage`. EyeRest color tokens are vendored as plain CSS custom
+  properties in `site/style.css`, cited to `qte77/qte77/brand/DESIGN.md` (same pattern
+  `paperverse/ui/src/theme.css` already uses). New `npm run site:build` script;
+  `.gitignore` adds `site-dist/`. Deviates from the plan's `git log --follow` spec — verified at
+  source that `--follow`'s rename-detection heuristic misattributes an unrelated commit to
+  `data/scans/redacted-property-com.json`'s history; uses a plain `git log --reverse` instead (see the
+  plan doc's Status section for the full detail).
 - `.github/workflows/codeql.yml`: CodeQL analysis (`javascript-typescript` + `actions`
   languages — this repo's workflow YAML included, not just its TS source) on push/PR to
   `main`, a weekly schedule, and `workflow_dispatch`. May also resolve the ruleset's

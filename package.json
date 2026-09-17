@@ -12,7 +12,8 @@
     "test:watch": "vitest",
     "typecheck": "tsc --noEmit",
     "build": "tsc",
-    "scan": "node dist/src/main.js"
+    "scan": "node dist/src/main.js",
+    "site:build": "node dist/scripts/buildSiteCli.js"
   },
   "devDependencies": {
     "@types/node": "^22.20.3",

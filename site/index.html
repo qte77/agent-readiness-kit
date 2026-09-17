@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Agent Readiness Dashboard</title>
+    <meta
+      name="description"
+      content="Agent-native readiness scan results for qte77-owned properties, across Discovery, Content, Trust, Execution, Agent-to-Agent, and Identity & Auth."
+    />
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <header class="page-header">
+      <h1>Agent Readiness Dashboard</h1>
+      <p class="subtitle">
+        Agent-native readiness scans for qte77-owned properties —
+        Discovery / Content / Trust / Execution / Agent-to-Agent / Identity &amp; Auth.
+      </p>
+      <div class="threshold-presets" role="group" aria-label="Pass / warn / fail threshold preset">
+        <span class="threshold-label">Threshold:</span>
+        <button type="button" class="preset-btn" data-preset="high" aria-pressed="false">High</button>
+        <button type="button" class="preset-btn" data-preset="mid" aria-pressed="false">Mid</button>
+        <button type="button" class="preset-btn" data-preset="low" aria-pressed="false">Low</button>
+      </div>
+    </header>
+
+    <main id="cards" class="card-grid" aria-live="polite">
+      <p class="status-message">Loading scan results…</p>
+    </main>
+
+    <footer class="page-footer">
+      <p id="footer-text" class="status-message">—</p>
+      <p>
+        <a href="https://github.com/qte77/agent-readiness-kit">agent-readiness-kit</a> —
+        source, scan data, and remediation issues on GitHub.
+      </p>
+    </footer>
+
+    <script src="app.js"></script>
+  </body>
+</html>

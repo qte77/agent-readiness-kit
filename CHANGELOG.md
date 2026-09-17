@@ -87,6 +87,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- `docs/plans/0001-scan-engine.md`: added `## External API contracts` and `## Design
+  decisions` (rows 3/4/6) so rows 3 and 4 can dispatch in parallel again; resolved both of row
+  3's prior open questions (ora.ai needs no API key; per-check data is available, 7 of 18
+  crosswalk signals overlap exactly); pivoted row 4 off the originally-planned Cloudflare URL
+  Scanner API onto isitagentready.com's own `POST /api/scan` (plain, unauthenticated,
+  synchronous — live-verified against a real property), which drops row 11's Cloudflare
+  secrets requirement entirely and makes rows 1–9 runnable end-to-end with zero secrets
+  configured anywhere
 - `docs/architecture.md`: worker section updated to reflect it's built/verified (was "not
   built yet"), plus the not-deployed decision and the `POLYFETCH_SCRAPE_DIR` env var
 - `README.md`, `.github/CONTRIBUTING.md`: document `worker/`'s separate dev commands and

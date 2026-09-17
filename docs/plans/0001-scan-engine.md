@@ -3,7 +3,7 @@ title: Agent-Readiness Kit — scan engine + MCP worker scaffold
 description: Build the estate's agent-native-readiness scanner — a GHA-only scan engine over 3 qte77 properties, one committed JSON per property as the trend record, dedup-safe remediation issues, and a read-only MCP worker exposing results. This arc ships the repo scaffold, core types, and the category crosswalk.
 date: 2026-09-01
 updated: 2026-09-17
-status: open
+status: closed
 issues: [1, 3, 4, 5, 6, 17]
 predecessor: null
 ---
@@ -249,12 +249,38 @@ predecessor: null
   armed** — safe, reversible, no data lost; it will complete on its own the moment a human
   approves it, or the owner adjusts the ruleset. See the row 13 table entry and Watch-outs for
   the options.
+- **2026-09-17 (row 13 shipped — diagnosis above corrected by direct evidence):** the owner
+  approved PR #27 (`gh pr review 27 --approve`, `author_association: "OWNER"`, visible via
+  `gh api .../pulls/27/reviews`). **This alone did not unblock the merge** — a plain
+  `gh pr merge --squash` immediately after the approval still failed with the identical "the
+  base branch policy prohibits the merge" error. That's decisive evidence against the
+  `require_extra_approval_for_unattributed_changes` theory above: if a missing approval were
+  the actual gate, supplying one should have cleared it. It didn't; only `gh pr merge --squash
+  --admin` (real bypass, not just a satisfied condition) got PR #27 to merge
+  (`c97af99`, 2026-09-17T14:55:38Z) — `data/scans/{qte77-github-io,agenthud-agui-a2ui,
+  sortmy-london}.json` are now on `main` for real, seeded by a real scan.
+  **Revised root-cause candidate**: the ruleset's separate `code_quality` rule
+  (`{"type":"code_quality","parameters":{"severity":"warnings"}}`) is very likely the actual
+  persistent blocker, not the approval rule — `gh api
+  repos/qte77/agent-readiness-kit/code-scanning/default-setup` returns
+  `"state":"not-configured"` for this repo, and a code-quality gate with no configured
+  analysis to satisfy it can only ever be bypassed, never satisfied by review or checks,
+  which matches the observed behavior exactly (approval didn't help; a genuine bypass did).
+  **Not fully confirmed** — GitHub's rulesets UI doesn't expose a per-rule pass/fail
+  breakdown via the API calls tried this session, so this is the best-supported explanation
+  from available evidence, not a source-verified fact; flagged here rather than asserted as
+  settled. Practical consequence unchanged from the entry above: every future scheduled
+  `scan.yml` run will hit the same `blocked` state and need an owner `--admin` merge (or a
+  ruleset fix — likely running GitHub's code-scanning default setup once, which is a one-time
+  owner action, not a per-run one, if this diagnosis is right) — worth the owner confirming
+  next time before assuming it's stuck.
+- **2026-09-17 (arc 0001 complete):** all 13 rows shipped. See `## At arc close` below.
 
-**What's next, in order** (full detail in the remaining-work table below; its "Depends on"
-column is the source of truth for sequencing):
-
-1. Row 13 (first real scan run, committing `data/scans/*.json` for real) — trigger row 11 via
-   `workflow_dispatch` (or wait for the schedule) now that it's shipped.
+**What's next, in order:** nothing — arc 0001 is complete (see `## At arc close` below). A
+follow-on arc would cover: (a) the deferred `docs/architecture.md` decision-5 doc-sync pass,
+(b) resolving the `code_quality`/code-scanning root-cause question above with certainty, (c)
+issue #5's isitagentready.com category-gap update now that real `checks` data exists in
+`data/scans/*.json`.
 
 **The loop** (per row, non-trivial module logic only — see Quality gates below): RED-first
 test modeling the expected/desired behavior first, in `test/scan/sources/*.test.ts` (fake
@@ -763,9 +789,9 @@ agent-readiness-kit/
 | ~~8~~ | ~~`src/remediation/issue.ts` (dedup-safe issue create/update per architecture.md's dedup section) + `src/remediation/github.ts`~~ | agent | — | **shipped 2026-09-16** |
 | ~~9~~ | ~~`src/main.ts` (CLI entrypoint: orchestrator -> checkpoint -> remediation, over all of `PROPERTIES`)~~ | agent | 1–8 | **shipped 2026-09-17** |
 | ~~10~~ | ~~`.github/workflows/ci.yml` (typecheck + test on PR)~~ | agent | — | **shipped 2026-09-16** |
-| ~~11~~ | ~~`.github/workflows/scan.yml` (scheduled scan job)~~ | owner | 9 | **shipped 2026-09-17** (weekly cron + `workflow_dispatch`, no API secrets needed — see Status/Watch-outs; not yet live-verified) |
+| ~~11~~ | ~~`.github/workflows/scan.yml` (scheduled scan job)~~ | owner | 9 | **shipped 2026-09-17** (weekly cron + `workflow_dispatch`, no API secrets needed, commits via PR+admin-merge — see Status/Watch-outs; live-verified) |
 | ~~12~~ | ~~`worker/` MCP layer (`wrangler.jsonc`, `src/index.ts`, `src/mcp/tools.ts`, `src/wellknown/agent-card.ts`, tests) mirroring `agenthud-agui-a2ui/worker/`~~ | agent | — | **shipped 2026-09-16** |
-| 13 | First real scan run seeding `data/scans/{qte77-github-io,agenthud-agui-a2ui,sortmy-london}.json` | owner | 1–7, 9, 11 | 3 files committed with real findings, not placeholders — **blocked 2026-09-17**: real run succeeded end-to-end and PR #27 is open with real data and auto-merge armed, but the ruleset's `require_extra_approval_for_unattributed_changes` needs a human approval on bot-authored PRs (see Status/Watch-outs); done-when becomes "PR #27 approved/merged" |
+| ~~13~~ | ~~First real scan run seeding `data/scans/{qte77-github-io,agenthud-agui-a2ui,sortmy-london}.json`~~ | owner | 1–7, 9, 11 | **shipped 2026-09-17** — PR #27 merged (`c97af99`) with real, non-placeholder findings for all 3 properties; dedup-safe remediation issues #23/#24/#25 updated (not duplicated) in the same run, confirming row 8's dedup logic live |
 
 ## Verification (this arc's commits)
 
@@ -779,3 +805,29 @@ agent-readiness-kit/
 
 Tick the remaining-work table against what merged, update this Status section, note any
 deviations from the locked decisions, and migrate any still-open rows to the next `NNNN` pair.
+
+**Arc 0001 closed 2026-09-17.** All 13 rows shipped (table above); no rows migrated forward.
+Deviations from the locked decisions, both already noted inline where they happened:
+- Decision 5 (`docs/architecture.md`, ora.ai/Cloudflare URL Scanner "async result" polling)
+  is stale — row 4 replaced Cloudflare URL Scanner with isitagentready.com's synchronous
+  endpoint (no polling at all). Still deferred to a follow-on doc-sync pass, not done this
+  arc — see the Docs & issues audit section above.
+- Row 11's commit mechanism deviated from the original "commit+push directly to `main`" plan
+  to a branch+PR+admin-merge path, because a repository ruleset (added mid-arc, after this
+  plan's own session-start check found none) rejects direct pushes and — per the row 13
+  Status entries above — also blocks a plain `gh pr merge` even with checks green and a human
+  approval; only `--admin` clears it. The likely cause is the ruleset's `code_quality` rule
+  tied to an unconfigured code-scanning setup, not confirmed with certainty. **Every future
+  scheduled `scan.yml` run will need this same owner `--admin` merge** until either
+  code scanning is configured for this repo or the ruleset is otherwise adjusted — this is a
+  standing operational cost of the current design, not a one-time fix.
+- Issue #1 (this arc's tracker) can be closed now that all 13 rows are shipped.
+
+**Follow-on work identified but out of this arc's scope** (candidates for arc 0002, not
+started):
+- The `docs/architecture.md` decision-5 doc-sync pass (above).
+- Resolving the `code_quality`/code-scanning root-cause question with certainty (above).
+- Issue #5's isitagentready.com category-gap update, now that real `checks` data exists in
+  `data/scans/*.json` for all 3 properties (per Design decision 2).
+- Issues #3, #4, #6, #17 — all pre-existing, standalone, not part of this arc's committed
+  scope (see the "Also see" section above).

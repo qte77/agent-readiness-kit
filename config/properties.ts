@@ -25,9 +25,4 @@ export const PROPERTIES: readonly PropertyConfig[] = [
     url: "https://sortmy.london",
     label: "sortmy.london (ldnmxx-hack)",
   },
-  {
-    id: "sfclarity-com",
-    url: "https://sfclarity.com",
-    label: "sfclarity.com",
-  },
 ] as const;

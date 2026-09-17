@@ -31,17 +31,18 @@ predecessor: 1
   plan specified `git log --follow --reverse --format=%H`. Verified at source before
   implementing — `--follow`'s rename-detection heuristic false-positives across this repo's
   `data/scans/*.json` files because they're structurally near-identical JSON:
-  `git log --follow -- data/scans/sfclarity-com.json` returns commit `c97af99` as part of that
-  file's history, but `git show --stat c97af99` proves that commit only touched
-  `agenthud-agui-a2ui.json`/`qte77-github-io.json`/`sortmy-london.json` — never
-  `sfclarity-com.json` at all. These files are always written in place by `src/checkpoint.ts`
+  `git log --follow` for one property's scan file returned a commit as part of that file's
+  history that `git show --stat` proves never actually touched it — it only touched the other
+  properties' files. These files are always written in place by `src/checkpoint.ts`
   and never renamed, so `--follow` is unnecessary and actively wrong here. Uses a plain
   `git log --reverse --format=%H` instead (see the module's own docstring for the full
   evidence). Verified by effect: a real `npm run build && npm run site:build` run produced
   `site-dist/{index.html,style.css,app.js,data/index.json,data/scans/*.json,data/history/*.json}`
-  for all 4 current properties, each with a history point per real committed revision (1 at
-  first branch-off, 2 after rebasing onto a concurrent `scan.yml` run — see the rebase note
-  below and Verification).
+  for every tracked property at the time, each with a history point per real committed revision
+  (1 at first branch-off, 2 after rebasing onto a concurrent `scan.yml` run — see the rebase
+  note below and Verification). One of the properties tracked at that time was later removed
+  from `config/properties.ts` — not an appropriate scan target for this public repo — so the
+  live dashboard now shows 3.
 - **`site/{index.html,style.css,app.js}`** (row 3) — the dashboard itself: header (title +
   High/Mid/Low threshold preset buttons, `aria-pressed`, persisted via
   `localStorage["ark-threshold"]`, wrapped in try/catch), one card per property found in the

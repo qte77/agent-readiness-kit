@@ -7,9 +7,9 @@ not just a score.
 ## Before you start
 
 - Check open issues to avoid duplication; for non-trivial changes, open an issue first.
-- See [AGENTS.md](../AGENTS.md) for the working conventions (principles, tests, commits).
-- Read [docs/architecture.md](../docs/architecture.md) and
-  [docs/plans/0001-scan-engine.md](../docs/plans/0001-scan-engine.md) before touching scan-engine
+- See [AGENTS.md](AGENTS.md) for the working conventions (principles, tests, commits).
+- Read [docs/architecture.md](docs/architecture.md) and
+  [docs/plans/0001-scan-engine.md](docs/plans/0001-scan-engine.md) before touching scan-engine
   code — several decisions there are locked and verified at source, not to be re-derived.
 
 ## Documentation hierarchy
@@ -19,12 +19,12 @@ One audience per file — reference, don't duplicate
 
 | File | Audience | Owns |
 | --- | --- | --- |
-| [README.md](../README.md) | users / evaluators | what this is, why, how — the front door |
+| [README.md](README.md) | users / evaluators | what this is, why, how — the front door |
 | CONTRIBUTING.md (this file) | contributors | workflow, commands, conventions |
-| [AGENTS.md](../AGENTS.md) | AI agents | behavioural rules (`CLAUDE.md` loads the same) |
-| [CHANGELOG.md](../CHANGELOG.md) | everyone | notable changes by version |
-| [docs/architecture.md](../docs/architecture.md) | contributors / agents | locked architecture decisions |
-| [docs/plans/](../docs/plans/) | contributors / agents | per-arc plan + the single remaining-work table |
+| [AGENTS.md](AGENTS.md) | AI agents | behavioural rules (`CLAUDE.md` loads the same) |
+| [CHANGELOG.md](CHANGELOG.md) | everyone | notable changes by version |
+| [docs/architecture.md](docs/architecture.md) | contributors / agents | locked architecture decisions |
+| [docs/plans/](docs/plans/) | contributors / agents | per-arc plan + the single remaining-work table |
 
 ## Development
 
@@ -71,23 +71,23 @@ npm run dev          # wrangler dev — GET /.well-known/agent-card.json, POST /
 
 ## CHANGELOG
 
-Add an entry under `## [Unreleased]` in [CHANGELOG.md](../CHANGELOG.md) for any consumer-visible
+Add an entry under `## [Unreleased]` in [CHANGELOG.md](CHANGELOG.md) for any consumer-visible
 change; lead with the file path. Keep a Changelog format.
 
 ## Releasing
 
-No version has been cut yet (this repo is a pre-v1 scaffold — see [README.md](../README.md)'s
-Status section), but the automation is pre-staged and dormant:
+No version has been cut yet (see [README.md](README.md)'s Status section), but the automation
+is pre-staged and dormant:
 
 1. **Bump — one PR off `main`.** Run `npm version <patch|minor|major> --no-git-tag-version` to
    set the version in `package.json`/`package-lock.json`; in `CHANGELOG.md` rename
    `## [Unreleased]` to `## [X.Y.Z] - <YYYY-MM-DD>`, adding a fresh `## [Unreleased]` above.
    Commit as `chore(release): vX.Y.Z` and merge on green CI.
 2. **Tag — automatic.** The merge changes `package.json` on `main`, so
-   [`tag-release`](workflows/tag-release.yaml) tags `vX.Y.Z` on the squash-merge commit.
-3. **Release — one click.** Run [`publish-release`](workflows/publish-release.yaml) (Actions
-   tab, or `gh workflow run publish-release.yaml -f tag=vX.Y.Z`) to publish a GitHub Release
-   with notes from the matching `CHANGELOG.md` block. Tag-only is fine.
+   [`tag-release`](.github/workflows/tag-release.yaml) tags `vX.Y.Z` on the squash-merge commit.
+3. **Release — one click.** Run [`publish-release`](.github/workflows/publish-release.yaml)
+   (Actions tab, or `gh workflow run publish-release.yaml -f tag=vX.Y.Z`) to publish a GitHub
+   Release with notes from the matching `CHANGELOG.md` block. Tag-only is fine.
 
 ## Commit messages
 

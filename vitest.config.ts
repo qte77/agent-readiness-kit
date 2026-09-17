@@ -15,8 +15,14 @@ import { configDefaults, defineConfig } from "vitest/config";
 // `dist/test/**/*.test.js`; without this exclude, a subsequent `npx vitest run` picks those
 // up too and silently double-runs every test. Never surfaces in CI (the `check` job never
 // runs `npm run build` before `npm test`), but pollutes any local run after a build.
+// `.claude/**` is also excluded: this harness creates per-agent worktrees under
+// `.claude/worktrees/<id>/` inside the repo root (local-only, via `.git/info/exclude`, not
+// tracked). A concurrent worktree's own `worker/test/*.test.ts` would otherwise get swept
+// into this root's test run too, failing here with an unrelated "Cannot find package 'zod'"
+// error since that worktree's own `worker/node_modules` isn't installed relative to this run
+// (found while running `npx vitest run` locally alongside an in-progress dispatched agent).
 export default defineConfig({
   test: {
-    exclude: [...configDefaults.exclude, "worker/**", "dist/**"],
+    exclude: [...configDefaults.exclude, "worker/**", "dist/**", ".claude/**"],
   },
 });

@@ -22,10 +22,10 @@
  * docs/plans/0002-readiness-dashboard.md's Status section): the spec specified `git log --follow --reverse
  * --format=%H -- <path>`. Verified at source before implementing: `--follow`'s rename-detection
  * heuristic false-positives across this repo's `data/scans/*.json` files, because they're
- * structurally near-identical JSON (confirmed live — `git log --follow` for
- * `data/scans/sfclarity-com.json` returned commit `c97af99`, which `git show --stat` proves
- * never touched that path at all; a plain `git log` for the same path correctly returns only
- * the one real commit that added it). These files are always written in place by
+ * structurally near-identical JSON (confirmed live — `git log --follow` for one property's
+ * scan file returned a commit that `git show --stat` proves never touched that path at all;
+ * a plain `git log` for the same path correctly returns only the one real commit that added
+ * it). These files are always written in place by
  * `src/checkpoint.ts` and never renamed, so `--follow` is both unnecessary and actively wrong
  * here. Uses a plain `git log --reverse --format=%H -- <path>` instead.
  */

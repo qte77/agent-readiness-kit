@@ -5,7 +5,7 @@ Content, Trust, Execution, Agent-to-Agent, Identity & Auth) and produces concret
 — not just a score. Runs entirely on GitHub Actions; zero runtime dependencies.
 
 Tracked properties (see [`config/properties.ts`](config/properties.ts)): `qte77.github.io`,
-`agenthud-agui-a2ui`, `sortmy.london`/`ldnmxx-hack`, `sfclarity.com`.
+`agenthud-agui-a2ui`, `sortmy.london`/`ldnmxx-hack`.
 
 The six-category crosswalk (category ↔ ora.ai signal ↔ Cloudflare signal) is owned by
 [`agenthud-agui-a2ui/docs/agent-readiness.md`](https://github.com/qte77/agenthud-agui-a2ui/blob/main/docs/agent-readiness.md);

@@ -2,9 +2,9 @@
 title: Agent-Readiness Kit — scan engine + MCP worker scaffold
 description: Build the estate's agent-native-readiness scanner — a GHA-only scan engine over 3 qte77 properties, one committed JSON per property as the trend record, dedup-safe remediation issues, and a read-only MCP worker exposing results. This arc ships the repo scaffold, core types, and the category crosswalk.
 date: 2026-09-01
-updated: 2026-09-16
+updated: 2026-09-17
 status: open
-issues: [1, 3, 4, 5, 6]
+issues: [1, 3, 4, 5, 6, 17]
 predecessor: null
 ---
 
@@ -94,30 +94,69 @@ predecessor: null
   tests (`worker/test/`, faked `fetch`); verified live with `wrangler dev` against the real
   `raw.githubusercontent.com` (see PR for the transcript). `.github/workflows/ci.yml` gained a
   `worker` job (`working-directory: worker`, own `npm ci`/typecheck/test, no lint step).
+- **2026-09-17 (rows 3 & 4 research + a row-4 design pivot — resolves both of row 3's prior
+  open questions, and makes the whole engine key-less through row 9):** fetched ora.ai's real
+  API contract directly — no key needed, per-check response overlaps 7 of our 18 crosswalk
+  signals exactly. Initially planned row 4 around Cloudflare URL Scanner's authenticated
+  `agentReadiness` feature, but live-testing isitagentready.com (prompted by inspecting
+  `https://isitagentready.com/<domain>` directly) found its page bundles a client-side WebMCP
+  tool calling `POST https://isitagentready.com/api/scan` — a plain, unauthenticated,
+  synchronous JSON endpoint, confirmed working against a real property
+  (`https://qte77.github.io`). **Row 4 now uses that endpoint directly instead**
+  (`src/scan/sources/isitAgentReady.ts`, renamed from `cloudflareUrlScanner.ts` — no code
+  existed yet, so this is a free rename) — no Cloudflare API token, no account id, no
+  submit→poll. This also removes row 11's only remaining secret requirement entirely. See
+  `## External API contracts` and `## Design decisions (rows 3, 4, 6)` below for the full
+  detail; `docs/architecture.md`'s locked decision 5 (Cloudflare URL Scanner's "async
+  result"/poll) needs a matching update in the post-milestone doc-sync pass — see the docs
+  audit below.
 
 **What's next, in order** (full detail in the remaining-work table below; its "Depends on"
 column is the source of truth for sequencing):
 
-1. Row 4 (`cloudflareUrlScanner.ts`) has **no dependency on any other open row** — the only
-   row-1-through-13 item left that's immediately, independently buildable right now (the
-   parallel-worktree dispatch used for rows 1/2/5/7/8/12 no longer applies once this is the
-   last independent row).
-2. Row 3 (`oraAi.ts`) also has no row-dependency, but resolve its two open questions (API-key
-   requirement, per-check vs. aggregate score data — see Watch-outs) as part of that row's work,
-   not deferred after.
-3. Row 6 (`orchestrator.ts`) — only after rows 1–5 land (fans them out).
-4. Row 9 (`main.ts`) — only after rows 1–8 land (wires orchestrator → checkpoint → remediation).
-5. Row 11 (`scan.yml`) — owner-gated (API secrets) — only after row 9.
-6. Row 13 (first real scan run) — after rows 1–7, 9, and 11.
+1. **Rows 3 and 4 are both independent of each other and of every other open row** — dispatch
+   both in **parallel**, one subagent per row, **each in its own git worktree**
+   (`Agent({isolation: "worktree", ...})`), exactly like rows 1/2/5/7/8/12 earlier in this arc.
+   See `## Design decisions (rows 3, 4, 6)` for what each row must implement — don't let the
+   dispatched agents re-derive or diverge on the category-handling approach.
+2. **Rows 6 and 9 go to one agent, one worktree, sequentially** (row 9's only unmet dependency
+   is row 6; two separate merge cycles buy nothing here) — after rows 3 and 4 both land.
+3. Row 11 (`scan.yml`) — **owner-gated** — only after row 9.
+4. Row 13 (first real scan run) — after rows 1–7, 9, and 11.
 
-**The loop** (per source-module row): RED-first test in `test/scan/sources/*.test.ts` (fake
+**The loop** (per row, non-trivial module logic only — see Quality gates below): RED-first
+test modeling the expected/desired behavior first, in `test/scan/sources/*.test.ts` (fake
 `fetch`/subprocess) → minimum implementation to pass → `npx vitest run` + `npx tsc --noEmit`
-green → commit on a `feat/TOPIC` branch → PR → CI green → squash-merge → delete branch (remote +
-local).
+green → commit on a `feat/TOPIC` branch (topic-scoped, not one branch for everything) → push +
+open PR (don't merge from inside the dispatched agent) → CI green → squash-merge → delete
+branch (remote + local). This is the same loop rows 1/2/5/7/8/12 already used successfully.
 
-**Owner-gates (batch into one sitting):** Row 11 — owner must provision ora.ai / Cloudflare API
-token secrets on the repo before the scheduled workflow can run green. Everything else in the
-table is agent-gated and can proceed without an owner sitting.
+**Quality gates (apply to every row in this plan):**
+- **Strict TDD, RED-first**: model the expected/desired behavior in a failing test before
+  writing the implementation. Only for **non-trivial module logic** — `src/scan/sources/*.ts`,
+  `orchestrator.ts`, `remediation/issue.ts`. **Not** for simple scripts/config/wiring
+  (`main.ts`'s CLI plumbing, `scan.yml`'s YAML) — those are verified by effect (a real run),
+  per the existing `## Tests` section below.
+- **Security**: every new row that adds a `fetch` call, a subprocess, or handles a token gets
+  the same scrutiny already applied to `remediation/github.ts` and `worker/` this arc — no
+  token/secret in logs or thrown-error text, no unvalidated external input reaching a URL path
+  (`propertyId`-style allowlist checks, not string concatenation), no injection via subprocess
+  args. State explicitly in the PR that this was checked, don't assume it's implicit.
+- **Lint**: still not configured repo-wide (known, deferred gap — see Watch-outs). Don't add
+  one ad hoc as part of these rows.
+- **UI e2e verification (viewport/device emulation, click-through, screenshots/console-errors
+  via polyfetch-scrape's patchright tier): not applicable to rows 3, 4, 6, 9, 11, or 13.** None
+  of them ship or touch a UI — they're API clients, CLI orchestration, and a CI workflow. This
+  matters for a *future*, not-yet-scoped idea (using polyfetch's patchright tier to detect
+  JS-render-dependency and bot-blocking as new signals, discussed earlier this session) — that
+  stays out of this plan unless separately requested as new rows.
+
+**Owner-gates (batch into one sitting):** Row 11 no longer needs any API secrets — both ora.ai
+and isitagentready.com (row 4, revised 2026-09-17) are fully key-less. The row 11 gate is now
+just **reviewing and merging the PR that activates a live recurring scheduled workflow** —
+still worth an explicit owner sitting (turning on an automated cron job is a real operational
+decision), just a much lighter one than secret-provisioning. Everything else in the table is
+agent-gated.
 
 **Commands:**
 
@@ -152,11 +191,19 @@ npm run dev           # wrangler dev, for GET /.well-known/agent-card.json + POS
   naming it in any issue/doc in this public repo.** Issues #3 and #4 originally named specific
   external repos/paths that didn't resolve publicly (qte77 has zero private repos, so they were
   either private-to-someone-else or gone); both were generalized on 2026-09-16.
-- Row 3 (`oraAi.ts`) has two open questions to resolve before/while implementing: whether
-  `POST /api/scan` requires an API key (decides if the row stays agent-gated or needs to move
-  under row 11's secrets), and whether `GET /api/score/<url>` returns per-check results or only
-  the aggregate score/grade (decides whether a Finding can compare against ora.ai per-signal, or
-  only at the category level).
+- **Row 3's two prior open questions are both resolved (2026-09-17, verified by fetching
+  ora.ai's own docs/OpenAPI spec directly)** — see `## External API contracts` below for the
+  full detail: no API key is required, and per-check data is available alongside the aggregate
+  score/grade. Row 3 stays agent-gated.
+- **Row 4 needs no secrets at all (revised 2026-09-17, live-verified)** — the originally-
+  planned Cloudflare URL Scanner API (which needed a real account-scoped token) is dropped in
+  favor of `POST https://isitagentready.com/api/scan`, a plain unauthenticated JSON endpoint
+  confirmed live against a real property. See `## External API contracts` for the full
+  rationale — this also means row 11 provisions **zero API secrets** now (see Owner-gates).
+- **Row 11 also needs a `qte77/polyfetch-scrape` checkout + `uv` install in the workflow**,
+  with `POLYFETCH_SCRAPE_DIR` pointed at it — nothing currently checks that repo out in CI, so
+  row 2's `discoverSnapshot.ts` would silently degrade to `"unknown"` on every scheduled run
+  without this.
 - No lint tooling is configured (`package.json` has `test`/`typecheck` scripts only) — decide
   once, not per-row, if/when a `worker/` CI job or stricter gating is added.
 - The crosswalk table in `agenthud-agui-a2ui/docs/agent-readiness.md` has a few genuinely
@@ -186,8 +233,44 @@ support material, not committed arc scope):**
 [#3](https://github.com/qte77/agent-readiness-kit/issues/3) generalize `PROPERTIES` beyond the 3
 hardcoded entries (deferred, doesn't block this arc),
 [#4](https://github.com/qte77/agent-readiness-kit/issues/4) row-1 detector reference patterns,
-[#5](https://github.com/qte77/agent-readiness-kit/issues/5) candidate crosswalk signal gaps,
-[#6](https://github.com/qte77/agent-readiness-kit/issues/6) `api-catalog` category mismatch.
+[#5](https://github.com/qte77/agent-readiness-kit/issues/5) candidate crosswalk signal gaps
+(row 4's real isitagentready.com `checks` response should get folded in here once row 13
+produces one across all 3 properties — see Design decision 2 below),
+[#6](https://github.com/qte77/agent-readiness-kit/issues/6) `api-catalog` category mismatch,
+[#17](https://github.com/qte77/agent-readiness-kit/issues/17) `dns-aid` — revisit once a DNS
+agent-identity draft reaches consensus.
+
+**Docs & issues audit for this batch (rows 3/4/6/9/11/13) — answered now so it's not
+re-litigated per-PR:**
+- **CHANGELOG.md**: yes, every PR adds its own `## [Unreleased]` bullet — same as every prior
+  row this arc.
+- **README.md / `.github/CONTRIBUTING.md`**: only if row 9 adds a real user-facing command
+  (e.g. an `npm run scan` alias for `node dist/main.js`) — if so, document it in the same PR,
+  not a follow-up. Otherwise no change needed until the post-milestone doc-sync pass (see
+  below).
+- **`docs/architecture.md`**: needs updating once rows 3/4 land — decision 5 currently says
+  "ora.ai two-phase scoring + Cloudflare URL Scanner's async result both resolve via a plain
+  synchronous await/poll"; row 4 no longer does async polling at all
+  (isitagentready.com's `/api/scan` is a single synchronous call — see External API
+  contracts), so decision 5's text needs rewriting, not just a one-line addition. Also add a
+  note that ora.ai's per-check results pass through the crosswalk (skip-if-unregistered) while
+  isitagentready.com's do not (evidence-only). Bundle this into the same post-milestone
+  doc-sync PR used after rows 1/2/5/7/8/12 (that pattern — one dedicated docs-sync PR after the
+  batch lands — worked well; repeat it rather than touching architecture.md/README/CONTRIBUTING
+  inside each row's own PR).
+- **ADR / roadmap / userstory**: still not applicable to this repo. `docs/architecture.md`'s
+  own `status: living` frontmatter already makes it this repo's ADR-equivalent — don't create
+  a separate `docs/decisions/` folder for this batch; that's `agenthud-agui-a2ui`'s pattern
+  (heavier repo), not this one's, per this estate's documentation-hierarchy convention.
+- **URLs/env/CLI documented?** No new secrets arrive with this batch at all (revised
+  2026-09-17 — see External API contracts): ora.ai and isitagentready.com are both key-less.
+  The only remaining new surface is whatever CLI form row 9's entrypoint takes (`node
+  dist/main.js` per the table; give it an `npm run scan`-style alias if it doesn't already have
+  one, and document it then, not before it exists).
+- **Issues to open/update/close?** None need closing yet — issue #1 (the arc) only closes once
+  row 13 ships and *all 13 rows* are done (see `## At arc close` below, unchanged). No new
+  issues needed for this batch beyond the two already opened this session (#5, #6, #17) —
+  Design decision 2's isitagentready.com note is a future *update* to #5, not a new issue.
 
 ## Context
 
@@ -230,6 +313,96 @@ drift out of sync until it's updated to match.
    `fetch()`-ing `data/scans/<id>.json` off `raw.githubusercontent.com` — no scanning logic
    in the Worker).
 
+## External API contracts (rows 3 & 4 — verified at source 2026-09-17, not guessed)
+
+**ora.ai** (row 3, `src/scan/sources/oraAi.ts`):
+- `POST /api/scan` — **no API key required.** Rate-limited by IP: 10 requests/minute (burst),
+  30 scans per rolling 24h, 6 "force" (cache-bypassing) scans per rolling 24h. Exceeding either
+  returns HTTP 429 with a JSON body and a `Retry-After` header (seconds until the window
+  frees). An **optional** ora-issued partner key (`Authorization: Bearer <key>`, manually
+  requested — "contact ora") exempts a caller from all scan-family rate limits; not required
+  for this row to function, and out of scope for v1 (30 scans/24h is fine for a weekly cron
+  across 3 properties — see row 11).
+- `GET /api/score/<url>` — the fresh score after the two-phase `POST`-then-`GET` pattern
+  (architecture.md decision 5). Response includes **both** an aggregate `score`
+  (0–100)/`grade` **and** per-check detail: a `layers[]` array, each with a `checks[]` array of
+  `{ id, name, status, score, maxScore, estScoreGain }`.
+- `GET /api/checks` — the full check catalog (open, no key), same stable `id`s as the score
+  endpoint's per-check results. Fetching it and diffing against `SIGNAL_TO_CATEGORY`'s 18 keys
+  found **exactly 7 exact-string matches**: `agent-instruction`, `schema-type-breadth`,
+  `markdown-negotiation`, `openapi-spec`, `mcp-server-card`, `a2a-agent-card`,
+  `oauth-protected-resource`. The other ~120 ora.ai check ids (e.g. `ard-catalog`,
+  `bot-detection`, `pricing-md`) have no crosswalk counterpart — don't invent one.
+
+**isitagentready.com** (row 4 — **supersedes the originally-planned Cloudflare URL Scanner
+API**; rename the module `src/scan/sources/isitAgentReady.ts`, and `SourceId`'s
+`"cloudflareUrlScanner"` literal to `"isitAgentReady"` in `src/types.ts` in the same PR — that
+literal isn't referenced anywhere else yet, so this is a free rename now, not a breaking change
+later):
+- **`POST https://isitagentready.com/api/scan`** — **no API key, no Cloudflare account, no
+  token.** Plain JSON body `{"url": "<url>"}`. **Live-verified this session** (real call against
+  `https://qte77.github.io`, not inferred): synchronous, single call, HTTP 200 with the full
+  result inline — no submit→poll needed at all. Response shape (confirmed from the real
+  response): `{ url, targetUrl, scannedAt, level (0–5), levelName (e.g. "Bot-Aware",
+  "Agent-Integrated"), checks: { discoverability: { robotsTxt: { status, message, evidence[],
+  durationMs }, sitemap: {...}, ... }, content: {...}, botAccessControl: {...}, discovery:
+  {...}, commerce: {...} } }` — the same five categories as the isitagentready.com UI
+  (Discoverability, Content Accessibility, Bot Access Control, Protocol Discovery, Commerce).
+  Each check's `evidence[]` carries the actual fetch/parse/conclude trail (e.g. the real
+  `robots.txt` bytes fetched). This *is* the site's own real backend (its page bundles a
+  client-side `scan_site` WebMCP tool — `navigator.modelContext.registerTool` — that calls this
+  exact endpoint; ours calls it server-side instead).
+- **This eliminates row 11's Cloudflare secrets requirement entirely** — see the updated
+  Watch-outs and Owner-gates below. The raw Cloudflare URL Scanner API (account-scoped token,
+  submit→poll, `agentReadiness` flag) is **dropped** for v1 in favor of this simpler,
+  key-less, more direct path to the same "Cloudflare signal" the crosswalk always intended —
+  isitagentready.com *is* that signal, not an indirect proxy for it.
+- Check ids (`robotsTxt`, `sitemap`, etc.) still use camelCase and don't string-match
+  `SIGNAL_TO_CATEGORY`'s kebab-case keys — same conservative-categorization approach applies
+  (see Design decision 2 below), just with a much simpler transport underneath.
+- No documented rate limit was found for this endpoint; treat it politely regardless (this is
+  someone else's free public tool) — cap row 11's cron to weekly across 3 properties, same as
+  already planned for ora.ai.
+
+## Design decisions (rows 3, 4, 6 — state these so dispatched agents don't re-derive or diverge)
+
+1. **`oraAi.ts` returns `{ findings: Finding[]; score?: number; grade?: string }`, not just
+   `Finding[]`.** It's the only source producing `ScanRun`-level `score`/`grade` (per
+   `src/types.ts`'s own docstring: "e.g. from ora.ai") — row 6 must special-case this one
+   source's return value onto the assembled `ScanRun` instead of just concatenating
+   `Finding[]` like every other source.
+   - For findings: for each entry in `GET /api/score/<url>`'s `layers[].checks[]`, look up
+     `check.id` in `SIGNAL_TO_CATEGORY`; if registered, emit a Finding (`id:
+     "oraAi.<check.id>"`, `source: "oraAi"`, `category: assignCategory(check.id)`, status
+     mapped from ora.ai's check status, `evidence` carrying ora.ai's own `score`/`maxScore`).
+     If `check.id` isn't registered, **skip it** — never invent a category, never throw.
+2. **`isitAgentReady.ts` stays conservative on categorization, and needs no credentials at
+   all** (this is simpler than originally planned — see External API contracts above; there's
+   no credential-presence branch to write, unlike `discoverSnapshot.ts`'s
+   `POLYFETCH_SCRAPE_DIR` check). `POST https://isitagentready.com/api/scan` with
+   `{ url }`, single call, no poll. On a network failure or non-200, return a single
+   `"unknown"`-status Finding explaining why — same never-throw discipline as every other
+   source, just triggered by an ordinary fetch failure rather than a missing-credential
+   check. This means **the entire pipeline (rows 1–9) now runs end-to-end with zero secrets
+   configured anywhere** — ora.ai needs none, `isitAgentReady.ts` needs none,
+   `GITHUB_TOKEN`'s absence is an acceptable local-run gap (row 9's Verification section), and
+   `discoverSnapshot.ts` degrades gracefully without `POLYFETCH_SCRAPE_DIR`. Row 11 no longer
+   provisions any API secrets at all (see updated Owner-gates).
+   Emit exactly **one** Finding (`id: "isitAgentReady.agent-readiness-scan"`, `category:
+   "Trust"` — the best single-category fit, documented as a pragmatic placement, not a
+   crosswalk-verified one), with the full response's `checks` object attached as `evidence`
+   verbatim (including each check's real `evidence[]` fetch trail — genuinely useful debugging
+   context). Do **not** fan the sub-checks out into per-signal Findings; their camelCase ids
+   don't string-match `SIGNAL_TO_CATEGORY`. Once row 13 produces more real responses across all
+   3 properties, compare sub-check ids against issue #5's isitagentready.com categories and
+   **update issue #5** (not `crosswalk.ts` directly, not this plan).
+3. **No cross-source dedup in the orchestrator.** `wellKnown.ts` and `oraAi.ts` can both emit a
+   Finding for `openapi-spec` — `Finding.id` (`<source>.<signal>`) is the uniqueness key, not
+   the signal id. Keep both; our directly-checked finding carries higher confidence than a
+   third-party black-box one, but both stay visible. `buildIssueBody`/`buildChangelogComment`
+   (row 8, shipped) already render by Finding, so this needs no change there — just don't add
+   dedup logic to `orchestrator.ts`.
+
 ## Repo structure (target — not all present yet, see remaining-work table)
 
 ```
@@ -242,7 +415,7 @@ agent-readiness-kit/
   config/properties.ts
   src/{main.ts, types.ts, checkpoint.ts, playbook.ts, mcpClient.ts}
   src/scan/{orchestrator.ts, crosswalk.ts}
-  src/scan/sources/{cloudflareMcp.ts, cloudflareUrlScanner.ts, oraAi.ts, wellKnown.ts, contentSignal.ts, mcpA2aProbe.ts, discoverSnapshot.ts}
+  src/scan/sources/{cloudflareMcp.ts, isitAgentReady.ts, oraAi.ts, wellKnown.ts, contentSignal.ts, mcpA2aProbe.ts, discoverSnapshot.ts}
   src/remediation/{github.ts, issue.ts}
   test/  (mirrors src/, plain vitest)
   worker/{wrangler.jsonc, package.json, src/index.ts, src/mcp/tools.ts, src/wellknown/agent-card.ts, test/}
@@ -371,8 +544,8 @@ agent-readiness-kit/
 |---|------|------|------------|-----------|
 | ~~1~~ | ~~`src/scan/sources/wellKnown.ts` + `contentSignal.ts` (robots.txt / `.well-known/*` / Content-Signal fetch)~~ | agent | — | **shipped 2026-09-16** |
 | ~~2~~ | ~~`src/scan/sources/discoverSnapshot.ts` (polyfetch-scrape CLI env-borrow subprocess: `uv run --directory polyfetch-scrape polyfetch discover <url> --json`)~~ | agent | — | **shipped 2026-09-16** |
-| 3 | `src/scan/sources/oraAi.ts` (two-phase `POST /api/scan` then `GET /api/score/<url>` ~45s later) | agent | — | await/poll implemented per architecture.md, unit test with mocked `fetch`; API-key and per-check-data questions (Watch-outs) resolved |
-| 4 | `src/scan/sources/cloudflareUrlScanner.ts` (async result poll) | agent | — | same poll pattern, unit test with mocked `fetch` |
+| 3 | `src/scan/sources/oraAi.ts` (two-phase `POST /api/scan` then `GET /api/score/<url>`) | agent | — | per Design decision 1: `{findings, score, grade}` return shape; registered check ids pass through `assignCategory`, unregistered ones skipped; unit test with mocked `fetch` |
+| 4 | `src/scan/sources/isitAgentReady.ts` (`POST https://isitagentready.com/api/scan`, no key — renamed from the originally-planned `cloudflareUrlScanner.ts`, see External API contracts) | agent | — | per Design decision 2: one `Trust`-category Finding with the full response's `checks` as evidence; `"unknown"` Finding on fetch failure (never throws); unit test with mocked `fetch`; `SourceId`'s `"cloudflareUrlScanner"` literal renamed to `"isitAgentReady"` in `src/types.ts` in the same PR |
 | ~~5~~ | ~~`src/scan/sources/cloudflareMcp.ts` + `mcpA2aProbe.ts` (agent-card.json / mcp server-card / A2A probes)~~ | agent | — | **shipped 2026-09-16** |
 | 6 | `src/scan/orchestrator.ts` (runs all sources for one property, assembles a `ScanRun`) | agent | 1, 2, 3, 4, 5 | orchestrator test with fake sources produces a valid `ScanRun` |
 | ~~7~~ | ~~`src/checkpoint.ts` (read/write `data/scans/<id>.json`) + `src/playbook.ts` (remediation text per Finding)~~ | agent | — | **shipped 2026-09-16** |

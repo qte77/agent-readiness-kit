@@ -9,6 +9,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- `src/scan/sources/isitAgentReady.ts`: row 4 of the plan — a single unauthenticated call to
+  `POST https://isitagentready.com/api/scan` (`{ url }`, synchronous, no submit-then-poll,
+  no API key/account/auth of any kind), superseding the originally-planned Cloudflare URL
+  Scanner API before any code existed for it; emits exactly one `Trust`-category Finding
+  (`isitAgentReady.agent-readiness-scan`) with status derived from the response's overall
+  `level` (0-5: `pass` at 4-5, `warn` at 2-3, `fail` at 0-1) and the full `checks`/`level`/
+  `levelName`/`scannedAt` response attached as evidence verbatim, without fanning the
+  camelCase sub-checks out into per-signal Findings (see the plan's Design decision 2);
+  returns a single `"unknown"`-status Finding on any network/parse failure, never throws.
+  Also renames `src/types.ts`'s `SourceId` union member `"cloudflareUrlScanner"` to
+  `"isitAgentReady"` (a free rename — nothing referenced the old literal yet).
+  RED-first test suite (`test/scan/sources/isitAgentReady.test.ts`, 16 new assertions,
+  111 total passing)
 - `src/checkpoint.ts`: read/write `data/scans/<propertyId>.json`, round-tripping a `ScanRun`
   verbatim (`baseDir`-parameterized so tests never touch the real `data/scans/` directory)
 - `src/playbook.ts`: `remediationFor(finding)` maps any `Finding` to concrete remediation text

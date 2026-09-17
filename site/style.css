@@ -220,6 +220,22 @@ a {
   white-space: nowrap;
 }
 
+.category-badge.status-pass {
+  background: var(--color-positive);
+}
+
+.category-badge.status-warn {
+  background: var(--color-caution);
+}
+
+.category-badge.status-fail {
+  background: var(--color-negative);
+}
+
+.category-badge.status-unknown {
+  background: var(--color-alt);
+}
+
 .sparkline-wrap {
   display: flex;
   align-items: center;

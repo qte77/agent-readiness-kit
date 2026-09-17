@@ -199,6 +199,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- `site/style.css`: `.category-badge` set `color: var(--color-bg)` (intended as light text on
+  a colored background) but never defined the matching `.category-badge.status-*` background
+  rules that `.status-badge` has — so each category badge rendered with no background
+  override at all, just the card's own `--color-surface`, making the text nearly invisible
+  (light-on-light in light mode, light-on-dark-but-still-too-close in dark mode). Found via a
+  real polyfetch-scrape/patchright screenshot pass (`http.server` locally, the live GH Pages
+  deploy remotely; desktop/mobile/tablet × light/dark), not caught by the dashboard PR's
+  code-review-only verification. Added the missing `.category-badge.status-pass/warn/fail/
+  unknown` background rules, mirroring `.status-badge`'s existing pattern exactly
 - `vitest.config.ts`: excludes `.claude/**` — this harness's per-agent worktrees live under
   `.claude/worktrees/<id>/` inside the repo root, and a concurrent worktree's own
   `worker/test/*.test.ts` was otherwise getting swept into the root's local test run,

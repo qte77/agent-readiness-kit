@@ -9,6 +9,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- `.github/workflows/scan.yml` (plan row 11): weekly-cron + `workflow_dispatch` scheduled
+  scan job — checks out `qte77/polyfetch-scrape` and installs `uv` so `discoverSnapshot.ts`
+  has something to call, builds, runs `npm run scan`, and commits+pushes any changed
+  `data/scans/*.json` to `main` directly. No new API secrets required (both ora.ai and
+  isitagentready.com are key-less); `GITHUB_TOKEN` is wired via `env:`/`permissions:` only
 - `src/main.ts` (plan row 9): CLI entrypoint — for every property in
   `config/properties.ts`'s `PROPERTIES`, runs the row-6 orchestrator, writes the resulting
   `ScanRun` to `data/scans/<propertyId>.json`, then files/updates a dedup-safe remediation

@@ -76,6 +76,10 @@ a {
   max-width: 65ch;
 }
 
+.subtitle-categories {
+  display: block;
+}
+
 .threshold-presets {
   display: flex;
   align-items: center;
@@ -176,6 +180,22 @@ a {
 .card-score .score-grade {
   color: var(--color-text-muted);
   font-family: var(--font-mono);
+}
+
+.score-source {
+  margin-left: auto;
+  font-size: 0.75rem;
+  color: var(--color-text-muted);
+  text-decoration: none;
+}
+
+.score-source[href]:hover {
+  text-decoration: underline;
+  color: var(--color-primary);
+}
+
+.score-source-fallback {
+  font-style: italic;
 }
 
 .status-badge {

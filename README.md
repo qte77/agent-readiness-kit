@@ -1,6 +1,6 @@
 # agent-readiness-kit
 
-Scans qte77-owned properties for "agent-native readiness" across six categories (Discovery,
+Scans web properties for "agent-native readiness" across six categories (Discovery,
 Content, Trust, Execution, Agent-to-Agent, Identity & Auth) and produces concrete remediation
 — not just a score. Runs entirely on GitHub Actions; zero runtime dependencies.
 

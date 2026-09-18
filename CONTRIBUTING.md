@@ -49,6 +49,9 @@ npm run site:build    # node dist/scripts/buildSiteCli.js — builds site-dist/ 
                       # (dev-only, adds no dependency) or any other static file server.
 ```
 
+A [`Makefile`](Makefile) wraps the commands above (`make help` lists them); `make preview`
+builds and serves the dashboard locally in one step.
+
 The dashboard itself (`https://qte77.github.io/agent-readiness-kit/`) is deployed by
 [`.github/workflows/pages.yml`](.github/workflows/pages.yml) on every push to `main` touching
 `data/scans/**` or `site/**` — see

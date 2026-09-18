@@ -9,8 +9,12 @@ updates:
       day: "monday"
     groups:
       npm-minor-patch:
+        applies-to: "version-updates"
         patterns: ["*"]
         update-types: ["minor", "patch"]
+      npm-security:
+        applies-to: "security-updates"
+        patterns: ["*"]
 
   - package-ecosystem: "npm"
     directory: "/worker"
@@ -19,8 +23,12 @@ updates:
       day: "monday"
     groups:
       worker-npm-minor-patch:
+        applies-to: "version-updates"
         patterns: ["*"]
         update-types: ["minor", "patch"]
+      worker-npm-security:
+        applies-to: "security-updates"
+        patterns: ["*"]
 
   - package-ecosystem: "github-actions"
     directory: "/"
@@ -29,5 +37,9 @@ updates:
       day: "monday"
     groups:
       actions-minor-patch:
+        applies-to: "version-updates"
         patterns: ["*"]
         update-types: ["minor", "patch"]
+      actions-security:
+        applies-to: "security-updates"
+        patterns: ["*"]

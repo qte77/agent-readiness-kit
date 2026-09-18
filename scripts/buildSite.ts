@@ -4,7 +4,8 @@
  * splits `src/scan/orchestrator.ts` (logic) from `src/main.ts` (wiring) — see
  * `docs/plans/0002-readiness-dashboard.md`.
  */
-import type { ScanRun, Status } from "../src/types.js";
+import type { Category, Finding, ScanRun, Status } from "../src/types.js";
+import { CATEGORIES } from "../src/types.js";
 
 /** Per-status finding counts for one scan run. */
 export interface StatusCounts {
@@ -26,6 +27,8 @@ export interface RunSummary {
   /** `run.grade` passed through verbatim. Never invented for the fallback-score case. */
   grade?: string;
   counts: StatusCounts;
+  /** Worst status per category for this run (see `worstStatusInCategory`); `unknown` for a category with no findings. */
+  categoryStatus: Record<Category, Status>;
 }
 
 function countByStatus(run: ScanRun): StatusCounts {
@@ -45,6 +48,20 @@ function fallbackScore(counts: StatusCounts): number | undefined {
   return Math.round((100 * counts.pass) / denominator);
 }
 
+/** Worst-first status ordering, mirrored verbatim from `site/app.js`'s `STATUS_PRIORITY`. */
+const STATUS_PRIORITY: readonly Status[] = ["fail", "warn", "unknown", "pass"];
+
+function worstStatusInCategory(findings: Finding[], category: Category): Status {
+  const inCategory = findings.filter((f) => f.category === category);
+  return STATUS_PRIORITY.find((status) => inCategory.some((f) => f.status === status)) ?? "unknown";
+}
+
+function categoryStatuses(run: ScanRun): Record<Category, Status> {
+  const result = {} as Record<Category, Status>;
+  for (const category of CATEGORIES) result[category] = worstStatusInCategory(run.findings, category);
+  return result;
+}
+
 /**
  * Summarize one `ScanRun` into the shape `site/app.js` renders a card/sparkline point from.
  * `run.score` wins when present; otherwise falls back to `fallbackScore` so the dashboard stays
@@ -57,6 +74,7 @@ export function summarizeScanRun(run: ScanRun): RunSummary {
     score: run.score ?? fallbackScore(counts),
     grade: run.grade,
     counts,
+    categoryStatus: categoryStatuses(run),
   };
 }
 

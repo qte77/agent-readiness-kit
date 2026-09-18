@@ -112,6 +112,24 @@ function worstStatus(counts) {
   return STATUS_PRIORITY.find((status) => counts[status] > 0) ?? "unknown";
 }
 
+/** Rank a status by its index in STATUS_PRIORITY (worst-first: fail=0 ... pass=3), so a
+ * higher index means a better status. Used to compare a category's status against its
+ * previous run without inventing a second ordering (see the plan's Comparison semantics). */
+function statusRank(status) {
+  return STATUS_PRIORITY.indexOf(status);
+}
+
+/** `null` when there's nothing to compare against or the status didn't change (the common
+ * case in real data so far) — omit the indicator entirely rather than show a "no change" glyph. */
+function categoryTrend(currentStatus, previousStatus) {
+  if (!previousStatus || previousStatus === currentStatus) return null;
+  // Lower index = worse in STATUS_PRIORITY's worst-first ordering, so a lower rank now than
+  // before means the category got worse, not better — this is the one easy place to invert.
+  return statusRank(currentStatus) > statusRank(previousStatus)
+    ? { arrow: "▲", className: "category-trend-up" }
+    : { arrow: "▼", className: "category-trend-down" };
+}
+
 function el(tag, attrs, children) {
   const node = document.createElement(tag);
   for (const [key, value] of Object.entries(attrs ?? {})) {
@@ -126,18 +144,23 @@ function buildStatusBadge(status, label) {
   return el("span", { class: `status-badge ${STATUS_CLASS[status] ?? "status-unknown"}`, text: label });
 }
 
-function buildCategoryBadges(findings) {
+function buildCategoryBadges(findings, previousCategoryStatus) {
   const byCategory = countsByCategory(findings);
   return CATEGORIES.map((category) => {
     const counts = byCategory[category];
     const status = worstStatus(counts);
-    const description = `${category}: ${counts.pass} pass, ${counts.fail} fail, ${counts.warn} warn, ${counts.unknown} unknown`;
-    const badge = el("span", {
-      class: `category-badge ${STATUS_CLASS[status]}`,
-      title: description,
-      "aria-label": description,
-      text: `${CATEGORY_ABBR[category]} ${counts.pass}P ${counts.fail}F ${counts.warn}W`,
-    });
+    const trend = categoryTrend(status, previousCategoryStatus?.[category]);
+    const description = `${category}: ${counts.pass} pass, ${counts.fail} fail, ${counts.warn} warn, ${counts.unknown} unknown${trend ? ` ${trend.arrow}` : ""}`;
+    const label = `${CATEGORY_ABBR[category]} ${counts.pass}P ${counts.fail}F ${counts.warn}W`;
+
+    const children = [document.createTextNode(trend ? `${label} ` : label)];
+    if (trend) children.push(el("span", { class: trend.className, text: trend.arrow }));
+
+    const badge = el(
+      "span",
+      { class: `category-badge ${STATUS_CLASS[status]}`, title: description, "aria-label": description },
+      children,
+    );
     return badge;
   });
 }
@@ -233,7 +256,8 @@ function buildCard(property, thresholdKey) {
     sourceNote,
   ]);
 
-  const categoryBadges = el("div", { class: "category-breakdown" }, buildCategoryBadges(run.findings));
+  const previousCategoryStatus = history.length >= 2 ? history[history.length - 2].categoryStatus : undefined;
+  const categoryBadges = el("div", { class: "category-breakdown" }, buildCategoryBadges(run.findings, previousCategoryStatus));
   const sparkline = buildSparkline(history, thresholdKey);
   const footer = el("p", { class: "card-footer", text: `Last scanned ${new Date(run.scannedAt).toLocaleString()} (${id})` });
 

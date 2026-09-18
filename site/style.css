@@ -256,6 +256,14 @@ a {
   background: var(--color-alt);
 }
 
+.category-trend-up {
+  color: var(--color-positive);
+}
+
+.category-trend-down {
+  color: var(--color-negative);
+}
+
 .sparkline-wrap {
   display: flex;
   align-items: center;

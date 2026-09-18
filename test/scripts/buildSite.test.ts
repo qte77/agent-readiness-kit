@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { capHistory, summarizeScanRun, type RunSummary } from "../../scripts/buildSite.js";
-import type { Finding, ScanRun } from "../../src/types.js";
+import { CATEGORIES, type Category, type Finding, type ScanRun, type Status } from "../../src/types.js";
 
 function finding(status: Finding["status"], id = "x"): Finding {
   return {
@@ -19,6 +19,15 @@ const BASE_RUN: ScanRun = {
   findings: [],
 };
 
+const ALL_UNKNOWN: Record<Category, Status> = {
+  Discovery: "unknown",
+  Content: "unknown",
+  Trust: "unknown",
+  Execution: "unknown",
+  "Agent-to-Agent": "unknown",
+  "Identity & Auth": "unknown",
+};
+
 describe("summarizeScanRun", () => {
   it("uses run.score/run.grade verbatim when score is present", () => {
     const run: ScanRun = {
@@ -32,6 +41,7 @@ describe("summarizeScanRun", () => {
       score: 65,
       grade: "C",
       counts: { pass: 1, fail: 1, warn: 1, unknown: 1 },
+      categoryStatus: { ...ALL_UNKNOWN, Discovery: "fail" },
     });
   });
 
@@ -45,6 +55,7 @@ describe("summarizeScanRun", () => {
     expect(summary.score).toBe(50);
     expect(summary.grade).toBeUndefined();
     expect(summary.counts).toEqual({ pass: 2, fail: 1, warn: 1, unknown: 1 });
+    expect(summary.categoryStatus).toEqual({ ...ALL_UNKNOWN, Discovery: "fail" });
   });
 
   it("reports score as undefined (not NaN) when there are zero findings", () => {
@@ -52,6 +63,7 @@ describe("summarizeScanRun", () => {
     const summary = summarizeScanRun(run);
     expect(summary.score).toBeUndefined();
     expect(summary.counts).toEqual({ pass: 0, fail: 0, warn: 0, unknown: 0 });
+    expect(summary.categoryStatus).toEqual(ALL_UNKNOWN);
   });
 
   it("reports score as undefined (not NaN) when every finding is unknown (zero graded findings)", () => {
@@ -59,11 +71,29 @@ describe("summarizeScanRun", () => {
     const summary = summarizeScanRun(run);
     expect(summary.score).toBeUndefined();
     expect(summary.counts).toEqual({ pass: 0, fail: 0, warn: 0, unknown: 2 });
+    expect(summary.categoryStatus).toEqual(ALL_UNKNOWN);
   });
 
   it("passes run.grade through verbatim and never invents a letter grade for the fallback score", () => {
     const run: ScanRun = { ...BASE_RUN, grade: undefined, findings: [finding("pass")] };
     expect(summarizeScanRun(run).grade).toBeUndefined();
+  });
+});
+
+describe("summarizeScanRun categoryStatus", () => {
+  it("worst-status wins across mixed findings within one category", () => {
+    const run: ScanRun = { ...BASE_RUN, findings: [finding("pass"), finding("fail")] };
+    expect(summarizeScanRun(run).categoryStatus).toEqual({ ...ALL_UNKNOWN, Discovery: "fail" });
+  });
+
+  it("reports unknown for a category with zero findings mapped to it", () => {
+    const run: ScanRun = { ...BASE_RUN, findings: [finding("pass")] };
+    expect(summarizeScanRun(run).categoryStatus.Content).toBe("unknown");
+  });
+
+  it("always includes all 6 CATEGORIES keys, even when a run's findings don't cover every category", () => {
+    const run: ScanRun = { ...BASE_RUN, findings: [finding("pass")] };
+    expect(Object.keys(summarizeScanRun(run).categoryStatus).sort()).toEqual([...CATEGORIES].sort());
   });
 });
 
@@ -74,6 +104,7 @@ describe("capHistory", () => {
       score: i,
       grade: "C",
       counts: { pass: 1, fail: 0, warn: 0, unknown: 0 },
+      categoryStatus: ALL_UNKNOWN,
     };
   }
 

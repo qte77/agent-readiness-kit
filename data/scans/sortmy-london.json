@@ -1,7 +1,7 @@
 {
   "propertyId": "sortmy-london",
   "url": "https://sortmy.london",
-  "scannedAt": "2026-09-18T02:14:20.250Z",
+  "scannedAt": "2026-09-18T14:06:20.261Z",
   "findings": [
     {
       "id": "wellKnown.agent-instruction",
@@ -239,7 +239,7 @@
       "evidence": {
         "level": 2,
         "levelName": "Bot-Aware",
-        "scannedAt": "2026-09-18T02:13:35.440Z",
+        "scannedAt": "2026-09-18T14:05:31.398Z",
         "checks": {
           "discoverability": {
             "robotsTxt": {
@@ -258,7 +258,7 @@
                     "statusText": "OK",
                     "headers": {
                       "content-type": "text/plain; charset=utf-8",
-                      "cf-ray": "a3ccd4ebde814967-IAD"
+                      "cf-ray": "a3d0e7cd4fbb514d-IAD"
                     },
                     "bodyPreview": "# sortmy.london — a free civic wayfinder; fully crawlable.\nUser-agent: *\nAllow: /\nContent-Signal: ai-input=yes, ai-train=no\n\nSitemap: https://sortmy.london/sitemap.xml\n"
                   },
@@ -316,7 +316,7 @@
                     "headers": {
                       "content-type": "application/xml",
                       "content-length": "230",
-                      "cf-ray": "a3ccd4ebfeb44967-IAD"
+                      "cf-ray": "a3d0e7cdb85a514d-IAD"
                     }
                   },
                   "finding": {
@@ -333,7 +333,7 @@
                   }
                 }
               ],
-              "durationMs": 17
+              "durationMs": 22
             },
             "linkHeaders": {
               "status": "fail",
@@ -351,7 +351,7 @@
                     "statusText": "OK",
                     "headers": {
                       "content-type": "text/html; charset=utf-8",
-                      "cf-ray": "a3ccd4ec6f604967-IAD"
+                      "cf-ray": "a3d0e7ce9a29514d-IAD"
                     }
                   },
                   "finding": {
@@ -368,7 +368,7 @@
                   }
                 }
               ],
-              "durationMs": 81
+              "durationMs": 164
             },
             "dnsAid": {
               "status": "fail",
@@ -410,7 +410,7 @@
                     "headers": {
                       "content-type": "application/dns-json"
                     },
-                    "bodyPreview": "{\"Status\":0,\"TC\":false,\"RD\":true,\"RA\":true,\"AD\":true,\"CD\":false,\"Question\":[{\"name\":\"_index._agents.sortmy.london\",\"type\":64}],\"Authority\":[{\"name\":\"sortmy.london\",\"type\":6,\"TTL\":1800,\"data\":\"cullen.ns.cloudflare.com. dns.cloudflare.com. 2415052951 10000 2400 604800 1800\"},{\"name\":\"sortmy.london\",\"type\":46,\"TTL\":1800,\"data\":\"SOA 13 2 1800 1789787609 1789607609 34505 sortmy.london. ilUg4ApJa1pNUWDs+oGQhUUaFOJ8E1BB+W0kuwAwqmAf/XV8QHMvzetpuX/J1KmFUkXeci3E9Iz85duWxacelw==\"},{\"name\":\"_index._agents.s..."
+                    "bodyPreview": "{\"Status\":0,\"TC\":false,\"RD\":true,\"RA\":true,\"AD\":true,\"CD\":false,\"Question\":[{\"name\":\"_index._agents.sortmy.london\",\"type\":64}],\"Authority\":[{\"name\":\"sortmy.london\",\"type\":6,\"TTL\":1800,\"data\":\"cullen.ns.cloudflare.com. dns.cloudflare.com. 2415052951 10000 2400 604800 1800\"},{\"name\":\"sortmy.london\",\"type\":46,\"TTL\":1800,\"data\":\"SOA 13 2 1800 1789830325 1789650325 34505 sortmy.london. +S3Y5xfqkypk0Sa05BjPMbom8JMbWQW72xCelkt+TdpQECKNvoT1TJbTvaIH6lBkZKQaWtXolpIk9hgAxwUDSQ==\"},{\"name\":\"_index._agents.s..."
                   },
                   "finding": {
                     "outcome": "neutral",
@@ -433,7 +433,7 @@
                     "headers": {
                       "content-type": "application/dns-json"
                     },
-                    "bodyPreview": "{\"Status\":0,\"TC\":false,\"RD\":true,\"RA\":true,\"AD\":true,\"CD\":false,\"Question\":[{\"name\":\"_index._agents.sortmy.london\",\"type\":65}],\"Authority\":[{\"name\":\"sortmy.london\",\"type\":6,\"TTL\":1800,\"data\":\"cullen.ns.cloudflare.com. dns.cloudflare.com. 2415052951 10000 2400 604800 1800\"},{\"name\":\"sortmy.london\",\"type\":46,\"TTL\":1800,\"data\":\"SOA 13 2 1800 1789787609 1789607609 34505 sortmy.london. 8lEHKhHSy+xygu8wWbVq2OxN3gAt5iQnxLL10iniwqlfi/0nYIfl1RFkjWwJpnnebPVcf3YzMSAFzeUxZt6B9Q==\"},{\"name\":\"_index._agents.s..."
+                    "bodyPreview": "{\"Status\":0,\"TC\":false,\"RD\":true,\"RA\":true,\"AD\":true,\"CD\":false,\"Question\":[{\"name\":\"_index._agents.sortmy.london\",\"type\":65}],\"Authority\":[{\"name\":\"sortmy.london\",\"type\":6,\"TTL\":1800,\"data\":\"cullen.ns.cloudflare.com. dns.cloudflare.com. 2415052951 10000 2400 604800 1800\"},{\"name\":\"sortmy.london\",\"type\":46,\"TTL\":1800,\"data\":\"SOA 13 2 1800 1789830325 1789650325 34505 sortmy.london. H+OKtMXi8+g8Jt4dVlSBIct2rtI1IWvISq793f6FcNVwcEK30gH99rvyLoH3iuPuvZvIwuX1wFKW8r36jd6HHA==\"},{\"name\":\"_index._agents.s..."
                   },
                   "finding": {
                     "outcome": "neutral",
@@ -456,7 +456,7 @@
                     "headers": {
                       "content-type": "application/dns-json"
                     },
-                    "bodyPreview": "{\"Status\":0,\"TC\":false,\"RD\":true,\"RA\":true,\"AD\":true,\"CD\":false,\"Question\":[{\"name\":\"_a2a._agents.sortmy.london\",\"type\":64}],\"Authority\":[{\"name\":\"sortmy.london\",\"type\":6,\"TTL\":1800,\"data\":\"cullen.ns.cloudflare.com. dns.cloudflare.com. 2415052951 10000 2400 604800 1800\"},{\"name\":\"sortmy.london\",\"type\":46,\"TTL\":1800,\"data\":\"SOA 13 2 1800 1789787609 1789607609 34505 sortmy.london. 1QAmUonNAcNXXQ9fVllXeEyLWKqi6iimBzvwlcdbwkcDyPVaPxrbjAnowd0bkeAZsd/SE8beOUv4UcXrZ1j12Q==\"},{\"name\":\"_a2a._agents.sortm..."
+                    "bodyPreview": "{\"Status\":0,\"TC\":false,\"RD\":true,\"RA\":true,\"AD\":true,\"CD\":false,\"Question\":[{\"name\":\"_a2a._agents.sortmy.london\",\"type\":64}],\"Authority\":[{\"name\":\"sortmy.london\",\"type\":6,\"TTL\":1800,\"data\":\"cullen.ns.cloudflare.com. dns.cloudflare.com. 2415052951 10000 2400 604800 1800\"},{\"name\":\"sortmy.london\",\"type\":46,\"TTL\":1800,\"data\":\"SOA 13 2 1800 1789830325 1789650325 34505 sortmy.london. 93nY600lMS4+Tit/VnXukj+mkGJ8bw0SP9x6qdRXvxTlLOJXLgZ/9ZwmU7uEdgt43OT17QpT8MdoXQDZnc8RCQ==\"},{\"name\":\"_a2a._agents.sortm..."
                   },
                   "finding": {
                     "outcome": "neutral",
@@ -479,7 +479,7 @@
                     "headers": {
                       "content-type": "application/dns-json"
                     },
-                    "bodyPreview": "{\"Status\":0,\"TC\":false,\"RD\":true,\"RA\":true,\"AD\":true,\"CD\":false,\"Question\":[{\"name\":\"_a2a._agents.sortmy.london\",\"type\":65}],\"Authority\":[{\"name\":\"sortmy.london\",\"type\":6,\"TTL\":1800,\"data\":\"cullen.ns.cloudflare.com. dns.cloudflare.com. 2415052951 10000 2400 604800 1800\"},{\"name\":\"sortmy.london\",\"type\":46,\"TTL\":1800,\"data\":\"SOA 13 2 1800 1789787609 1789607609 34505 sortmy.london. Uo8vxbYS7EStaUnJHmhVxoFGFPT4LJLYtJhOIG0Drhrb2YjxjcOlRy4T5cdftNSh0WciH2xR416eYVs4x1Uzfg==\"},{\"name\":\"_a2a._agents.sortm..."
+                    "bodyPreview": "{\"Status\":0,\"TC\":false,\"RD\":true,\"RA\":true,\"AD\":true,\"CD\":false,\"Question\":[{\"name\":\"_a2a._agents.sortmy.london\",\"type\":65}],\"Authority\":[{\"name\":\"sortmy.london\",\"type\":6,\"TTL\":1800,\"data\":\"cullen.ns.cloudflare.com. dns.cloudflare.com. 2415052951 10000 2400 604800 1800\"},{\"name\":\"sortmy.london\",\"type\":46,\"TTL\":1800,\"data\":\"SOA 13 2 1800 1789830325 1789650325 34505 sortmy.london. KC0LweqDdgNVp2q3VvbZwkLSTYAyXv9xURhn2zZfYbARIL2ox80ufx9EViLcqC3vYn8MlqEG60KFMWVQ15QJAQ==\"},{\"name\":\"_a2a._agents.sortm..."
                   },
                   "finding": {
                     "outcome": "neutral",
@@ -502,7 +502,7 @@
                     "headers": {
                       "content-type": "application/dns-json"
                     },
-                    "bodyPreview": "{\"Status\":0,\"TC\":false,\"RD\":true,\"RA\":true,\"AD\":true,\"CD\":false,\"Question\":[{\"name\":\"_mcp._agents.sortmy.london\",\"type\":64}],\"Authority\":[{\"name\":\"sortmy.london\",\"type\":6,\"TTL\":1800,\"data\":\"cullen.ns.cloudflare.com. dns.cloudflare.com. 2415052951 10000 2400 604800 1800\"},{\"name\":\"sortmy.london\",\"type\":46,\"TTL\":1800,\"data\":\"SOA 13 2 1800 1789787609 1789607609 34505 sortmy.london. qcpa2v9YZMEmK6g0v6G+w9b55Eua3AUsk2H7uzf2Ckb4l3Ww7d/cfU+ngHPBRnUUgsiZ98L/7Pzu7oEad6/QNA==\"},{\"name\":\"_mcp._agents.sortm..."
+                    "bodyPreview": "{\"Status\":0,\"TC\":false,\"RD\":true,\"RA\":true,\"AD\":true,\"CD\":false,\"Question\":[{\"name\":\"_mcp._agents.sortmy.london\",\"type\":64}],\"Authority\":[{\"name\":\"sortmy.london\",\"type\":6,\"TTL\":1800,\"data\":\"cullen.ns.cloudflare.com. dns.cloudflare.com. 2415052951 10000 2400 604800 1800\"},{\"name\":\"sortmy.london\",\"type\":46,\"TTL\":1800,\"data\":\"SOA 13 2 1800 1789830325 1789650325 34505 sortmy.london. /pSBgqmcSjJ1R4zKs6/90t9uyhuCtBqv9UAlpu3Fhd84BM06lmoloQZypQICNeBHfEP/pRyN2YugX+p9IFilZw==\"},{\"name\":\"_mcp._agents.sortm..."
                   },
                   "finding": {
                     "outcome": "neutral",
@@ -525,7 +525,7 @@
                     "headers": {
                       "content-type": "application/dns-json"
                     },
-                    "bodyPreview": "{\"Status\":0,\"TC\":false,\"RD\":true,\"RA\":true,\"AD\":true,\"CD\":false,\"Question\":[{\"name\":\"_mcp._agents.sortmy.london\",\"type\":65}],\"Authority\":[{\"name\":\"sortmy.london\",\"type\":6,\"TTL\":1800,\"data\":\"cullen.ns.cloudflare.com. dns.cloudflare.com. 2415052951 10000 2400 604800 1800\"},{\"name\":\"sortmy.london\",\"type\":46,\"TTL\":1800,\"data\":\"SOA 13 2 1800 1789787609 1789607609 34505 sortmy.london. 2XiPxr/9CVs0lPQLAcuqjwbNRZ6Qros6EhJG3qrlrwpTt+iUfaZVd1+PH8LPy8Qux/XdIElMRM1oSPyX/XUVwA==\"},{\"name\":\"_mcp._agents.sortm..."
+                    "bodyPreview": "{\"Status\":0,\"TC\":false,\"RD\":true,\"RA\":true,\"AD\":true,\"CD\":false,\"Question\":[{\"name\":\"_mcp._agents.sortmy.london\",\"type\":65}],\"Authority\":[{\"name\":\"sortmy.london\",\"type\":6,\"TTL\":1800,\"data\":\"cullen.ns.cloudflare.com. dns.cloudflare.com. 2415052951 10000 2400 604800 1800\"},{\"name\":\"sortmy.london\",\"type\":46,\"TTL\":1800,\"data\":\"SOA 13 2 1800 1789830325 1789650325 34505 sortmy.london. 7LjVu/yoYi/PyxLeOuEaO3CdLTXHsIBsvIHyAN2oKj8cDisUWi3PA1ddrjbh8dNEIXng3JdG3YVfvklWGMIb6g==\"},{\"name\":\"_mcp._agents.sortm..."
                   },
                   "finding": {
                     "outcome": "neutral",
@@ -548,7 +548,7 @@
                     "headers": {
                       "content-type": "application/dns-json"
                     },
-                    "bodyPreview": "{\"Status\":0,\"TC\":false,\"RD\":true,\"RA\":true,\"AD\":true,\"CD\":false,\"Question\":[{\"name\":\"_index._agents.sortmy.london\",\"type\":16}],\"Authority\":[{\"name\":\"sortmy.london\",\"type\":6,\"TTL\":1800,\"data\":\"cullen.ns.cloudflare.com. dns.cloudflare.com. 2415052951 10000 2400 604800 1800\"},{\"name\":\"sortmy.london\",\"type\":46,\"TTL\":1800,\"data\":\"SOA 13 2 1800 1789787609 1789607609 34505 sortmy.london. lLBCv5wpr057KLf2PXtVmkY7jryBVqeRsdtcQNTGVxgyFDETYlZ1edSiHQmAbMMMzVxBm+dQug5WerRrhqVGyg==\"},{\"name\":\"_index._agents.s..."
+                    "bodyPreview": "{\"Status\":0,\"TC\":false,\"RD\":true,\"RA\":true,\"AD\":true,\"CD\":false,\"Question\":[{\"name\":\"_index._agents.sortmy.london\",\"type\":16}],\"Authority\":[{\"name\":\"sortmy.london\",\"type\":6,\"TTL\":1800,\"data\":\"cullen.ns.cloudflare.com. dns.cloudflare.com. 2415052951 10000 2400 604800 1800\"},{\"name\":\"sortmy.london\",\"type\":46,\"TTL\":1800,\"data\":\"SOA 13 2 1800 1789830325 1789650325 34505 sortmy.london. DNKnp7U9sQn6zrSNtTt4mOdrlVaBrttZEnBwIch4SW0oa3kDBauGTTu+g5+gNGXsEXk5MDdaFK+EwxHR2jJHqw==\"},{\"name\":\"_index._agents.s..."
                   },
                   "finding": {
                     "outcome": "neutral",
@@ -572,7 +572,7 @@
                   }
                 }
               ],
-              "durationMs": 22
+              "durationMs": 25
             }
           },
           "contentAccessibility": {
@@ -603,7 +603,7 @@
                     "statusText": "OK",
                     "headers": {
                       "content-type": "text/html; charset=utf-8",
-                      "cf-ray": "a3ccd4f5cb29876a-IAD"
+                      "cf-ray": "a3d0e7d4591cf24a-IAD"
                     }
                   }
                 },
@@ -616,7 +616,7 @@
                   }
                 }
               ],
-              "durationMs": 481
+              "durationMs": 439
             }
           },
           "botAccessControl": {
@@ -900,7 +900,7 @@
                     "statusText": "OK",
                     "headers": {
                       "content-type": "text/plain; charset=utf-8",
-                      "cf-ray": "a3ccd4ebde814967-IAD"
+                      "cf-ray": "a3d0e7cd4fbb514d-IAD"
                     },
                     "bodyPreview": "# sortmy.london — a free civic wayfinder; fully crawlable.\nUser-agent: *\nAllow: /\nContent-Signal: ai-input=yes, ai-train=no\n\nSitemap: https://sortmy.london/sitemap.xml\n"
                   },
@@ -955,7 +955,7 @@
                     "statusText": "OK",
                     "headers": {
                       "content-type": "text/plain; charset=utf-8",
-                      "cf-ray": "a3ccd4ebde814967-IAD"
+                      "cf-ray": "a3d0e7cd4fbb514d-IAD"
                     },
                     "bodyPreview": "# sortmy.london — a free civic wayfinder; fully crawlable.\nUser-agent: *\nAllow: /\nContent-Signal: ai-input=yes, ai-train=no\n\nSitemap: https://sortmy.london/sitemap.xml\n"
                   },
@@ -999,7 +999,7 @@
                     "statusText": "Not Found",
                     "headers": {
                       "content-type": "text/html; charset=utf-8",
-                      "cf-ray": "a3ccd4ebfeb64967-IAD"
+                      "cf-ray": "a3d0e7cdb859514d-IAD"
                     }
                   },
                   "finding": {
@@ -1016,7 +1016,7 @@
                   }
                 }
               ],
-              "durationMs": 21
+              "durationMs": 33
             }
           },
           "discovery": {
@@ -1039,7 +1039,7 @@
                     "statusText": "Not Found",
                     "headers": {
                       "content-type": "text/html; charset=utf-8",
-                      "cf-ray": "a3ccd4ec3f224967-IAD"
+                      "cf-ray": "a3d0e7ce294c514d-IAD"
                     }
                   },
                   "finding": {
@@ -1056,7 +1056,7 @@
                   }
                 }
               ],
-              "durationMs": 57
+              "durationMs": 107
             },
             "oauthDiscovery": {
               "status": "fail",
@@ -1074,7 +1074,7 @@
                     "statusText": "Not Found",
                     "headers": {
                       "content-type": "text/html; charset=utf-8",
-                      "cf-ray": "a3ccd4ebfeb34967-IAD"
+                      "cf-ray": "a3d0e7cdb861514d-IAD"
                     }
                   },
                   "finding": {
@@ -1094,7 +1094,7 @@
                     "statusText": "Not Found",
                     "headers": {
                       "content-type": "text/html; charset=utf-8",
-                      "cf-ray": "a3ccd4ec0ec94967-IAD"
+                      "cf-ray": "a3d0e7cdc88f514d-IAD"
                     }
                   },
                   "finding": {
@@ -1111,32 +1111,12 @@
                   }
                 }
               ],
-              "durationMs": 25
+              "durationMs": 48
             },
             "oauthProtectedResource": {
               "status": "fail",
               "message": "No OAuth Protected Resource Metadata found",
               "evidence": [
-                {
-                  "action": "fetch",
-                  "label": "GET /.well-known/oauth-protected-resource",
-                  "request": {
-                    "url": "https://sortmy.london/.well-known/oauth-protected-resource",
-                    "method": "GET"
-                  },
-                  "response": {
-                    "status": 404,
-                    "statusText": "Not Found",
-                    "headers": {
-                      "content-type": "text/html; charset=utf-8",
-                      "cf-ray": "a3ccd4ec0ecc4967-IAD"
-                    }
-                  },
-                  "finding": {
-                    "outcome": "negative",
-                    "summary": "Returned 404"
-                  }
-                },
                 {
                   "action": "fetch",
                   "label": "GET /",
@@ -1149,12 +1129,32 @@
                     "statusText": "OK",
                     "headers": {
                       "content-type": "text/html; charset=utf-8",
-                      "cf-ray": "a3ccd4ec1ee54967-IAD"
+                      "cf-ray": "a3d0e7cdd8aa514d-IAD"
                     }
                   },
                   "finding": {
                     "outcome": "neutral",
                     "summary": "Target resource returned 200 (no WWW-Authenticate header)"
+                  }
+                },
+                {
+                  "action": "fetch",
+                  "label": "GET /.well-known/oauth-protected-resource",
+                  "request": {
+                    "url": "https://sortmy.london/.well-known/oauth-protected-resource",
+                    "method": "GET"
+                  },
+                  "response": {
+                    "status": 404,
+                    "statusText": "Not Found",
+                    "headers": {
+                      "content-type": "text/html; charset=utf-8",
+                      "cf-ray": "a3d0e7cdc892514d-IAD"
+                    }
+                  },
+                  "finding": {
+                    "outcome": "negative",
+                    "summary": "Returned 404"
                   }
                 },
                 {
@@ -1166,7 +1166,7 @@
                   }
                 }
               ],
-              "durationMs": 34
+              "durationMs": 49
             },
             "authMd": {
               "status": "fail",
@@ -1187,7 +1187,7 @@
                     "statusText": "Not Found",
                     "headers": {
                       "content-type": "text/html; charset=utf-8",
-                      "cf-ray": "a3ccd4ec2eec4967-IAD"
+                      "cf-ray": "a3d0e7cde8cb514d-IAD"
                     }
                   },
                   "finding": {
@@ -1204,32 +1204,12 @@
                   }
                 }
               ],
-              "durationMs": 38
+              "durationMs": 78
             },
             "mcpServerCard": {
               "status": "fail",
               "message": "MCP Server Card not found",
               "evidence": [
-                {
-                  "action": "fetch",
-                  "label": "GET /.well-known/mcp/server-card.json",
-                  "request": {
-                    "url": "https://sortmy.london/.well-known/mcp/server-card.json",
-                    "method": "GET"
-                  },
-                  "response": {
-                    "status": 404,
-                    "statusText": "Not Found",
-                    "headers": {
-                      "content-type": "text/html; charset=utf-8",
-                      "cf-ray": "a3ccd4ec2eee4967-IAD"
-                    }
-                  },
-                  "finding": {
-                    "outcome": "negative",
-                    "summary": "/.well-known/mcp/server-card.json returned 404"
-                  }
-                },
                 {
                   "action": "fetch",
                   "label": "GET /.well-known/mcp/server-cards.json",
@@ -1242,12 +1222,32 @@
                     "statusText": "Not Found",
                     "headers": {
                       "content-type": "text/html; charset=utf-8",
-                      "cf-ray": "a3ccd4ec2ef14967-IAD"
+                      "cf-ray": "a3d0e7cde8d0514d-IAD"
                     }
                   },
                   "finding": {
                     "outcome": "negative",
                     "summary": "/.well-known/mcp/server-cards.json returned 404"
+                  }
+                },
+                {
+                  "action": "fetch",
+                  "label": "GET /.well-known/mcp/server-card.json",
+                  "request": {
+                    "url": "https://sortmy.london/.well-known/mcp/server-card.json",
+                    "method": "GET"
+                  },
+                  "response": {
+                    "status": 404,
+                    "statusText": "Not Found",
+                    "headers": {
+                      "content-type": "text/html; charset=utf-8",
+                      "cf-ray": "a3d0e7cde8cf514d-IAD"
+                    }
+                  },
+                  "finding": {
+                    "outcome": "negative",
+                    "summary": "/.well-known/mcp/server-card.json returned 404"
                   }
                 },
                 {
@@ -1262,7 +1262,7 @@
                     "statusText": "Not Found",
                     "headers": {
                       "content-type": "text/html; charset=utf-8",
-                      "cf-ray": "a3ccd4ec2efb4967-IAD"
+                      "cf-ray": "a3d0e7ce08f8514d-IAD"
                     }
                   },
                   "finding": {
@@ -1279,7 +1279,7 @@
                   }
                 }
               ],
-              "durationMs": 42
+              "durationMs": 110
             },
             "a2aAgentCard": {
               "status": "fail",
@@ -1297,7 +1297,7 @@
                     "statusText": "Not Found",
                     "headers": {
                       "content-type": "text/html; charset=utf-8",
-                      "cf-ray": "a3ccd4ec2f054967-IAD"
+                      "cf-ray": "a3d0e7ce08fb514d-IAD"
                     }
                   },
                   "finding": {
@@ -1314,7 +1314,7 @@
                   }
                 }
               ],
-              "durationMs": 44
+              "durationMs": 107
             },
             "agentSkills": {
               "status": "fail",
@@ -1332,7 +1332,7 @@
                     "statusText": "Not Found",
                     "headers": {
                       "content-type": "text/html; charset=utf-8",
-                      "cf-ray": "a3ccd4ec3f184967-IAD"
+                      "cf-ray": "a3d0e7ce08ff514d-IAD"
                     }
                   },
                   "finding": {
@@ -1352,7 +1352,7 @@
                     "statusText": "Not Found",
                     "headers": {
                       "content-type": "text/html; charset=utf-8",
-                      "cf-ray": "a3ccd4ec6f6c4967-IAD"
+                      "cf-ray": "a3d0e7ce9a31514d-IAD"
                     }
                   },
                   "finding": {
@@ -1369,7 +1369,7 @@
                   }
                 }
               ],
-              "durationMs": 88
+              "durationMs": 170
             },
             "webMcp": {
               "status": "fail",
@@ -1412,7 +1412,7 @@
                   }
                 }
               ],
-              "durationMs": 4535
+              "durationMs": 4547
             },
             "ard": {
               "status": "fail",
@@ -1449,7 +1449,7 @@
                     "statusText": "Not Found",
                     "headers": {
                       "content-type": "text/html; charset=utf-8",
-                      "cf-ray": "a3ccd4ebfeb54967-IAD"
+                      "cf-ray": "a3d0e7cdb860514d-IAD"
                     }
                   },
                   "finding": {
@@ -1473,7 +1473,7 @@
                     "headers": {
                       "content-type": "application/dns-json"
                     },
-                    "bodyPreview": "{\"Status\":0,\"TC\":false,\"RD\":true,\"RA\":true,\"AD\":true,\"CD\":false,\"Question\":[{\"name\":\"_catalog._agents.sortmy.london\",\"type\":16}],\"Authority\":[{\"name\":\"sortmy.london\",\"type\":6,\"TTL\":1800,\"data\":\"cullen.ns.cloudflare.com. dns.cloudflare.com. 2415052951 10000 2400 604800 1800\"},{\"name\":\"sortmy.london\",\"type\":46,\"TTL\":1800,\"data\":\"SOA 13 2 1800 1789787609 1789607609 34505 sortmy.london. kID6N39zXptlFbVjUrUgI7jZ0/LS4SsRufZ1PsKjV8gJTbxlPpLrgXu1fJDj3W2Ar7LQouRr379gj+M0Lb/7Tg==\"},{\"name\":\"_catalog._agen..."
+                    "bodyPreview": "{\"Status\":0,\"TC\":false,\"RD\":true,\"RA\":true,\"AD\":true,\"CD\":false,\"Question\":[{\"name\":\"_catalog._agents.sortmy.london\",\"type\":16}],\"Authority\":[{\"name\":\"sortmy.london\",\"type\":6,\"TTL\":1800,\"data\":\"cullen.ns.cloudflare.com. dns.cloudflare.com. 2415052951 10000 2400 604800 1800\"},{\"name\":\"sortmy.london\",\"type\":46,\"TTL\":1800,\"data\":\"SOA 13 2 1800 1789830326 1789650326 34505 sortmy.london. 9sfvtCLRFAtBGxaHqhWnpIULzh43z3/vyexo99Xsp7LL4m1MkLXkf17Am6lg3xV5RJuFExUZEgAMmrEat3pg2Q==\"},{\"name\":\"_catalog._agen..."
                   },
                   "finding": {
                     "outcome": "neutral",
@@ -1496,7 +1496,7 @@
                     "headers": {
                       "content-type": "application/dns-json"
                     },
-                    "bodyPreview": "{\"Status\":0,\"TC\":false,\"RD\":true,\"RA\":true,\"AD\":true,\"CD\":false,\"Question\":[{\"name\":\"_search._agents.sortmy.london\",\"type\":33}],\"Authority\":[{\"name\":\"sortmy.london\",\"type\":6,\"TTL\":1800,\"data\":\"cullen.ns.cloudflare.com. dns.cloudflare.com. 2415052951 10000 2400 604800 1800\"},{\"name\":\"sortmy.london\",\"type\":46,\"TTL\":1800,\"data\":\"SOA 13 2 1800 1789787609 1789607609 34505 sortmy.london. hVe/q6KOM82vYcVnnTf67cMQ7Rj1ShqoWq5oiXLwjK3Fr3jkYM/ao+d1iJ93Aj9iAPAgFVyurDYwGT4W12fY2Q==\"},{\"name\":\"_search._agents..."
+                    "bodyPreview": "{\"Status\":0,\"TC\":false,\"RD\":true,\"RA\":true,\"AD\":true,\"CD\":false,\"Question\":[{\"name\":\"_search._agents.sortmy.london\",\"type\":33}],\"Authority\":[{\"name\":\"sortmy.london\",\"type\":6,\"TTL\":1800,\"data\":\"cullen.ns.cloudflare.com. dns.cloudflare.com. 2415052951 10000 2400 604800 1800\"},{\"name\":\"sortmy.london\",\"type\":46,\"TTL\":1800,\"data\":\"SOA 13 2 1800 1789830326 1789650326 34505 sortmy.london. UNuh/vv7uSoAgE0TeTN17wyiw1WRXW0hX5YCgMARGayVLaDhpLs/3olrBSw27xw8xyfNYkT4fnGpRias8NONdw==\"},{\"name\":\"_search._agents..."
                   },
                   "finding": {
                     "outcome": "neutral",
@@ -1516,7 +1516,7 @@
                 "discoveryMechanisms": [],
                 "searchEndpoints": []
               },
-              "durationMs": 22
+              "durationMs": 32
             }
           },
           "commerce": {
@@ -1536,32 +1536,12 @@
                     "statusText": "OK",
                     "headers": {
                       "content-type": "text/html; charset=utf-8",
-                      "cf-ray": "a3ccd4ec4f2e4967-IAD"
+                      "cf-ray": "a3d0e7ce4976514d-IAD"
                     }
                   },
                   "finding": {
                     "outcome": "neutral",
                     "summary": "/ returned 200 (not 402)"
-                  }
-                },
-                {
-                  "action": "fetch",
-                  "label": "GET /api",
-                  "request": {
-                    "url": "https://sortmy.london/api",
-                    "method": "GET"
-                  },
-                  "response": {
-                    "status": 404,
-                    "statusText": "Not Found",
-                    "headers": {
-                      "content-type": "text/html; charset=utf-8",
-                      "cf-ray": "a3ccd4ec4f324967-IAD"
-                    }
-                  },
-                  "finding": {
-                    "outcome": "neutral",
-                    "summary": "/api returned 404 (not 402)"
                   }
                 },
                 {
@@ -1577,12 +1557,32 @@
                     "headers": {
                       "content-type": "text/plain;charset=UTF-8",
                       "content-length": "9",
-                      "cf-ray": "a3ccd4ec5f444967-IAD"
+                      "cf-ray": "a3d0e7ce69b5514d-IAD"
                     }
                   },
                   "finding": {
                     "outcome": "neutral",
                     "summary": "/api/v1 returned 404 (not 402)"
+                  }
+                },
+                {
+                  "action": "fetch",
+                  "label": "GET /api",
+                  "request": {
+                    "url": "https://sortmy.london/api",
+                    "method": "GET"
+                  },
+                  "response": {
+                    "status": 404,
+                    "statusText": "Not Found",
+                    "headers": {
+                      "content-type": "text/html; charset=utf-8",
+                      "cf-ray": "a3d0e7ce69b9514d-IAD"
+                    }
+                  },
+                  "finding": {
+                    "outcome": "neutral",
+                    "summary": "/api returned 404 (not 402)"
                   }
                 },
                 {
@@ -1597,7 +1597,7 @@
                     "statusText": "OK",
                     "headers": {
                       "content-type": "application/json",
-                      "cf-ray": "a3ccd4ec4f274967-IAD"
+                      "cf-ray": "a3d0e7ce396b514d-IAD"
                     }
                   }
                 },
@@ -1622,7 +1622,7 @@
                   }
                 }
               ],
-              "durationMs": 1076
+              "durationMs": 898
             },
             "mpp": {
               "status": "neutral",
@@ -1640,7 +1640,7 @@
                     "statusText": "Not Found",
                     "headers": {
                       "content-type": "text/html; charset=utf-8",
-                      "cf-ray": "a3ccd4ec5f564967-IAD"
+                      "cf-ray": "a3d0e7ce69c2514d-IAD"
                     }
                   },
                   "finding": {
@@ -1657,7 +1657,7 @@
                   }
                 }
               ],
-              "durationMs": 77
+              "durationMs": 157
             },
             "ucp": {
               "status": "neutral",
@@ -1675,7 +1675,7 @@
                     "statusText": "Not Found",
                     "headers": {
                       "content-type": "text/html; charset=utf-8",
-                      "cf-ray": "a3ccd4ec3f244967-IAD"
+                      "cf-ray": "a3d0e7ce395a514d-IAD"
                     }
                   },
                   "finding": {
@@ -1692,7 +1692,7 @@
                   }
                 }
               ],
-              "durationMs": 56
+              "durationMs": 141
             },
             "acp": {
               "status": "neutral",
@@ -1710,7 +1710,7 @@
                     "statusText": "Not Found",
                     "headers": {
                       "content-type": "text/html; charset=utf-8",
-                      "cf-ray": "a3ccd4ec5f584967-IAD"
+                      "cf-ray": "a3d0e7ce79e0514d-IAD"
                     }
                   },
                   "finding": {
@@ -1727,7 +1727,7 @@
                   }
                 }
               ],
-              "durationMs": 76
+              "durationMs": 156
             },
             "ap2": {
               "status": "neutral",

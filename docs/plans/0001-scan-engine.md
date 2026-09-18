@@ -483,8 +483,10 @@ drift out of sync until it's updated to match.
 4. **Crosswalk lives in `agenthud-agui-a2ui/docs/agent-readiness.md`** — this repo links to
    it and encodes it as a lookup (`src/scan/crosswalk.ts`, done this arc), never forks the
    table.
-5. **ora.ai two-phase scoring + Cloudflare URL Scanner's async result both resolve via a
-   plain synchronous `await`/poll** inside the one GHA job — no persisted pending-state.
+5. **ora.ai's two-phase scoring resolves via a plain synchronous `await`/sleep** inside the
+   one GHA job — no persisted pending-state. **isitagentready.com (which superseded the
+   originally-planned Cloudflare URL Scanner) is a single synchronous call, not async at
+   all** — updated 2026-09-18, see `docs/architecture.md`'s "External scoring sources".
 6. **Dedup-safe issue creation**: search by a fixed title marker before creating; update the
    existing issue's body + a changelog comment, never silent stale reuse. Mirrors (and
    improves on) `2026-08-26-AgentNativeHack-FT-CF-SF/src/execute.ts:37-55`'s
@@ -809,9 +811,9 @@ deviations from the locked decisions, and migrate any still-open rows to the nex
 **Arc 0001 closed 2026-09-17.** All 13 rows shipped (table above); no rows migrated forward.
 Deviations from the locked decisions, both already noted inline where they happened:
 - Decision 5 (`docs/architecture.md`, ora.ai/Cloudflare URL Scanner "async result" polling)
-  is stale — row 4 replaced Cloudflare URL Scanner with isitagentready.com's synchronous
-  endpoint (no polling at all). Still deferred to a follow-on doc-sync pass, not done this
-  arc — see the Docs & issues audit section above.
+  was stale — row 4 replaced Cloudflare URL Scanner with isitagentready.com's synchronous
+  endpoint (no polling at all). **Fixed 2026-09-18** — see `docs/architecture.md`'s "External
+  scoring sources" section, no longer deferred.
 - Row 11's commit mechanism deviated from the original "commit+push directly to `main`" plan
   to a branch+PR+admin-merge path, because a repository ruleset (added mid-arc, after this
   plan's own session-start check found none) rejects direct pushes and — per the row 13
@@ -825,7 +827,6 @@ Deviations from the locked decisions, both already noted inline where they happe
 
 **Follow-on work identified but out of this arc's scope** (candidates for arc 0002, not
 started):
-- The `docs/architecture.md` decision-5 doc-sync pass (above).
 - Resolving the `code_quality`/code-scanning root-cause question with certainty (above).
 - Issue #5's isitagentready.com category-gap update, now that real `checks` data exists in
   `data/scans/*.json` for all 3 properties (per Design decision 2).

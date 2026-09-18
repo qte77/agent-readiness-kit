@@ -186,6 +186,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- `docs/architecture.md`'s "Async scoring sources" decision was stale since row 4's key-less
+  pivot (2026-09-17) — it still described Cloudflare URL Scanner's async polling, which was
+  dropped before any code existed for it. Renamed to "External scoring sources" and rewritten:
+  ora.ai's two-phase settle-and-fetch stays as-is; isitagentready.com is now correctly
+  described as a single synchronous call, not async at all. Matching fix in
+  `docs/plans/0001-scan-engine.md`'s locked-decisions mirror and arc-close notes
 - Reworded `README.md`, `package.json`'s `description`, the GitHub repo's own About
   description, and the dashboard's subtitle: no longer claim scanning is exclusive to
   qte77-owned properties — the tool itself is generic, `config/properties.ts` just lists the

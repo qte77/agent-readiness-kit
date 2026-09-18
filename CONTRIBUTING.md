@@ -33,42 +33,41 @@ One audience per file — reference, don't duplicate
 
 Requires Node.js 22+.
 
-```bash
-npm install         # dependencies
-npm test             # vitest
-npm run typecheck    # tsc --noEmit
-npm run build        # tsc
-npm run scan         # node dist/src/main.js — run a real scan locally (needs `npm run build`
-                      # first); files/updates a remediation issue per property, which needs
-                      # GITHUB_TOKEN set — without it, that step fails gracefully with a clear
-                      # message and the loop moves on to the next property (an accepted
-                      # local-run gap, not a bug)
-npm run site:build    # node dist/scripts/buildSiteCli.js — builds site-dist/ (the GitHub
-                      # Pages dashboard + its data) from data/scans/ and site/; needs
-                      # `npm run build` first. Preview locally with `npx serve site-dist`
-                      # (dev-only, adds no dependency) or any other static file server.
-```
+A [`Makefile`](Makefile) wraps this repo's commands — run `make help` to list them, grouped
+by section:
 
-A [`Makefile`](Makefile) wraps the commands above (`make help` lists them); `make preview`
-builds and serves the dashboard locally in one step.
+```bash
+make install       # npm install
+make test           # npx vitest run
+make typecheck      # npx tsc --noEmit
+make build           # npm run build (tsc)
+make scan           # npm run scan — run a real scan locally (needs `make build` first);
+                     # files/updates a remediation issue per property, which needs
+                     # GITHUB_TOKEN set — without it, that step fails gracefully with a clear
+                     # message and the loop moves on to the next property (an accepted
+                     # local-run gap, not a bug)
+make site_build      # npm run site:build — builds site-dist/ (the GitHub Pages dashboard +
+                     # its data) from data/scans/ and site/; needs `make build` first
+make preview         # make build + make site_build, then serves site-dist/ locally via
+                     # `npx serve` (dev-only, adds no dependency)
+```
 
 The dashboard itself (`https://qte77.github.io/agent-readiness-kit/`) is deployed by
 [`.github/workflows/pages.yml`](.github/workflows/pages.yml) on every push to `main` touching
 `data/scans/**` or `site/**` — see
 [docs/plans/0002-readiness-dashboard.md](docs/plans/0002-readiness-dashboard.md).
 
-Run `npm run typecheck && npm test` before opening a PR (CI enforces both; no linter is
-configured yet — see the plan's remaining-work table).
+Run `make typecheck test` before opening a PR (CI enforces both; no linter is configured
+yet — see the plan's remaining-work table).
 
 `worker/` (the read-only MCP layer) is a separate package with its own lockfile — run its
 own gate too when you touch it (CI enforces both jobs):
 
 ```bash
-cd worker
-npm install
-npm run typecheck
-npm test
-npm run dev          # wrangler dev — GET /.well-known/agent-card.json, POST /mcp
+make worker_install
+make worker_typecheck
+make worker_test
+make worker_dev      # wrangler dev — GET /.well-known/agent-card.json, POST /mcp
 ```
 
 `src/scan/sources/discoverSnapshot.ts` needs a polyfetch-scrape checkout to run for real

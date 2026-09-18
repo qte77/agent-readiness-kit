@@ -199,6 +199,7 @@ function buildCard(property, thresholdKey) {
   const { id, run, history } = property;
   const score = effectiveScore(run);
   const status = statusForScore(score, thresholdKey);
+  const isOraAiScore = typeof run.score === "number";
 
   const titleLink = el("a", { href: run.url, text: run.url.replace(/^https?:\/\//, "") });
   const header = el("div", { class: "card-header" }, [
@@ -206,9 +207,30 @@ function buildCard(property, thresholdKey) {
     buildStatusBadge(status, status),
   ]);
 
+  const sourceNote = isOraAiScore
+    ? el("a", {
+        class: "score-source",
+        href: `https://ora.ai/score/${run.url.replace(/^https?:\/\//, "")}`,
+        target: "_blank",
+        rel: "noopener noreferrer",
+        title:
+          "This score and grade are ora.ai's own aggregate, from ~124 automated checks - a " +
+          "different metric than the category breakdown below, which counts only this tool's " +
+          "own 18 crosswalk signals. Click to see the full ora.ai report.",
+        text: "via ora.ai ↗",
+      })
+    : el("span", {
+        class: "score-source score-source-fallback",
+        title:
+          "ora.ai did not return a score for this run; this is a fallback estimate computed " +
+          "locally from this tool's own pass/fail/warn counts, not an ora.ai score.",
+        text: "estimated",
+      });
+
   const scoreLine = el("div", { class: "card-score" }, [
     el("span", { class: "score-value", text: typeof score === "number" ? String(score) : "n/a" }),
     ...(run.grade ? [el("span", { class: "score-grade", text: run.grade })] : []),
+    sourceNote,
   ]);
 
   const categoryBadges = el("div", { class: "category-breakdown" }, buildCategoryBadges(run.findings));

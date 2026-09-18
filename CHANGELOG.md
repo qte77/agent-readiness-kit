@@ -9,6 +9,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- `Makefile`: wraps this repo's npm/worker commands (`make help` lists them, grouped by
+  section, mirroring the estate's `polyfetch-scrape/Makefile` convention); `make preview`
+  builds and serves the dashboard locally in one step
+- Dashboard cards now attribute the score/grade to ora.ai explicitly (a `via ora.ai ↗` link to
+  `https://ora.ai/score/<url>`, with a tooltip distinguishing it from the category breakdown
+  below), and label a fallback-computed score as `estimated` when ora.ai didn't return one —
+  addresses real confusion where a passing overall badge didn't visually explain itself
+  against a mostly-failing category breakdown
 - `site/{index.html,style.css,app.js}`, `scripts/{buildSite.ts,buildSiteCli.ts}`,
   `.github/workflows/pages.yml` (arc 0002 — see
   `docs/plans/0002-readiness-dashboard.md`): a static GitHub Pages dashboard for scan results,
@@ -178,6 +186,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- Reworded `README.md`, `package.json`'s `description`, the GitHub repo's own About
+  description, and the dashboard's subtitle: no longer claim scanning is exclusive to
+  qte77-owned properties — the tool itself is generic, `config/properties.ts` just lists the
+  currently-configured target set. Dashboard subtitle's category list now renders as its own
+  line (`display: block`), staying on one line when the viewport is wide enough rather than
+  wrapping into the sentence above it
 - `CONTRIBUTING.md` moved from `.github/CONTRIBUTING.md` to the repo root (GitHub recognizes
   either location for the community-profile link; root is more discoverable); updated its own
   internal relative links plus the reference in `AGENTS.md`. `README.md` also rewritten:

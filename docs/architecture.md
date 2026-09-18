@@ -44,12 +44,22 @@ owned by `agenthud-agui-a2ui/docs/agent-readiness.md` — link to it, never fork
 table. `src/scan/crosswalk.ts` encodes it as a lookup (`assignCategory(signal)`) for scan
 sources to call; if the upstream table changes, update the lookup to match.
 
-## Async scoring sources
+## External scoring sources
 
-Both ora.ai's two-phase scoring (`POST /api/scan` echoes a stale cached score; `GET
-/api/score/<url>` ~45s later has the fresh one) and Cloudflare URL Scanner's async result
-resolve via a plain synchronous `await`/poll inside the one GHA job. No persisted
-pending-state is needed — GHA jobs have no Worker-style CPU-time limit, unlike a Worker.
+ora.ai's scoring is two-phase: `POST /api/scan` echoes a stale cached score, then `GET
+/api/score/<url>` ~45s later has the fresh one. `src/scan/sources/oraAi.ts` resolves this via
+a single injectable `sleep(settleDelayMs)` between the two calls inside the one GHA job — no
+persisted pending-state is needed (GHA jobs have no Worker-style CPU-time limit, unlike a
+Worker), and no repeated poll loop, since no repeated-polling behavior was ever verified at
+source.
+
+isitagentready.com (`src/scan/sources/isitAgentReady.ts`) — which superseded the
+originally-planned Cloudflare URL Scanner API before any code existed for it — is not async at
+all: a single `POST https://isitagentready.com/api/scan` call returns the full result
+synchronously, no submit-then-poll. It also needs no API key, unlike the account-scoped
+Cloudflare URL Scanner token this decision originally assumed. See
+`docs/plans/0001-scan-engine.md`'s "External API contracts" section for the full detail
+verified at source.
 
 ## Dedup-safe issue creation
 

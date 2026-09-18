@@ -104,4 +104,28 @@ describe("capHistory", () => {
     const capped = capHistory(summaries, 3);
     expect(capped).toEqual([summaries[2], summaries[3], summaries[4]]);
   });
+
+  it("drops a consecutive duplicate scannedAt, keeping the first occurrence", () => {
+    // Real cause: two different commits (e.g. an unrelated squash-merge) can produce
+    // byte-identical content for a data/scans/<id>.json path, so git log -- <path> returns
+    // both even though only one represents a real distinct scan run.
+    const a = summaryAt(0);
+    const duplicate = { ...summaryAt(1), scannedAt: a.scannedAt };
+    const b = summaryAt(2);
+    expect(capHistory([a, duplicate, b])).toEqual([a, b]);
+  });
+
+  it("keeps entries with distinct scannedAt even when other fields are identical", () => {
+    const a = summaryAt(0);
+    const b = { ...summaryAt(0), scannedAt: summaryAt(1).scannedAt };
+    expect(capHistory([a, b])).toEqual([a, b]);
+  });
+
+  it("collapses more than two consecutive duplicates down to one", () => {
+    const a = summaryAt(0);
+    const dup1 = { ...summaryAt(1), scannedAt: a.scannedAt };
+    const dup2 = { ...summaryAt(2), scannedAt: a.scannedAt };
+    const b = summaryAt(3);
+    expect(capHistory([a, dup1, dup2, b])).toEqual([a, b]);
+  });
 });

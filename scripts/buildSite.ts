@@ -61,9 +61,29 @@ export function summarizeScanRun(run: ScanRun): RunSummary {
 }
 
 /**
+ * Drops a consecutive duplicate `scannedAt`, keeping the first occurrence. A real scan always
+ * produces a fresh, unique timestamp (`new Date().toISOString()` at scan time) — two adjacent
+ * entries sharing one mean `git log -- <path>` returned the same underlying revision twice,
+ * not two real scans (observed cause: a later, unrelated commit whose tree happened to be
+ * byte-identical to an earlier one for this specific path, e.g. a squash-merge that never
+ * touched this property but still counted as "touching" it under git's history
+ * simplification). Non-consecutive matches are left alone — this only guards against the
+ * exact adjacent-duplicate shape actually observed, not a general dedup.
+ */
+function dedupeConsecutive(summaries: RunSummary[]): RunSummary[] {
+  const result: RunSummary[] = [];
+  for (const summary of summaries) {
+    if (result[result.length - 1]?.scannedAt !== summary.scannedAt) {
+      result.push(summary);
+    }
+  }
+  return result;
+}
+
+/**
  * Cap trend history at the most recent `max` entries (default 52, ~1 year of weekly runs),
  * assuming `summaries` is already ordered oldest-to-newest. Handles N=0/N=1 without crashing.
  */
 export function capHistory(summaries: RunSummary[], max = 52): RunSummary[] {
-  return summaries.slice(-max);
+  return dedupeConsecutive(summaries).slice(-max);
 }

@@ -211,6 +211,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- `scripts/buildSite.ts`'s `capHistory` now drops a consecutive duplicate `scannedAt` before
+  capping — found live in the dashboard's sparkline data: two different commits (a later,
+  unrelated commit whose tree happened to be byte-identical to an earlier one for a given
+  `data/scans/<id>.json` path) both showed up in `git log -- <path>`'s walk, producing two
+  history points for what was really one scan. Real scans always get a fresh, unique
+  timestamp, so a shared `scannedAt` between adjacent points is never a second real run
 - `site/style.css`: `.category-badge` set `color: var(--color-bg)` (intended as light text on
   a colored background) but never defined the matching `.category-badge.status-*` background
   rules that `.status-badge` has — so each category badge rendered with no background

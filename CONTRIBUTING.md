@@ -11,9 +11,12 @@ not just a score.
 - Read [docs/architecture.md](docs/architecture.md) and
   [docs/plans/0001-scan-engine.md](docs/plans/0001-scan-engine.md) before touching scan-engine
   code — several decisions there are locked and verified at source, not to be re-derived.
-- Read [docs/plans/0002-readiness-dashboard.md](docs/plans/0002-readiness-dashboard.md) before
-  touching `site/`, `scripts/buildSite*.ts`, or `.github/workflows/pages.yml` — same convention,
-  a different arc.
+- Read [docs/plans/0002-readiness-dashboard.md](docs/plans/0002-readiness-dashboard.md) and
+  [docs/plans/0003-category-trend-indicator.md](docs/plans/0003-category-trend-indicator.md)
+  before touching `site/`, `scripts/buildSite*.ts`, or `.github/workflows/pages.yml` — same
+  convention, different arcs. Read
+  [docs/plans/0004-crosswalk-accuracy-and-gaps.md](docs/plans/0004-crosswalk-accuracy-and-gaps.md)
+  (the current arc) before touching `src/scan/sources/*.ts` spec citations or `src/playbook.ts`.
 
 ## Documentation hierarchy
 

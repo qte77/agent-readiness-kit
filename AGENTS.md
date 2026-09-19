@@ -30,11 +30,14 @@ just a score. This file is self-contained and tracked; treat it as the source of
 ## Where things live
 
 - [docs/architecture.md](docs/architecture.md) — locked architecture decisions.
-- [docs/plans/0002-readiness-dashboard.md](docs/plans/0002-readiness-dashboard.md) — the
-  current arc's single remaining-work table, opening with a `## Status` section for
+- [docs/plans/0004-crosswalk-accuracy-and-gaps.md](docs/plans/0004-crosswalk-accuracy-and-gaps.md)
+  — the current arc's single remaining-work table, opening with a `## Status` section for
   session-to-session onboarding (this project keeps one file per arc — no separate handoff
-  file). [docs/plans/0001-scan-engine.md](docs/plans/0001-scan-engine.md) is the closed prior
-  arc (scan engine + MCP worker scaffold).
+  file). [docs/plans/0001-scan-engine.md](docs/plans/0001-scan-engine.md),
+  [docs/plans/0002-readiness-dashboard.md](docs/plans/0002-readiness-dashboard.md), and
+  [docs/plans/0003-category-trend-indicator.md](docs/plans/0003-category-trend-indicator.md)
+  are closed prior arcs (scan engine + MCP worker scaffold; dashboard; per-category trend
+  indicator).
 - [src/scan/crosswalk.ts](src/scan/crosswalk.ts) — signal → category lookup, seeded from
   `agenthud-agui-a2ui/docs/agent-readiness.md`; never forked/duplicated locally.
 - Contributor dev setup + PR workflow: [CONTRIBUTING.md](CONTRIBUTING.md).

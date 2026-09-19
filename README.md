@@ -25,12 +25,12 @@ static GitHub Pages site rebuilt on every push touching `data/scans/**` or `site
 property weekly (Monday 06:00 UTC, or on demand via `workflow_dispatch`), commits results to
 [`data/scans/`](data/scans/), and files/updates a dedup-safe remediation issue per property.
 [`.github/workflows/pages.yml`](.github/workflows/pages.yml) rebuilds the dashboard above on
-every push touching `data/scans/**` or `site/**`. Arc 0001 (the scan engine) is complete — see
-[`docs/plans/0001-scan-engine.md`](docs/plans/0001-scan-engine.md) for its full history. Arc
-0002 (this dashboard) is the current work — see
-[`docs/plans/0002-readiness-dashboard.md`](docs/plans/0002-readiness-dashboard.md)'s opening
-`## Status` section for what shipped, what's next, commands, and watch-outs. Ongoing and future
-work lives under [`docs/plans/`](docs/plans/), one file per arc.
+every push touching `data/scans/**` or `site/**`. Arcs 0001-0003 (scan engine, dashboard,
+per-category trend indicator) are complete. Arc 0004 (crosswalk signal accuracy audit) is the
+current work — see
+[`docs/plans/0004-crosswalk-accuracy-and-gaps.md`](docs/plans/0004-crosswalk-accuracy-and-gaps.md)'s
+opening `## Status` section for what shipped, what's next, commands, and watch-outs. Ongoing and
+future work lives under [`docs/plans/`](docs/plans/), one file per arc.
 
 ## How it works
 

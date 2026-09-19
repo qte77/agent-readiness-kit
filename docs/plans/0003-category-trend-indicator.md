@@ -2,8 +2,8 @@
 title: Agent-Readiness Kit — per-category trend indicator
 description: Add a small "did this category get better/worse since last run" indicator to each dashboard card's category badges, using history data already collected — no new scan sources, no new API calls.
 date: 2026-09-18
-updated: 2026-09-18
-status: open
+updated: 2026-09-19
+status: closed
 issues: []
 predecessor: 2
 ---
@@ -12,16 +12,28 @@ predecessor: 2
 
 ## Status (read this first — onboards the next session)
 
-**Nothing shipped yet — this arc has not started implementation.** The design below was worked
-out in Claude Code Plan Mode and approved by the owner; this doc is that approved plan, saved
-here per this project's own arc convention (one file per arc, no separate handoff file — see
-`AGENTS.md`).
+**Closed 2026-09-19 — shipped with one deferred verification gap.** Rows 1-2 shipped in full
+(PR #49, merged): `scripts/buildSite.ts` computes `categoryStatus`, `site/app.js`/`style.css`
+render the ▲/▼ trend arrow. **Deviation from the design's done-when bar**: row 3's full
+patchright/e2e pass (desktop/mobile/tablet × light/dark, a synthetic history fixture forcing a
+real ▲ and ▼, live re-screenshot) was **not performed** — the implementing agent's session was
+interrupted mid-arc; recovery work (review + finish) covered unit tests (152→155 passing),
+`tsc --noEmit`, and a build/inspect smoke test against real history (confirmed `categoryStatus`
+backfills correctly, and the real "no-change" case renders no arrows), but stopped short of
+actual browser verification. This was disclosed in PR #49's body before merge, and the owner
+chose to merge anyway rather than block on it. A later WebFetch-based live check could not
+substitute for real verification (WebFetch doesn't execute JavaScript, so it can't observe this
+client-rendered dashboard's actual output). **Follow-up**: a real browser check (patchright or
+equivalent) of the live dashboard is still owed — tracked as a fresh small item, not silently
+dropped (see the remaining-work table's row 3 note).
 
-**What's next, in order** (full detail in the remaining-work table below):
-1. Row 1 — `scripts/buildSite.ts` schema change + pure logic, RED-first tests.
+**What shipped, in order** (full detail in the remaining-work table below):
+1. Row 1 — `scripts/buildSite.ts` schema change + pure logic, RED-first tests. **Shipped.**
 2. Row 2 — `site/app.js` + `site/style.css` rendering (depends on row 1's `categoryStatus`
-   field existing).
+   field existing). **Shipped**, code-level-verified only (see deviation note above).
 3. Row 3 — verification: rebuild against real history, polyfetch/patchright e2e pass, ship.
+   **Partially done** — build/inspect + unit tests done; e2e pass and live re-screenshot still
+   outstanding.
 
 **The loop** (same one used for every prior row this session): RED-first test → minimum
 implementation to pass → `npx vitest run` + `npx tsc --noEmit` green → commit on a topic
@@ -291,9 +303,9 @@ but it alone cannot prove the arrow-rendering code path works.
 
 | # | Item | Gate | Depends on | Done-when |
 |---|------|------|------------|-----------|
-| 1 | `scripts/buildSite.ts`: `categoryStatuses()` + `categoryStatus` field on `RunSummary`, RED-first tests in `test/scripts/buildSite.test.ts` | agent | — | New tests pass (worst-status-wins, zero-finding category → unknown, all 6 categories always present); existing `summarizeScanRun` tests' `toEqual` updated to include the new field; `npx tsc --noEmit` clean |
-| 2 | `site/app.js` trend-arrow rendering + `site/style.css` trend classes | agent | 1 | Rebuilding locally and serving `site-dist/` shows no arrows against real (unchanged) history, and a synthetic history mutation (temporary local test fixture) shows the correct ▲/▼ with correct color and no inverted arrows |
-| 3 | Verification + ship | agent | 1, 2 | `npx vitest run` all green; polyfetch/patchright e2e pass locally (desktop/mobile/tablet × light/dark, matching this session's established e2e pattern) with zero console errors; PR opened, CI/CodeFactor/CodeQL green, merged, `pages.yml` redeployed, live dashboard re-screenshotted to confirm the no-change baseline renders cleanly |
+| 1 | ~~`scripts/buildSite.ts`: `categoryStatuses()` + `categoryStatus` field on `RunSummary`, RED-first tests~~ | agent | — | **Shipped** (PR #49) — 3 new tests, all pass; `npx tsc --noEmit` clean |
+| 2 | ~~`site/app.js` trend-arrow rendering + `site/style.css` trend classes~~ | agent | 1 | **Shipped** (PR #49) — logic traced correct by hand (rank comparison, no inversion); **not** verified in a real browser (see Status deviation note) |
+| 3 | Real browser (patchright or equivalent) verification of the live dashboard: confirm the real "no-change" case renders cleanly across viewports/themes with zero console errors, then force a synthetic ▲/▼ via a temporary local fixture and confirm correct rendering | agent | 1, 2 | Still open — carried forward from row 3's original done-when, which was not met before merge. Not urgent (all 3 tracked properties currently have identical category status, so the live "no-arrows" case is low-risk), but owed before the arrow-rendering path can be called verified |
 
 ## Tests (strict RED-first; modules only)
 
@@ -323,7 +335,9 @@ but it alone cannot prove the arrow-rendering code path works.
 
 ## At arc close
 
-Tick the remaining-work table against what merged, update this Status section, note any
-deviations from the design above (especially if the `STATUS_PRIORITY` index-inversion turned
-out to need different handling than described), and migrate any still-open rows to the next
-`NNNN` pair.
+**Closed 2026-09-19.** Rows 1-2 shipped as designed — the `STATUS_PRIORITY` index-inversion risk
+the design flagged did **not** need different handling; the implementation matched the design
+exactly (`statusRank(current) > statusRank(previous)` ⇒ improved). Row 3's browser-verification
+gap (see Status section) is migrated forward rather than left silently dropped — no dedicated
+new arc needed for one verification task; do it opportunistically alongside the next dashboard
+change, or promote it to its own row if a dashboard-focused arc opens before then.

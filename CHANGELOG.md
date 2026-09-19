@@ -9,6 +9,35 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- Per-category trend indicator on dashboard cards (arc 0003, PR #49):
+  `scripts/buildSite.ts` adds `categoryStatus: Record<Category, Status>` to `RunSummary` (worst
+  status per category, backfilled retroactively for every historical revision on rebuild — no
+  migration needed); `site/app.js`/`style.css` render a small ▲/▼ on a category badge only when
+  its status changed since the previous run, colored via `.category-trend-up`/`-down`. No
+  indicator when unchanged or fewer than 2 history points. See
+  `docs/plans/0003-category-trend-indicator.md`'s "At arc close" note: shipped with a deferred
+  real-browser verification gap (unit-tested and code-traced, not yet patchright-verified).
+- `.github/dependabot.yml`: a dedicated `applies-to: security-updates` group per ecosystem
+  (`npm-security`, `worker-npm-security`, `actions-security`), alongside the existing
+  minor/patch version-update groups — security updates previously ignored those groups
+  entirely (`update-types` has no effect on security updates, confirmed against GitHub's own
+  docs) and opened one PR per CVE regardless. `.github/workflows/codeql.yml`: bumped
+  `github/codeql-action` from v4.38.0 to v4.38.1 (PR #50).
+- Crosswalk signal citation audit (arc 0004 rows 1-4, PR #53) — every scan signal citing an
+  external spec/RFC/draft was verified at source; 4 were found stale and fixed:
+  - `ai-catalog` (`wellKnown.ts`, `playbook.ts`): probes `/.well-known/ard.json` (the ARD spec's
+    current v0.91 canonical path) first, falling back to the legacy
+    `/.well-known/ai-catalog.json` on 404. Signal id unchanged.
+  - `mcp-server-card` (`cloudflareMcp.ts`): doc comment now notes this check mirrors
+    Cloudflare's `isitagentready.com` grading, not a shipped MCP spec — the real "MCP Server
+    Card" concept (SEP-2127) is still Draft with an unresolved discovery mechanism.
+  - `oauth-oidc-discovery` (`wellKnown.ts`): remediation text now attributes
+    `/.well-known/openid-configuration` to OpenID Connect Discovery 1.0, not RFC 8414 (which
+    defines a different default path).
+  - `web-bot-auth` (`contentSignal.ts`, `playbook.ts`): citation updated from the expired
+    `draft-meunier-*` individual drafts to the WG-adopted `draft-ietf-webbotauth-httpsig-protocol`.
+  - See `docs/plans/0004-crosswalk-accuracy-and-gaps.md` for the full audit, including a
+    still-open, higher-risk row (`a2a-agent-card`'s A2A v0.3.0→v1.0.0 schema drift) not yet fixed.
 - `Makefile`: wraps this repo's npm/worker commands (`make help` lists them, grouped by
   section, mirroring the estate's `polyfetch-scrape/Makefile` convention); `make preview`
   builds and serves the dashboard locally in one step

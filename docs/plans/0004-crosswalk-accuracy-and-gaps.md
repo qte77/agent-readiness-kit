@@ -2,7 +2,7 @@
 title: Agent-Readiness Kit — crosswalk signal accuracy audit + gap analysis
 description: Verify every scan signal's spec/RFC/draft citation at source, fix what's stale, and propose well-established signals missing from the crosswalk — triggered by a user request to explore agent-native aspects beyond what's already implemented.
 date: 2026-09-18
-updated: 2026-09-18
+updated: 2026-09-19
 status: open
 issues: []
 predecessor: 3
@@ -12,20 +12,24 @@ predecessor: 3
 
 ## Status (read this first — onboards the next session)
 
-**Nothing shipped yet — planning/research only.** Triggered mid-arc-0003 by an owner request to
-verify the crosswalk's existing signals against their real specs and look for well-established
-signals the crosswalk is missing. Six parallel research subagents fetched primary sources
-(rfc-editor.org, datatracker.ietf.org, modelcontextprotocol.io, a2a-protocol.org,
-agenticresourcediscovery.org, workos.com, github.com/cloudflare) this session (2026-09-18) and
-their findings are recorded verbatim-sourced in **Findings** below. This doc is the durability
-step for those findings — they existed only in the triggering conversation's transcript before
-this write-up.
+**Rows 1-4 shipped 2026-09-19** (mechanical citation/path fixes, no functional behavior change
+outside row 1's new ARD fallback). Row 5 (A2A schema drift) and rows 6-7 (owner-gated) are still
+open. Triggered mid-arc-0003 by an owner request to verify the crosswalk's existing signals
+against their real specs and look for well-established signals the crosswalk is missing. Six
+parallel research subagents fetched primary sources (rfc-editor.org, datatracker.ietf.org,
+modelcontextprotocol.io, a2a-protocol.org, agenticresourcediscovery.org, workos.com,
+github.com/cloudflare) this session (2026-09-18) and their findings are recorded verbatim-sourced
+in **Findings** below.
 
 **What's next, in order** (full detail in the remaining-work table):
-1. Rows 1-4 — mechanical, low-risk fixes (probe-path fallback, comment/wording updates only, no
-   behavior change to existing pass/fail grading logic). Independent of each other, safe to batch
-   into one PR or split — implementer's call.
-2. Row 5 — **the one row needing more research before coding**: the A2A signal has a real
+1. ~~Rows 1-4~~ — **shipped 2026-09-19**: `ai-catalog` now probes `/.well-known/ard.json` first
+   with a legacy fallback (`wellKnown.ts` + `playbook.ts`); `mcp-server-card` got its SEP-2127
+   caveat comment (`cloudflareMcp.ts`); `oauth-oidc-discovery`'s remediation wording was tightened
+   (`wellKnown.ts`); `web-bot-auth`'s citation was updated to `draft-ietf-webbotauth-httpsig-protocol`
+   (`contentSignal.ts` + `playbook.ts`). 3 new RED-first tests in `test/scan/sources/wellKnown.test.ts`
+   cover row 1's fallback logic; rows 2-4 were wording-only, existing tests unmodified and still
+   green (155 total, 0 failed). `npx tsc --noEmit` clean throughout.
+2. Row 5 — **the one row still needing more research before coding**: the A2A signal has a real
    functional-risk schema drift (see Findings). Do not implement against the field-level facts
    already gathered here alone — fetch the complete `AgentCard`/`AgentInterface`/`SendMessage`
    message definitions from `specification/a2a.proto`
@@ -309,10 +313,10 @@ existing convention this repo already enforces structurally for *presence*, just
 
 | # | Item | Gate | Depends on | Done-when |
 |---|------|------|------------|-----------|
-| 1 | `ai-catalog`: probe `/.well-known/ard.json` as primary, fall back to legacy `/.well-known/ai-catalog.json` on 404; update remediation text in `wellKnown.ts` **and** `src/playbook.ts:47-50` to the current ARD v0.91 path. Signal id unchanged. While here, spot-check the ora.ai `ard-catalog`/`ard-entries-valid` check-id note above (not yet independently confirmed). | agent | — | `wellKnown.ts` tries `ard.json` first, falls back correctly; tests cover both the new-path-pass and fallback-pass cases; both copies of the remediation text updated; `npx vitest run` + `npx tsc --noEmit` clean |
-| 2 | `mcp-server-card`: add a code comment (mirroring `cloudflareMcp.ts`'s existing docstring style) noting this check mirrors Cloudflare's `isitagentready.com` grading, not a shipped MCP spec; the real "MCP Server Card" concept is SEP-2127 (Draft, discovery mechanism unresolved as of 2026-09-18). Decide-by-default: **keep grading pass/fail as today** (mirrors an established external grader) rather than downgrading to `unknown`-only like `dns-aid` — record this decision in the comment so a future session doesn't silently flip it either way without noticing it was deliberate. `src/playbook.ts:93-96`'s copy is already correctly hedged — no change needed there. | agent | — | Comment added; no probe-path/logic change; `npx tsc --noEmit` clean |
-| 3 | `oauth-oidc-discovery`: reword remediation string in `wellKnown.ts` to "per OpenID Connect Discovery 1.0 (a related-but-distinct mechanism from RFC 8414's own `/.well-known/oauth-authorization-server`)" or similar — wording only. `src/playbook.ts:111-113`'s copy is already accurate — no change needed there. | agent | — | Remediation string updated; existing tests still pass unmodified (no behavior change) |
-| 4 | `web-bot-auth`: update citation from expired `draft-meunier-*` names to `draft-ietf-webbotauth-httpsig-protocol` (Active WG Document) in **both** `contentSignal.ts` and `src/playbook.ts:84-87`. Wording only — well-known path and `keys` format unchanged. | agent | — | Both copies of the comment/remediation string updated; existing tests still pass unmodified |
+| 1 | ~~`ai-catalog`: probe `/.well-known/ard.json` as primary, fall back to legacy `/.well-known/ai-catalog.json` on 404; update remediation text in `wellKnown.ts` **and** `src/playbook.ts:47-50` to the current ARD v0.91 path. Signal id unchanged.~~ **Shipped 2026-09-19.** New `evaluateAiCatalog()` in `wellKnown.ts` does the fallback; both remediation copies updated. **Not done**: the ora.ai `ard-catalog`/`ard-entries-valid` check-id spot-check noted under Findings #1 — still needs a live ora.ai response to confirm, carried forward as its own follow-up (not blocking, since it's additive to what shipped). | agent | — | Done — `npx vitest run` (155 passed) + `npx tsc --noEmit` clean |
+| 2 | ~~`mcp-server-card`: add a code comment...~~ **Shipped 2026-09-19.** `cloudflareMcp.ts`'s docstring now notes the SEP-2127 Draft status and the decide-by-default (keep grading pass/fail). `src/playbook.ts:93-96`'s copy needed no change (already hedged). | agent | — | Done — comment added, no probe-path/logic change, `npx tsc --noEmit` clean |
+| 3 | ~~`oauth-oidc-discovery`: reword remediation string...~~ **Shipped 2026-09-19.** `wellKnown.ts`'s remediation now cites OpenID Connect Discovery 1.0 explicitly, distinct from RFC 8414's own default path. `src/playbook.ts:111-113` needed no change (already accurate). | agent | — | Done — existing tests pass unmodified |
+| 4 | ~~`web-bot-auth`: update citation from expired `draft-meunier-*` names...~~ **Shipped 2026-09-19.** Both `contentSignal.ts` and `src/playbook.ts:84-87` now cite `draft-ietf-webbotauth-httpsig-protocol`. Wording only — well-known path and `keys` format unchanged. | agent | — | Done — existing tests pass unmodified |
 | 5 | `a2a-agent-card`: fix schema-drift risk. **First** fetch the complete `AgentCard`/`AgentInterface`/`SendMessage` definitions from `specification/a2a.proto` (not yet done this session — only individual field facts were confirmed). Then update `cloudflareMcp.ts`'s `AGENT_CARD_KEYS` to not hard-require a flat `url` (accept `supported_interfaces[]` as the v1.0.0-correct shape, ideally accepting either shape so a v0.3.0-era card doesn't suddenly fail either), and update `mcpA2aProbe.ts`'s live probe to use the current method name and correct endpoint-selection logic (`supported_interfaces` is a list, not one string) — update citations from v0.3.0 to v1.0.0 throughout. Update tests for both files. | agent | full a2a.proto schema read (not yet done) | A conformant v1.0.0 AgentCard and a legacy v0.3.0-shaped one both grade correctly (no false-fail on either); live probe uses the current JSON-RPC method; `npx vitest run` + `npx tsc --noEmit` clean; spot-check against a real reachable A2A v1.0.0 server if one is publicly documented |
 | 6 | Open a PR in `agenthud-agui-a2ui/docs/agent-readiness.md` (different repo) correcting its own `ai-catalog.json`→ARD and `mcp/server-card.json` references per Findings #1-#2 above, so the two repos' crosswalk sources don't drift back apart. | owner | — | Owner opens/reviews/merges that PR, or explicitly defers — either way this repo's rows 1-5 are not blocked on it |
 | 7 | Decide whether to adopt any of the 3 gap-analysis candidates (`AGENTS.md` presence check, IETF AIPREF watch, `llms-full.txt`). If yes for any, register the signal id upstream first (crosswalk source of truth), then it becomes a small new row in a future arc. | owner | 6 (same upstream doc) | Owner picks yes/no/defer per candidate; recorded in this doc's "At arc close" note |

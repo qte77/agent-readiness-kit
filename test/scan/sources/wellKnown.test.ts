@@ -94,6 +94,38 @@ describe("scanWellKnown", () => {
     expect(findings.find((f) => f.id === "wellKnown.agent-instruction")?.status).toBe("unknown");
   });
 
+  it("passes ai-catalog when the current ARD path (/.well-known/ard.json) is valid JSON", async () => {
+    mockFetch({
+      [`${BASE_URL}/.well-known/ard.json`]: { status: 200, body: JSON.stringify({ entries: [] }) },
+    });
+    vi.mocked(resolveTxt).mockRejectedValue(new Error("ENOTFOUND"));
+
+    const findings = await scanWellKnown(BASE_URL);
+    const finding = findings.find((f) => f.id === "wellKnown.ai-catalog");
+    expect(finding?.status).toBe("pass");
+    expect(finding?.summary).toMatch(/\/\.well-known\/ard\.json/);
+  });
+
+  it("falls back to the legacy /.well-known/ai-catalog.json path when ard.json 404s", async () => {
+    mockFetch({
+      [`${BASE_URL}/.well-known/ai-catalog.json`]: { status: 200, body: JSON.stringify({}) },
+    });
+    vi.mocked(resolveTxt).mockRejectedValue(new Error("ENOTFOUND"));
+
+    const findings = await scanWellKnown(BASE_URL);
+    const finding = findings.find((f) => f.id === "wellKnown.ai-catalog");
+    expect(finding?.status).toBe("pass");
+    expect(finding?.summary).toMatch(/\/\.well-known\/ai-catalog\.json/);
+  });
+
+  it("fails ai-catalog when neither ard.json nor the legacy ai-catalog.json path exists", async () => {
+    mockFetch({});
+    vi.mocked(resolveTxt).mockRejectedValue(new Error("ENOTFOUND"));
+
+    const findings = await scanWellKnown(BASE_URL);
+    expect(findings.find((f) => f.id === "wellKnown.ai-catalog")?.status).toBe("fail");
+  });
+
   it("passes api-catalog when the RFC 9727 well-known file is valid JSON", async () => {
     mockFetch({
       [`${BASE_URL}/.well-known/api-catalog`]: { status: 200, body: JSON.stringify({ apis: [] }) },

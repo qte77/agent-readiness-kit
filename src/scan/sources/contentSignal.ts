@@ -147,12 +147,13 @@ function evaluateBotRules(robots: ProbeResult): Finding {
   );
 }
 
-/** `web-bot-auth` — IETF Web Bot Auth (draft-meunier-http-message-signatures-directory). */
+/** `web-bot-auth` — IETF Web Bot Auth (draft-ietf-webbotauth-httpsig-protocol, WG-adopted). */
 function evaluateWebBotAuth(directory: ProbeResult): Finding {
   const remediation =
     "Publish a /.well-known/http-message-signatures-directory (JWKS-style key directory) and " +
-    "support the Signature-Agent header, per the IETF Web Bot Auth drafts " +
-    "(draft-meunier-http-message-signatures-directory / draft-meunier-webbotauth-httpsig-protocol).";
+    "support the Signature-Agent header, per the IETF webbotauth working group's " +
+    "draft-ietf-webbotauth-httpsig-protocol (the path and JWKS format are unchanged from its " +
+    "expired individual-draft predecessors).";
   if (!directory.ok) {
     return finding(
       "web-bot-auth",

@@ -3,7 +3,16 @@
  *
  * Owns two signal ids from the agent-readiness crosswalk (`src/scan/crosswalk.ts`):
  * - `mcp-server-card` (Execution): presence + basic shape of
- *   `/.well-known/mcp/server-card.json`.
+ *   `/.well-known/mcp/server-card.json`. This mirrors Cloudflare's own `isitagentready.com`
+ *   check set, not a shipped MCP spec: MCP's real capability-discovery mechanism is a live
+ *   JSON-RPC exchange (`initialize`, or `server/discover` in the current 2026-07-28 spec),
+ *   never a static well-known file. A proposal literally named "MCP Server Cards" (SEP-2127)
+ *   exists but is still Draft, with its own discovery mechanism explicitly unresolved, as of
+ *   2026-09-18 (verified at source — see docs/plans/0004-crosswalk-accuracy-and-gaps.md).
+ *   Decide-by-default: keep grading pass/fail here anyway, since it mirrors an established
+ *   external grader (Cloudflare's) rather than the unshipped spec — don't silently flip this
+ *   to `unknown`-only without noting the change, same treatment `wellKnown.ts`'s `dns-aid`
+ *   gets for an actually-unsettled signal.
  * - `a2a-agent-card` (Agent-to-Agent): presence + basic shape of
  *   `/.well-known/agent-card.json` — the *static* half of this signal only. The live
  *   protocol-level probe against the card's declared endpoint lives in `mcpA2aProbe.ts`,

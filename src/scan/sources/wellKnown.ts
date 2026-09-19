@@ -108,6 +108,26 @@ function evaluateJsonPresence(
   });
 }
 
+const AI_CATALOG_REMEDIATION =
+  "Publish a /.well-known/ard.json per the Agentic Resource Discovery (ARD) v0.91 convention " +
+  "(https://agenticresourcediscovery.org/spec/); the legacy /.well-known/ai-catalog.json path " +
+  "is still accepted as a fallback but is no longer the spec's canonical name.";
+
+/**
+ * `ai-catalog` probes the current ARD spec's canonical `/.well-known/ard.json` path first,
+ * falling back to the predecessor spec's `/.well-known/ai-catalog.json` only on a 404 — ARD
+ * v0.91 (2026-08-26) still accepts the legacy path for backward compatibility, but no longer
+ * treats it as canonical. Signal id is unchanged; only the probed path(s) differ.
+ */
+async function evaluateAiCatalog(origin: string): Promise<Finding> {
+  const ard = await probe(`${origin}/.well-known/ard.json`);
+  if (ard.status !== 404) {
+    return evaluateJsonPresence("ai-catalog", "/.well-known/ard.json", ard, AI_CATALOG_REMEDIATION);
+  }
+  const legacy = await probe(`${origin}/.well-known/ai-catalog.json`);
+  return evaluateJsonPresence("ai-catalog", "/.well-known/ai-catalog.json", legacy, AI_CATALOG_REMEDIATION);
+}
+
 /**
  * `dns-aid` is deliberately never scored pass/fail: as of this writing (2026-09) at least
  * three competing, non-RFC individual IETF drafts define incompatible DNS agent-identity
@@ -162,7 +182,6 @@ export async function scanWellKnown(url: string): Promise<Finding[]> {
 
   const [
     llmsTxt,
-    aiCatalog,
     agentSkillsIndex,
     apiCatalog,
     authMd,
@@ -172,7 +191,6 @@ export async function scanWellKnown(url: string): Promise<Finding[]> {
     developersPortal,
   ] = await Promise.all([
     probe(`${origin}/llms.txt`),
-    probe(`${origin}/.well-known/ai-catalog.json`),
     probe(`${origin}/.well-known/agent-skills/index.json`),
     probe(`${origin}/.well-known/api-catalog`),
     probe(`${origin}/auth.md`),
@@ -182,7 +200,7 @@ export async function scanWellKnown(url: string): Promise<Finding[]> {
     probe(`${origin}/developers`),
   ]);
 
-  const dnsAid = await evaluateDnsAid(hostname);
+  const [dnsAid, aiCatalog] = await Promise.all([evaluateDnsAid(hostname), evaluateAiCatalog(origin)]);
 
   return [
     evaluateTextPresence(
@@ -191,13 +209,7 @@ export async function scanWellKnown(url: string): Promise<Finding[]> {
       llmsTxt,
       "Publish a non-trivial /llms.txt at site root describing the site for LLM agents.",
     ),
-    evaluateJsonPresence(
-      "ai-catalog",
-      "/.well-known/ai-catalog.json",
-      aiCatalog,
-      "Publish a /.well-known/ai-catalog.json per the Agentic Resource Discovery (ARD) " +
-        "convention (https://agenticresourcediscovery.org/).",
-    ),
+    aiCatalog,
     evaluateJsonPresence(
       "agent-skills-index",
       "/.well-known/agent-skills/index.json",
@@ -226,7 +238,9 @@ export async function scanWellKnown(url: string): Promise<Finding[]> {
       "oauth-oidc-discovery",
       "/.well-known/openid-configuration",
       oidcDiscovery,
-      "Publish a /.well-known/openid-configuration per RFC 8414 / OIDC Discovery.",
+      "Publish a /.well-known/openid-configuration per OpenID Connect Discovery 1.0 (a " +
+        "related-but-distinct mechanism from RFC 8414's own default " +
+        "/.well-known/oauth-authorization-server path).",
     ),
     evaluateJsonPresence(
       "openapi-spec",

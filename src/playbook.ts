@@ -26,9 +26,10 @@ import type { Finding } from "./types.js";
  * in the upstream crosswalk table (`agenthud-agui-a2ui/docs/agent-readiness.md`'s "Crosswalk"
  * and "Next steps" sections, read at source) and issue #4's worked examples for
  * markdown-negotiation/content-signal/api-catalog/openapi-spec, plus verified specs for the
- * rest (RFC 9727 api-catalog, RFC 9728 oauth-protected-resource, RFC 9421 + the
- * draft-meunier-web-bot-auth family, the AID DNS spec, Cloudflare's Content Signals policy,
- * OpenID Connect Discovery). Where the upstream doc itself flags a schema as "emerging" /
+ * rest (RFC 9727 api-catalog, RFC 9728 oauth-protected-resource, RFC 9421 + the IETF
+ * webbotauth working group's draft-ietf-webbotauth-httpsig-protocol, the AID DNS spec,
+ * Cloudflare's Content Signals policy, OpenID Connect Discovery). Where the upstream doc
+ * itself flags a schema as "emerging" /
  * "verify at source" (ai-catalog.json, agent-skills/index.json, mcp/server-card.json), this
  * table carries that caveat forward rather than presenting it as settled.
  *
@@ -45,9 +46,10 @@ const REMEDIATION_BY_SIGNAL: Record<string, string> = {
     "Publish (or extend) llms.txt with a plain-language instructions section for autonomous " +
     "agents: what they may do on this site, any rate limits, and where to find deeper docs.",
   "ai-catalog":
-    "Publish /.well-known/ai-catalog.json (an Agent Resource Directory / ARD-style manifest) " +
-    "listing the site's agent-facing capabilities. This schema is still emerging — verify its " +
-    "current shape at source before publishing rather than copying an old example.",
+    "Publish /.well-known/ard.json (the Agentic Resource Discovery manifest) listing the " +
+    "site's agent-facing capabilities; /.well-known/ai-catalog.json is still accepted as a " +
+    "legacy fallback. This schema is still emerging — verify its current shape at source " +
+    "before publishing rather than copying an old example.",
   "agent-skills-index":
     "Publish /.well-known/agent-skills/index.json listing discrete, invocable skills the site " +
     "exposes to agents, each with a stable id and description. Verify the current schema at " +
@@ -82,9 +84,9 @@ const REMEDIATION_BY_SIGNAL: Record<string, string> = {
     "Publish explicit per-user-agent allow/disallow rules in robots.txt for known agent " +
     "crawlers, instead of relying on a bare `User-agent: *` block.",
   "web-bot-auth":
-    "Adopt Web Bot Auth (HTTP Message Signatures per RFC 9421, the IETF " +
-    "draft-meunier-web-bot-auth family) so verified agent crawlers can authenticate " +
-    "cryptographically instead of relying on spoofable user-agent strings.",
+    "Adopt Web Bot Auth (HTTP Message Signatures per RFC 9421, the IETF webbotauth working " +
+    "group's draft-ietf-webbotauth-httpsig-protocol) so verified agent crawlers can " +
+    "authenticate cryptographically instead of relying on spoofable user-agent strings.",
 
   // Execution
   "openapi-spec":

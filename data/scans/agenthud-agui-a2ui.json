@@ -1,7 +1,7 @@
 {
   "propertyId": "agenthud-agui-a2ui",
   "url": "https://qte77.github.io/agenthud-agui-a2ui/",
-  "scannedAt": "2026-09-18T02:13:27.211Z",
+  "scannedAt": "2026-09-20T15:23:18.643Z",
   "findings": [
     {
       "id": "wellKnown.agent-instruction",
@@ -20,7 +20,7 @@
       "source": "wellKnown",
       "status": "fail",
       "summary": "/.well-known/ai-catalog.json returned 404 (not found)",
-      "remediation": "Publish a /.well-known/ai-catalog.json per the Agentic Resource Discovery (ARD) convention (https://agenticresourcediscovery.org/)."
+      "remediation": "Publish a /.well-known/ard.json per the Agentic Resource Discovery (ARD) v0.91 convention (https://agenticresourcediscovery.org/spec/); the legacy /.well-known/ai-catalog.json path is still accepted as a fallback but is no longer the spec's canonical name."
     },
     {
       "id": "wellKnown.agent-skills-index",
@@ -60,7 +60,7 @@
       "source": "wellKnown",
       "status": "fail",
       "summary": "/.well-known/openid-configuration returned 404 (not found)",
-      "remediation": "Publish a /.well-known/openid-configuration per RFC 8414 / OIDC Discovery."
+      "remediation": "Publish a /.well-known/openid-configuration per OpenID Connect Discovery 1.0 (a related-but-distinct mechanism from RFC 8414's own default /.well-known/oauth-authorization-server path)."
     },
     {
       "id": "wellKnown.openapi-spec",
@@ -124,7 +124,7 @@
       "source": "contentSignal",
       "status": "fail",
       "summary": "/.well-known/http-message-signatures-directory not found",
-      "remediation": "Publish a /.well-known/http-message-signatures-directory (JWKS-style key directory) and support the Signature-Agent header, per the IETF Web Bot Auth drafts (draft-meunier-http-message-signatures-directory / draft-meunier-webbotauth-httpsig-protocol)."
+      "remediation": "Publish a /.well-known/http-message-signatures-directory (JWKS-style key directory) and support the Signature-Agent header, per the IETF webbotauth working group's draft-ietf-webbotauth-httpsig-protocol (the path and JWKS format are unchanged from its expired individual-draft predecessors)."
     },
     {
       "id": "contentSignal.markdown-twins",
@@ -252,7 +252,7 @@
       "evidence": {
         "level": 2,
         "levelName": "Bot-Aware",
-        "scannedAt": "2026-09-18T02:12:41.554Z",
+        "scannedAt": "2026-09-20T15:22:31.502Z",
         "checks": {
           "discoverability": {
             "robotsTxt": {
@@ -271,7 +271,7 @@
                     "statusText": "OK",
                     "headers": {
                       "content-type": "text/plain; charset=utf-8",
-                      "cf-ray": "a3ccd39d58627071-IAD"
+                      "cf-ray": "a3e1d35ea99d4967-IAD"
                     },
                     "bodyPreview": "# Content Signals (contentsignals.org) — how AI systems may use this content.\n# Estate posture (matches sfclarity.com): let search engines and AI answer engines\n# index and *cite* this content, but do not train on it. Hand-maintained + code-reviewed\n# on purpose — a managed-robots dashboard toggle has silently dropped such a policy before.\nUser-agent: *\nContent-Signal: search=yes, ai-input=yes, ai-train=no\nAllow: /\n\n# Answer-engine crawlers that feed *cited* AI answers are explicitly welcome.\nUs..."
                   },
@@ -328,7 +328,7 @@
                     "statusText": "OK",
                     "headers": {
                       "content-type": "application/xml",
-                      "cf-ray": "a3ccd39d68767071-IAD"
+                      "cf-ray": "a3e1d35eb9bc4967-IAD"
                     }
                   },
                   "finding": {
@@ -345,7 +345,7 @@
                   }
                 }
               ],
-              "durationMs": 35
+              "durationMs": 20
             },
             "linkHeaders": {
               "status": "fail",
@@ -363,7 +363,7 @@
                     "statusText": "OK",
                     "headers": {
                       "content-type": "text/html; charset=utf-8",
-                      "cf-ray": "a3ccd39db8f57071-IAD"
+                      "cf-ray": "a3e1d35efa474967-IAD"
                     }
                   },
                   "finding": {
@@ -380,7 +380,7 @@
                   }
                 }
               ],
-              "durationMs": 51
+              "durationMs": 37
             },
             "dnsAid": {
               "status": "fail",
@@ -445,7 +445,7 @@
                     "headers": {
                       "content-type": "application/dns-json"
                     },
-                    "bodyPreview": "{\"Status\":0,\"TC\":false,\"RD\":true,\"RA\":true,\"AD\":false,\"CD\":false,\"Question\":[{\"name\":\"_index._agents.qte77.github.io\",\"type\":65}],\"Authority\":[{\"name\":\"github.io\",\"type\":6,\"TTL\":3600,\"data\":\"dns1.p05.nsone.net. hostmaster.nsone.net. 1647625169 43200 7200 1209600 3600\"}]}"
+                    "bodyPreview": "{\"Status\":0,\"TC\":false,\"RD\":true,\"RA\":true,\"AD\":false,\"CD\":false,\"Question\":[{\"name\":\"_index._agents.qte77.github.io\",\"type\":65}],\"Authority\":[{\"name\":\"github.io\",\"type\":6,\"TTL\":900,\"data\":\"ns-1622.awsdns-10.co.uk. awsdns-hostmaster.amazon.com. 1 7200 900 1209600 86400\"}]}"
                   },
                   "finding": {
                     "outcome": "neutral",
@@ -491,7 +491,7 @@
                     "headers": {
                       "content-type": "application/dns-json"
                     },
-                    "bodyPreview": "{\"Status\":0,\"TC\":false,\"RD\":true,\"RA\":true,\"AD\":false,\"CD\":false,\"Question\":[{\"name\":\"_a2a._agents.qte77.github.io\",\"type\":65}],\"Authority\":[{\"name\":\"github.io\",\"type\":6,\"TTL\":3600,\"data\":\"dns1.p05.nsone.net. hostmaster.nsone.net. 1647625169 43200 7200 1209600 3600\"}]}"
+                    "bodyPreview": "{\"Status\":0,\"TC\":false,\"RD\":true,\"RA\":true,\"AD\":false,\"CD\":false,\"Question\":[{\"name\":\"_a2a._agents.qte77.github.io\",\"type\":65}],\"Authority\":[{\"name\":\"github.io\",\"type\":6,\"TTL\":900,\"data\":\"ns-1622.awsdns-10.co.uk. awsdns-hostmaster.amazon.com. 1 7200 900 1209600 86400\"}]}"
                   },
                   "finding": {
                     "outcome": "neutral",
@@ -514,7 +514,7 @@
                     "headers": {
                       "content-type": "application/dns-json"
                     },
-                    "bodyPreview": "{\"Status\":0,\"TC\":false,\"RD\":true,\"RA\":true,\"AD\":false,\"CD\":false,\"Question\":[{\"name\":\"_mcp._agents.qte77.github.io\",\"type\":64}],\"Authority\":[{\"name\":\"github.io\",\"type\":6,\"TTL\":3600,\"data\":\"dns1.p05.nsone.net. hostmaster.nsone.net. 1647625169 43200 7200 1209600 3600\"}]}"
+                    "bodyPreview": "{\"Status\":0,\"TC\":false,\"RD\":true,\"RA\":true,\"AD\":false,\"CD\":false,\"Question\":[{\"name\":\"_mcp._agents.qte77.github.io\",\"type\":64}],\"Authority\":[{\"name\":\"github.io\",\"type\":6,\"TTL\":900,\"data\":\"ns-1622.awsdns-10.co.uk. awsdns-hostmaster.amazon.com. 1 7200 900 1209600 86400\"}]}"
                   },
                   "finding": {
                     "outcome": "neutral",
@@ -560,7 +560,7 @@
                     "headers": {
                       "content-type": "application/dns-json"
                     },
-                    "bodyPreview": "{\"Status\":0,\"TC\":false,\"RD\":true,\"RA\":true,\"AD\":false,\"CD\":false,\"Question\":[{\"name\":\"_index._agents.qte77.github.io\",\"type\":16}],\"Authority\":[{\"name\":\"github.io\",\"type\":6,\"TTL\":900,\"data\":\"ns-1622.awsdns-10.co.uk. awsdns-hostmaster.amazon.com. 1 7200 900 1209600 86400\"}]}"
+                    "bodyPreview": "{\"Status\":0,\"TC\":false,\"RD\":true,\"RA\":true,\"AD\":false,\"CD\":false,\"Question\":[{\"name\":\"_index._agents.qte77.github.io\",\"type\":16}],\"Authority\":[{\"name\":\"github.io\",\"type\":6,\"TTL\":3600,\"data\":\"dns1.p05.nsone.net. hostmaster.nsone.net. 1647625169 43200 7200 1209600 3600\"}]}"
                   },
                   "finding": {
                     "outcome": "neutral",
@@ -584,7 +584,7 @@
                   }
                 }
               ],
-              "durationMs": 7
+              "durationMs": 9
             }
           },
           "contentAccessibility": {
@@ -627,7 +627,7 @@
                   }
                 }
               ],
-              "durationMs": 340
+              "durationMs": 249
             }
           },
           "botAccessControl": {
@@ -900,7 +900,7 @@
                     "statusText": "OK",
                     "headers": {
                       "content-type": "text/plain; charset=utf-8",
-                      "cf-ray": "a3ccd39d58627071-IAD"
+                      "cf-ray": "a3e1d35ea99d4967-IAD"
                     },
                     "bodyPreview": "# Content Signals (contentsignals.org) — how AI systems may use this content.\n# Estate posture (matches sfclarity.com): let search engines and AI answer engines\n# index and *cite* this content, but do not train on it. Hand-maintained + code-reviewed\n# on purpose — a managed-robots dashboard toggle has silently dropped such a policy before.\nUser-agent: *\nContent-Signal: search=yes, ai-input=yes, ai-train=no\nAllow: /\n\n# Answer-engine crawlers that feed *cited* AI answers are explicitly welcome.\nUs..."
                   },
@@ -956,7 +956,7 @@
                     "statusText": "OK",
                     "headers": {
                       "content-type": "text/plain; charset=utf-8",
-                      "cf-ray": "a3ccd39d58627071-IAD"
+                      "cf-ray": "a3e1d35ea99d4967-IAD"
                     },
                     "bodyPreview": "# Content Signals (contentsignals.org) — how AI systems may use this content.\n# Estate posture (matches sfclarity.com): let search engines and AI answer engines\n# index and *cite* this content, but do not train on it. Hand-maintained + code-reviewed\n# on purpose — a managed-robots dashboard toggle has silently dropped such a policy before.\nUser-agent: *\nContent-Signal: search=yes, ai-input=yes, ai-train=no\nAllow: /\n\n# Answer-engine crawlers that feed *cited* AI answers are explicitly welcome.\nUs..."
                   },
@@ -1000,7 +1000,7 @@
                     "statusText": "Not Found",
                     "headers": {
                       "content-type": "text/html; charset=utf-8",
-                      "cf-ray": "a3ccd39d68787071-IAD"
+                      "cf-ray": "a3e1d35eb9bd4967-IAD"
                     }
                   },
                   "finding": {
@@ -1017,7 +1017,7 @@
                   }
                 }
               ],
-              "durationMs": 13
+              "durationMs": 5
             }
           },
           "discovery": {
@@ -1040,7 +1040,7 @@
                     "statusText": "Not Found",
                     "headers": {
                       "content-type": "text/html; charset=utf-8",
-                      "cf-ray": "a3ccd39d98bc7071-IAD"
+                      "cf-ray": "a3e1d35eda154967-IAD"
                     }
                   },
                   "finding": {
@@ -1057,32 +1057,12 @@
                   }
                 }
               ],
-              "durationMs": 35
+              "durationMs": 28
             },
             "oauthDiscovery": {
               "status": "fail",
               "message": "No OAuth/OIDC discovery metadata found",
               "evidence": [
-                {
-                  "action": "fetch",
-                  "label": "GET /.well-known/oauth-authorization-server",
-                  "request": {
-                    "url": "https://qte77.github.io/.well-known/oauth-authorization-server",
-                    "method": "GET"
-                  },
-                  "response": {
-                    "status": 404,
-                    "statusText": "Not Found",
-                    "headers": {
-                      "content-type": "text/html; charset=utf-8",
-                      "cf-ray": "a3ccd39d78897071-IAD"
-                    }
-                  },
-                  "finding": {
-                    "outcome": "negative",
-                    "summary": "oauth-authorization-server returned 404"
-                  }
-                },
                 {
                   "action": "fetch",
                   "label": "GET /.well-known/openid-configuration",
@@ -1095,12 +1075,32 @@
                     "statusText": "Not Found",
                     "headers": {
                       "content-type": "text/html; charset=utf-8",
-                      "cf-ray": "a3ccd39d68797071-IAD"
+                      "cf-ray": "a3e1d35eb9c04967-IAD"
                     }
                   },
                   "finding": {
                     "outcome": "negative",
                     "summary": "openid-configuration returned 404"
+                  }
+                },
+                {
+                  "action": "fetch",
+                  "label": "GET /.well-known/oauth-authorization-server",
+                  "request": {
+                    "url": "https://qte77.github.io/.well-known/oauth-authorization-server",
+                    "method": "GET"
+                  },
+                  "response": {
+                    "status": 404,
+                    "statusText": "Not Found",
+                    "headers": {
+                      "content-type": "text/html; charset=utf-8",
+                      "cf-ray": "a3e1d35eb9cd4967-IAD"
+                    }
+                  },
+                  "finding": {
+                    "outcome": "negative",
+                    "summary": "oauth-authorization-server returned 404"
                   }
                 },
                 {
@@ -1112,7 +1112,7 @@
                   }
                 }
               ],
-              "durationMs": 22
+              "durationMs": 9
             },
             "oauthProtectedResource": {
               "status": "fail",
@@ -1130,7 +1130,7 @@
                     "statusText": "OK",
                     "headers": {
                       "content-type": "text/html; charset=utf-8",
-                      "cf-ray": "a3ccd39d78937071-IAD"
+                      "cf-ray": "a3e1d35ec9d84967-IAD"
                     }
                   },
                   "finding": {
@@ -1150,7 +1150,7 @@
                     "statusText": "Not Found",
                     "headers": {
                       "content-type": "text/html; charset=utf-8",
-                      "cf-ray": "a3ccd39d788c7071-IAD"
+                      "cf-ray": "a3e1d35eb9d04967-IAD"
                     }
                   },
                   "finding": {
@@ -1188,7 +1188,7 @@
                     "statusText": "Not Found",
                     "headers": {
                       "content-type": "text/html; charset=utf-8",
-                      "cf-ray": "a3ccd39d88a17071-IAD"
+                      "cf-ray": "a3e1d35ec9dd4967-IAD"
                     }
                   },
                   "finding": {
@@ -1205,7 +1205,7 @@
                   }
                 }
               ],
-              "durationMs": 22
+              "durationMs": 20
             },
             "mcpServerCard": {
               "status": "fail",
@@ -1223,32 +1223,12 @@
                     "statusText": "Not Found",
                     "headers": {
                       "content-type": "text/html; charset=utf-8",
-                      "cf-ray": "a3ccd39d88ae7071-IAD"
+                      "cf-ray": "a3e1d35ec9ea4967-IAD"
                     }
                   },
                   "finding": {
                     "outcome": "negative",
                     "summary": "/.well-known/mcp/server-cards.json returned 404"
-                  }
-                },
-                {
-                  "action": "fetch",
-                  "label": "GET /.well-known/mcp.json",
-                  "request": {
-                    "url": "https://qte77.github.io/.well-known/mcp.json",
-                    "method": "GET"
-                  },
-                  "response": {
-                    "status": 404,
-                    "statusText": "Not Found",
-                    "headers": {
-                      "content-type": "text/html; charset=utf-8",
-                      "cf-ray": "a3ccd39d98b27071-IAD"
-                    }
-                  },
-                  "finding": {
-                    "outcome": "negative",
-                    "summary": "/.well-known/mcp.json returned 404"
                   }
                 },
                 {
@@ -1263,12 +1243,32 @@
                     "statusText": "Not Found",
                     "headers": {
                       "content-type": "text/html; charset=utf-8",
-                      "cf-ray": "a3ccd39d88a47071-IAD"
+                      "cf-ray": "a3e1d35ec9de4967-IAD"
                     }
                   },
                   "finding": {
                     "outcome": "negative",
                     "summary": "/.well-known/mcp/server-card.json returned 404"
+                  }
+                },
+                {
+                  "action": "fetch",
+                  "label": "GET /.well-known/mcp.json",
+                  "request": {
+                    "url": "https://qte77.github.io/.well-known/mcp.json",
+                    "method": "GET"
+                  },
+                  "response": {
+                    "status": 404,
+                    "statusText": "Not Found",
+                    "headers": {
+                      "content-type": "text/html; charset=utf-8",
+                      "cf-ray": "a3e1d35ed9f94967-IAD"
+                    }
+                  },
+                  "finding": {
+                    "outcome": "negative",
+                    "summary": "/.well-known/mcp.json returned 404"
                   }
                 },
                 {
@@ -1280,7 +1280,7 @@
                   }
                 }
               ],
-              "durationMs": 32
+              "durationMs": 20
             },
             "a2aAgentCard": {
               "status": "pass",
@@ -1324,7 +1324,7 @@
                     "statusText": "OK",
                     "headers": {
                       "content-type": "application/json; charset=utf-8",
-                      "cf-ray": "a3ccd39d98b37071-IAD"
+                      "cf-ray": "a3e1d35eda054967-IAD"
                     },
                     "bodyPreview": "{\"protocolVersion\":\"0.3.0\",\"name\":\"agenthud\",\"description\":\"Renders live A2UI interfaces from natural-language prompts and replays AG-UI event streams. A qte77 agent-native demo — ask it to draw a UI and it returns an A2UI component batch.\",\"version\":\"1.0.0\",\"url\":\"https://agenthud-proxy.cloudflare-driveway392.workers.dev/a2a\",\"preferredTransport\":\"JSONRPC\",\"supportedInterfaces\":[{\"transport\":\"JSONRPC\",\"url\":\"https://agenthud-proxy.cloudflare-driveway392.workers.dev/a2a\"}],\"documentationUrl\":\"ht..."
                   },
@@ -1358,7 +1358,7 @@
                   }
                 }
               ],
-              "durationMs": 67
+              "durationMs": 24
             },
             "agentSkills": {
               "status": "fail",
@@ -1376,7 +1376,7 @@
                     "statusText": "Not Found",
                     "headers": {
                       "content-type": "text/html; charset=utf-8",
-                      "cf-ray": "a3ccd39d98b47071-IAD"
+                      "cf-ray": "a3e1d35eda0b4967-IAD"
                     }
                   },
                   "finding": {
@@ -1396,7 +1396,7 @@
                     "statusText": "Not Found",
                     "headers": {
                       "content-type": "text/html; charset=utf-8",
-                      "cf-ray": "a3ccd39db8f77071-IAD"
+                      "cf-ray": "a3e1d35efa484967-IAD"
                     }
                   },
                   "finding": {
@@ -1413,7 +1413,7 @@
                   }
                 }
               ],
-              "durationMs": 65
+              "durationMs": 37
             },
             "webMcp": {
               "status": "fail",
@@ -1456,7 +1456,7 @@
                   }
                 }
               ],
-              "durationMs": 4523
+              "durationMs": 3642
             },
             "ard": {
               "status": "fail",
@@ -1493,7 +1493,7 @@
                     "statusText": "Not Found",
                     "headers": {
                       "content-type": "text/html; charset=utf-8",
-                      "cf-ray": "a3ccd39d68777071-IAD"
+                      "cf-ray": "a3e1d35eb9bb4967-IAD"
                     }
                   },
                   "finding": {
@@ -1560,7 +1560,7 @@
                 "discoveryMechanisms": [],
                 "searchEndpoints": []
               },
-              "durationMs": 8
+              "durationMs": 6
             }
           },
           "commerce": {
@@ -1568,6 +1568,26 @@
               "status": "neutral",
               "message": "x402 payment protocol not detected (not a commerce site)",
               "evidence": [
+                {
+                  "action": "fetch",
+                  "label": "GET /api",
+                  "request": {
+                    "url": "https://qte77.github.io/api",
+                    "method": "GET"
+                  },
+                  "response": {
+                    "status": 404,
+                    "statusText": "Not Found",
+                    "headers": {
+                      "content-type": "text/html; charset=utf-8",
+                      "cf-ray": "a3e1d35eea354967-IAD"
+                    }
+                  },
+                  "finding": {
+                    "outcome": "neutral",
+                    "summary": "/api returned 404 (not 402)"
+                  }
+                },
                 {
                   "action": "fetch",
                   "label": "GET /agenthud-agui-a2ui/",
@@ -1580,7 +1600,7 @@
                     "statusText": "OK",
                     "headers": {
                       "content-type": "text/html; charset=utf-8",
-                      "cf-ray": "a3ccd39da8c87071-IAD"
+                      "cf-ray": "a3e1d35eea274967-IAD"
                     }
                   },
                   "finding": {
@@ -1600,32 +1620,12 @@
                     "statusText": "Not Found",
                     "headers": {
                       "content-type": "text/html; charset=utf-8",
-                      "cf-ray": "a3ccd39da8d07071-IAD"
+                      "cf-ray": "a3e1d35eea374967-IAD"
                     }
                   },
                   "finding": {
                     "outcome": "neutral",
                     "summary": "/api/v1 returned 404 (not 402)"
-                  }
-                },
-                {
-                  "action": "fetch",
-                  "label": "GET /api",
-                  "request": {
-                    "url": "https://qte77.github.io/api",
-                    "method": "GET"
-                  },
-                  "response": {
-                    "status": 404,
-                    "statusText": "Not Found",
-                    "headers": {
-                      "content-type": "text/html; charset=utf-8",
-                      "cf-ray": "a3ccd39da8cd7071-IAD"
-                    }
-                  },
-                  "finding": {
-                    "outcome": "neutral",
-                    "summary": "/api returned 404 (not 402)"
                   }
                 },
                 {
@@ -1640,7 +1640,7 @@
                     "statusText": "OK",
                     "headers": {
                       "content-type": "text/html; charset=utf-8",
-                      "cf-ray": "a3ccd39da8cb7071-IAD"
+                      "cf-ray": "a3e1d35eea294967-IAD"
                     }
                   },
                   "finding": {
@@ -1660,7 +1660,7 @@
                     "statusText": "OK",
                     "headers": {
                       "content-type": "application/json",
-                      "cf-ray": "a3ccd39d98bf7071-IAD"
+                      "cf-ray": "a3e1d35eda1a4967-IAD"
                     }
                   }
                 },
@@ -1685,7 +1685,7 @@
                   }
                 }
               ],
-              "durationMs": 723
+              "durationMs": 1026
             },
             "mpp": {
               "status": "neutral",
@@ -1703,7 +1703,7 @@
                     "statusText": "OK",
                     "headers": {
                       "content-type": "application/json; charset=utf-8",
-                      "cf-ray": "a3ccd39da8dd7071-IAD"
+                      "cf-ray": "a3e1d35eea424967-IAD"
                     }
                   },
                   "finding": {
@@ -1720,7 +1720,7 @@
                   }
                 }
               ],
-              "durationMs": 45
+              "durationMs": 35
             },
             "ucp": {
               "status": "neutral",
@@ -1738,7 +1738,7 @@
                     "statusText": "Not Found",
                     "headers": {
                       "content-type": "text/html; charset=utf-8",
-                      "cf-ray": "a3ccd39d98be7071-IAD"
+                      "cf-ray": "a3e1d35eda164967-IAD"
                     }
                   },
                   "finding": {
@@ -1755,7 +1755,7 @@
                   }
                 }
               ],
-              "durationMs": 34
+              "durationMs": 24
             },
             "acp": {
               "status": "neutral",
@@ -1773,7 +1773,7 @@
                     "statusText": "Not Found",
                     "headers": {
                       "content-type": "text/html; charset=utf-8",
-                      "cf-ray": "a3ccd39db8f47071-IAD"
+                      "cf-ray": "a3e1d35eea434967-IAD"
                     }
                   },
                   "finding": {
@@ -1790,7 +1790,7 @@
                   }
                 }
               ],
-              "durationMs": 59
+              "durationMs": 34
             },
             "ap2": {
               "status": "neutral",
@@ -1852,6 +1852,6 @@
       }
     }
   ],
-  "score": 65,
+  "score": 59,
   "grade": "C"
 }

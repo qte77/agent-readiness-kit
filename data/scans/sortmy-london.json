@@ -1,15 +1,18 @@
 {
   "propertyId": "sortmy-london",
   "url": "https://sortmy.london",
-  "scannedAt": "2026-09-18T02:14:20.250Z",
+  "scannedAt": "2026-09-20T15:24:05.314Z",
   "findings": [
     {
       "id": "wellKnown.agent-instruction",
       "category": "Discovery",
       "source": "wellKnown",
-      "status": "fail",
-      "summary": "/llms.txt returned 404 (not found)",
-      "remediation": "Publish a non-trivial /llms.txt at site root describing the site for LLM agents."
+      "status": "pass",
+      "summary": "/llms.txt present with non-trivial content",
+      "evidence": {
+        "httpStatus": 200,
+        "bodyLength": 3655
+      }
     },
     {
       "id": "wellKnown.ai-catalog",
@@ -17,31 +20,38 @@
       "source": "wellKnown",
       "status": "fail",
       "summary": "/.well-known/ai-catalog.json returned 404 (not found)",
-      "remediation": "Publish a /.well-known/ai-catalog.json per the Agentic Resource Discovery (ARD) convention (https://agenticresourcediscovery.org/)."
+      "remediation": "Publish a /.well-known/ard.json per the Agentic Resource Discovery (ARD) v0.91 convention (https://agenticresourcediscovery.org/spec/); the legacy /.well-known/ai-catalog.json path is still accepted as a fallback but is no longer the spec's canonical name."
     },
     {
       "id": "wellKnown.agent-skills-index",
       "category": "Discovery",
       "source": "wellKnown",
-      "status": "fail",
-      "summary": "/.well-known/agent-skills/index.json returned 404 (not found)",
-      "remediation": "Publish a /.well-known/agent-skills/index.json listing the site's available agent skills."
+      "status": "pass",
+      "summary": "/.well-known/agent-skills/index.json present and parses as valid JSON",
+      "evidence": {
+        "httpStatus": 200
+      }
     },
     {
       "id": "wellKnown.api-catalog",
       "category": "Discovery",
       "source": "wellKnown",
-      "status": "fail",
-      "summary": "/.well-known/api-catalog returned 404 (not found)",
-      "remediation": "Publish a /.well-known/api-catalog per RFC 9727."
+      "status": "pass",
+      "summary": "/.well-known/api-catalog present and parses as valid JSON",
+      "evidence": {
+        "httpStatus": 200
+      }
     },
     {
       "id": "wellKnown.auth-md",
       "category": "Identity & Auth",
       "source": "wellKnown",
-      "status": "fail",
-      "summary": "/auth.md returned 404 (not found)",
-      "remediation": "Publish a non-trivial /auth.md per the WorkOS auth.md convention (https://workos.com/auth-md)."
+      "status": "pass",
+      "summary": "/auth.md present with non-trivial content",
+      "evidence": {
+        "httpStatus": 200,
+        "bodyLength": 1432
+      }
     },
     {
       "id": "wellKnown.oauth-protected-resource",
@@ -57,15 +67,17 @@
       "source": "wellKnown",
       "status": "fail",
       "summary": "/.well-known/openid-configuration returned 404 (not found)",
-      "remediation": "Publish a /.well-known/openid-configuration per RFC 8414 / OIDC Discovery."
+      "remediation": "Publish a /.well-known/openid-configuration per OpenID Connect Discovery 1.0 (a related-but-distinct mechanism from RFC 8414's own default /.well-known/oauth-authorization-server path)."
     },
     {
       "id": "wellKnown.openapi-spec",
       "category": "Execution",
       "source": "wellKnown",
-      "status": "fail",
-      "summary": "/openapi.json returned 404 (not found)",
-      "remediation": "Publish a valid /openapi.json describing the site's API surface."
+      "status": "pass",
+      "summary": "/openapi.json present and parses as valid JSON",
+      "evidence": {
+        "httpStatus": 200
+      }
     },
     {
       "id": "wellKnown.dev-resource-discovery",
@@ -101,9 +113,19 @@
       "id": "contentSignal.bot-rules",
       "category": "Trust",
       "source": "contentSignal",
-      "status": "warn",
-      "summary": "/robots.txt present but declares no explicit rules for known AI crawlers",
-      "remediation": "Add explicit User-agent blocks (Allow/Disallow) for known AI crawlers (e.g. GPTBot, ClaudeBot, Google-Extended) in /robots.txt."
+      "status": "pass",
+      "summary": "/robots.txt declares explicit rules for AI crawler(s): GPTBot, ChatGPT-User, Google-Extended, CCBot, ClaudeBot, anthropic-ai, PerplexityBot",
+      "evidence": {
+        "matchedAgents": [
+          "GPTBot",
+          "ChatGPT-User",
+          "Google-Extended",
+          "CCBot",
+          "ClaudeBot",
+          "anthropic-ai",
+          "PerplexityBot"
+        ]
+      }
     },
     {
       "id": "contentSignal.web-bot-auth",
@@ -111,15 +133,17 @@
       "source": "contentSignal",
       "status": "fail",
       "summary": "/.well-known/http-message-signatures-directory not found",
-      "remediation": "Publish a /.well-known/http-message-signatures-directory (JWKS-style key directory) and support the Signature-Agent header, per the IETF Web Bot Auth drafts (draft-meunier-http-message-signatures-directory / draft-meunier-webbotauth-httpsig-protocol)."
+      "remediation": "Publish a /.well-known/http-message-signatures-directory (JWKS-style key directory) and support the Signature-Agent header, per the IETF webbotauth working group's draft-ietf-webbotauth-httpsig-protocol (the path and JWKS format are unchanged from its expired individual-draft predecessors)."
     },
     {
       "id": "contentSignal.markdown-twins",
       "category": "Content",
       "source": "contentSignal",
-      "status": "fail",
-      "summary": "No markdown twin found via <link rel=\"alternate\" type=\"text/markdown\"> or a root-level README.md/index.md",
-      "remediation": "Publish a markdown twin of the page (e.g. README.md) and/or declare it via <link rel=\"alternate\" type=\"text/markdown\"> in <head>."
+      "status": "pass",
+      "summary": "A root-level markdown twin (README.md or index.md) is present",
+      "evidence": {
+        "twinFound": true
+      }
     },
     {
       "id": "contentSignal.markdown-negotiation",
@@ -136,15 +160,19 @@
       "id": "discoverSnapshot.schema-type-breadth",
       "category": "Content",
       "source": "discoverSnapshot",
-      "status": "fail",
-      "summary": "No schema.org JSON-LD @type values found — no structured-data breadth for agents to read",
+      "status": "warn",
+      "summary": "Only one schema.org @type found (WebApplication) — narrow structured-data breadth",
       "evidence": {
-        "json_ld_types": [],
+        "json_ld_types": [
+          "WebApplication"
+        ],
         "sitemaps": [
           "https://sortmy.london/sitemap.xml"
         ],
         "feeds": [],
-        "llms_txt": []
+        "llms_txt": [
+          "https://sortmy.london/llms.txt"
+        ]
       },
       "remediation": "Add or broaden schema.org JSON-LD structured data (e.g. SoftwareApplication, Organization, FAQPage) so agents/LLMs can identify more of what this page is about."
     },
@@ -157,7 +185,7 @@
       "evidence": {
         "score": 0,
         "maxScore": 2,
-        "estScoreGain": 1.3
+        "estScoreGain": 0.5
       }
     },
     {
@@ -169,7 +197,7 @@
       "evidence": {
         "score": 0,
         "maxScore": 3,
-        "estScoreGain": 2.9
+        "estScoreGain": 1.7
       }
     },
     {
@@ -181,17 +209,17 @@
       "evidence": {
         "score": 0,
         "maxScore": 2,
-        "estScoreGain": 1.9
+        "estScoreGain": 1.1
       }
     },
     {
       "id": "oraAi.openapi-spec",
       "category": "Execution",
       "source": "oraAi",
-      "status": "unknown",
-      "summary": "ora.ai check \"OpenAPI spec published\" (openapi-spec) reported status \"na\"",
+      "status": "pass",
+      "summary": "ora.ai check \"OpenAPI spec published\" (openapi-spec) reported status \"pass\"",
       "evidence": {
-        "score": 0,
+        "score": 7,
         "maxScore": 7
       }
     },
@@ -199,10 +227,10 @@
       "id": "oraAi.markdown-negotiation",
       "category": "Content",
       "source": "oraAi",
-      "status": "fail",
-      "summary": "ora.ai check \"Markdown agent docs\" (markdown-negotiation) reported status \"fail\"",
+      "status": "pass",
+      "summary": "ora.ai check \"Markdown agent docs\" (markdown-negotiation) reported status \"pass\"",
       "evidence": {
-        "score": 0,
+        "score": 1,
         "maxScore": 1
       }
     },
@@ -215,7 +243,7 @@
       "evidence": {
         "score": 0,
         "maxScore": 2,
-        "estScoreGain": 4.6
+        "estScoreGain": 0.8
       }
     },
     {
@@ -227,7 +255,7 @@
       "evidence": {
         "score": 0,
         "maxScore": 2,
-        "estScoreGain": 4.6
+        "estScoreGain": 0.8
       }
     },
     {
@@ -239,7 +267,7 @@
       "evidence": {
         "level": 2,
         "levelName": "Bot-Aware",
-        "scannedAt": "2026-09-18T02:13:35.440Z",
+        "scannedAt": "2026-09-20T15:23:24.801Z",
         "checks": {
           "discoverability": {
             "robotsTxt": {
@@ -258,9 +286,9 @@
                     "statusText": "OK",
                     "headers": {
                       "content-type": "text/plain; charset=utf-8",
-                      "cf-ray": "a3ccd4ebde814967-IAD"
+                      "cf-ray": "a3e1d4aa4a764967-IAD"
                     },
-                    "bodyPreview": "# sortmy.london — a free civic wayfinder; fully crawlable.\nUser-agent: *\nAllow: /\nContent-Signal: ai-input=yes, ai-train=no\n\nSitemap: https://sortmy.london/sitemap.xml\n"
+                    "bodyPreview": "# sortmy.london — a free civic wayfinder; fully crawlable.\nUser-agent: *\nAllow: /\nContent-Signal: ai-input=yes, ai-train=no\n\n# Explicit per-bot allow for known AI crawlers/agents (the wildcard rule above already allows\n# everyone — these lines exist so a scanner that only checks for named AI user-agents, not\n# wildcard coverage, can see the intent stated explicitly too).\nUser-agent: GPTBot\nAllow: /\nUser-agent: ChatGPT-User\nAllow: /\nUser-agent: OAI-SearchBot\nAllow: /\nUser-agent: ClaudeBot\nAllow: ..."
                   },
                   "finding": {
                     "outcome": "positive",
@@ -315,8 +343,8 @@
                     "statusText": "OK",
                     "headers": {
                       "content-type": "application/xml",
-                      "content-length": "230",
-                      "cf-ray": "a3ccd4ebfeb44967-IAD"
+                      "content-length": "461",
+                      "cf-ray": "a3e1d4aa7ac64967-IAD"
                     }
                   },
                   "finding": {
@@ -333,11 +361,31 @@
                   }
                 }
               ],
-              "durationMs": 17
+              "durationMs": 19
             },
             "linkHeaders": {
-              "status": "fail",
-              "message": "No Link headers found on target page",
+              "status": "pass",
+              "message": "Found agent-useful Link relations: alternate, service-desc, api-catalog",
+              "details": {
+                "relationsFound": [
+                  {
+                    "rel": "alternate",
+                    "href": "/index.md",
+                    "type": "text/markdown"
+                  },
+                  {
+                    "rel": "service-desc",
+                    "href": "/openapi.json",
+                    "type": "application/json"
+                  },
+                  {
+                    "rel": "api-catalog",
+                    "href": "/.well-known/api-catalog",
+                    "type": "application/linkset+json"
+                  }
+                ],
+                "totalLinks": 4
+              },
               "evidence": [
                 {
                   "action": "fetch",
@@ -351,24 +399,41 @@
                     "statusText": "OK",
                     "headers": {
                       "content-type": "text/html; charset=utf-8",
-                      "cf-ray": "a3ccd4ec6f604967-IAD"
+                      "link": "</sitemap.xml>; rel=\"sitemap\", </index.md>; rel=\"alternate\"; type=\"text/markdown\", </openapi.json>; rel=\"service-desc\"; type=\"application/json\", </.well-known/api-catalog>; rel=\"api-catalog\"; type=\"application/linkset+json\"",
+                      "cf-ray": "a3e1d4ab1c054967-IAD"
                     }
                   },
                   "finding": {
-                    "outcome": "negative",
-                    "summary": "No Link header present in response"
+                    "outcome": "positive",
+                    "summary": "Target page returned 200 with Link header"
+                  }
+                },
+                {
+                  "action": "parse",
+                  "label": "Parse Link header (RFC 8288)",
+                  "finding": {
+                    "outcome": "neutral",
+                    "summary": "Parsed 4 link(s) from header"
+                  }
+                },
+                {
+                  "action": "parse",
+                  "label": "Match agent-useful relations",
+                  "finding": {
+                    "outcome": "positive",
+                    "summary": "Found agent-useful relations: alternate, service-desc, api-catalog"
                   }
                 },
                 {
                   "action": "conclude",
                   "label": "Conclusion",
                   "finding": {
-                    "outcome": "negative",
-                    "summary": "No Link headers found on target page"
+                    "outcome": "positive",
+                    "summary": "Found agent-useful Link relations: alternate, service-desc, api-catalog"
                   }
                 }
               ],
-              "durationMs": 81
+              "durationMs": 112
             },
             "dnsAid": {
               "status": "fail",
@@ -410,7 +475,7 @@
                     "headers": {
                       "content-type": "application/dns-json"
                     },
-                    "bodyPreview": "{\"Status\":0,\"TC\":false,\"RD\":true,\"RA\":true,\"AD\":true,\"CD\":false,\"Question\":[{\"name\":\"_index._agents.sortmy.london\",\"type\":64}],\"Authority\":[{\"name\":\"sortmy.london\",\"type\":6,\"TTL\":1800,\"data\":\"cullen.ns.cloudflare.com. dns.cloudflare.com. 2415052951 10000 2400 604800 1800\"},{\"name\":\"sortmy.london\",\"type\":46,\"TTL\":1800,\"data\":\"SOA 13 2 1800 1789787609 1789607609 34505 sortmy.london. ilUg4ApJa1pNUWDs+oGQhUUaFOJ8E1BB+W0kuwAwqmAf/XV8QHMvzetpuX/J1KmFUkXeci3E9Iz85duWxacelw==\"},{\"name\":\"_index._agents.s..."
+                    "bodyPreview": "{\"Status\":0,\"TC\":false,\"RD\":true,\"RA\":true,\"AD\":true,\"CD\":false,\"Question\":[{\"name\":\"_index._agents.sortmy.london\",\"type\":64}],\"Authority\":[{\"name\":\"sortmy.london\",\"type\":6,\"TTL\":1800,\"data\":\"cullen.ns.cloudflare.com. dns.cloudflare.com. 2415052951 10000 2400 604800 1800\"},{\"name\":\"sortmy.london\",\"type\":46,\"TTL\":1800,\"data\":\"SOA 13 2 1800 1790007800 1789827800 34505 sortmy.london. oqww6sArzQ80vCb+tda38DLrap6cCuWNCEFBoi0NK51/tm63RzIq05Qv7Bh6eK5mjCdIE6vAQAQB44qNzDbMBg==\"},{\"name\":\"_index._agents.s..."
                   },
                   "finding": {
                     "outcome": "neutral",
@@ -433,7 +498,7 @@
                     "headers": {
                       "content-type": "application/dns-json"
                     },
-                    "bodyPreview": "{\"Status\":0,\"TC\":false,\"RD\":true,\"RA\":true,\"AD\":true,\"CD\":false,\"Question\":[{\"name\":\"_index._agents.sortmy.london\",\"type\":65}],\"Authority\":[{\"name\":\"sortmy.london\",\"type\":6,\"TTL\":1800,\"data\":\"cullen.ns.cloudflare.com. dns.cloudflare.com. 2415052951 10000 2400 604800 1800\"},{\"name\":\"sortmy.london\",\"type\":46,\"TTL\":1800,\"data\":\"SOA 13 2 1800 1789787609 1789607609 34505 sortmy.london. 8lEHKhHSy+xygu8wWbVq2OxN3gAt5iQnxLL10iniwqlfi/0nYIfl1RFkjWwJpnnebPVcf3YzMSAFzeUxZt6B9Q==\"},{\"name\":\"_index._agents.s..."
+                    "bodyPreview": "{\"Status\":0,\"TC\":false,\"RD\":true,\"RA\":true,\"AD\":true,\"CD\":false,\"Question\":[{\"name\":\"_index._agents.sortmy.london\",\"type\":65}],\"Authority\":[{\"name\":\"sortmy.london\",\"type\":6,\"TTL\":1800,\"data\":\"cullen.ns.cloudflare.com. dns.cloudflare.com. 2415052951 10000 2400 604800 1800\"},{\"name\":\"sortmy.london\",\"type\":46,\"TTL\":1800,\"data\":\"SOA 13 2 1800 1790007800 1789827800 34505 sortmy.london. 8Dhgz2aGunH7kf6wTSQTfS1YMgNLmciGbVXroU0z5PXVmNUusMEOE1ADgZwx6vYSq0PUTXbgb655DQ+ibVAgxg==\"},{\"name\":\"_index._agents.s..."
                   },
                   "finding": {
                     "outcome": "neutral",
@@ -456,7 +521,7 @@
                     "headers": {
                       "content-type": "application/dns-json"
                     },
-                    "bodyPreview": "{\"Status\":0,\"TC\":false,\"RD\":true,\"RA\":true,\"AD\":true,\"CD\":false,\"Question\":[{\"name\":\"_a2a._agents.sortmy.london\",\"type\":64}],\"Authority\":[{\"name\":\"sortmy.london\",\"type\":6,\"TTL\":1800,\"data\":\"cullen.ns.cloudflare.com. dns.cloudflare.com. 2415052951 10000 2400 604800 1800\"},{\"name\":\"sortmy.london\",\"type\":46,\"TTL\":1800,\"data\":\"SOA 13 2 1800 1789787609 1789607609 34505 sortmy.london. 1QAmUonNAcNXXQ9fVllXeEyLWKqi6iimBzvwlcdbwkcDyPVaPxrbjAnowd0bkeAZsd/SE8beOUv4UcXrZ1j12Q==\"},{\"name\":\"_a2a._agents.sortm..."
+                    "bodyPreview": "{\"Status\":0,\"TC\":false,\"RD\":true,\"RA\":true,\"AD\":true,\"CD\":false,\"Question\":[{\"name\":\"_a2a._agents.sortmy.london\",\"type\":64}],\"Authority\":[{\"name\":\"sortmy.london\",\"type\":6,\"TTL\":1800,\"data\":\"cullen.ns.cloudflare.com. dns.cloudflare.com. 2415052951 10000 2400 604800 1800\"},{\"name\":\"sortmy.london\",\"type\":46,\"TTL\":1800,\"data\":\"SOA 13 2 1800 1790007800 1789827800 34505 sortmy.london. /wcrOCkmjPnBcKsVK5Li4ztypicmCMhtN1a3mPL+1OGFyxt4DLg7gh95/6xoXCg/TYB6TwbaR/m1DPqrVL7U7w==\"},{\"name\":\"_a2a._agents.sortm..."
                   },
                   "finding": {
                     "outcome": "neutral",
@@ -479,7 +544,7 @@
                     "headers": {
                       "content-type": "application/dns-json"
                     },
-                    "bodyPreview": "{\"Status\":0,\"TC\":false,\"RD\":true,\"RA\":true,\"AD\":true,\"CD\":false,\"Question\":[{\"name\":\"_a2a._agents.sortmy.london\",\"type\":65}],\"Authority\":[{\"name\":\"sortmy.london\",\"type\":6,\"TTL\":1800,\"data\":\"cullen.ns.cloudflare.com. dns.cloudflare.com. 2415052951 10000 2400 604800 1800\"},{\"name\":\"sortmy.london\",\"type\":46,\"TTL\":1800,\"data\":\"SOA 13 2 1800 1789787609 1789607609 34505 sortmy.london. Uo8vxbYS7EStaUnJHmhVxoFGFPT4LJLYtJhOIG0Drhrb2YjxjcOlRy4T5cdftNSh0WciH2xR416eYVs4x1Uzfg==\"},{\"name\":\"_a2a._agents.sortm..."
+                    "bodyPreview": "{\"Status\":0,\"TC\":false,\"RD\":true,\"RA\":true,\"AD\":true,\"CD\":false,\"Question\":[{\"name\":\"_a2a._agents.sortmy.london\",\"type\":65}],\"Authority\":[{\"name\":\"sortmy.london\",\"type\":6,\"TTL\":1800,\"data\":\"cullen.ns.cloudflare.com. dns.cloudflare.com. 2415052951 10000 2400 604800 1800\"},{\"name\":\"sortmy.london\",\"type\":46,\"TTL\":1800,\"data\":\"SOA 13 2 1800 1790007800 1789827800 34505 sortmy.london. ndRn5uxCL96Ji2A5xWobkmHdkLv1Vrs85Gnsp7HlAU5rSIXx/44raduiMjssX5moi6J3xmhZcKo/6SJRpLEISg==\"},{\"name\":\"_a2a._agents.sortm..."
                   },
                   "finding": {
                     "outcome": "neutral",
@@ -502,7 +567,7 @@
                     "headers": {
                       "content-type": "application/dns-json"
                     },
-                    "bodyPreview": "{\"Status\":0,\"TC\":false,\"RD\":true,\"RA\":true,\"AD\":true,\"CD\":false,\"Question\":[{\"name\":\"_mcp._agents.sortmy.london\",\"type\":64}],\"Authority\":[{\"name\":\"sortmy.london\",\"type\":6,\"TTL\":1800,\"data\":\"cullen.ns.cloudflare.com. dns.cloudflare.com. 2415052951 10000 2400 604800 1800\"},{\"name\":\"sortmy.london\",\"type\":46,\"TTL\":1800,\"data\":\"SOA 13 2 1800 1789787609 1789607609 34505 sortmy.london. qcpa2v9YZMEmK6g0v6G+w9b55Eua3AUsk2H7uzf2Ckb4l3Ww7d/cfU+ngHPBRnUUgsiZ98L/7Pzu7oEad6/QNA==\"},{\"name\":\"_mcp._agents.sortm..."
+                    "bodyPreview": "{\"Status\":0,\"TC\":false,\"RD\":true,\"RA\":true,\"AD\":true,\"CD\":false,\"Question\":[{\"name\":\"_mcp._agents.sortmy.london\",\"type\":64}],\"Authority\":[{\"name\":\"sortmy.london\",\"type\":6,\"TTL\":1800,\"data\":\"cullen.ns.cloudflare.com. dns.cloudflare.com. 2415052951 10000 2400 604800 1800\"},{\"name\":\"sortmy.london\",\"type\":46,\"TTL\":1800,\"data\":\"SOA 13 2 1800 1790007800 1789827800 34505 sortmy.london. CPrX8uAlE11aLUrnnQ2nHXL01wdXUQIYKM56SX4hQURkuhJ+It5hgxuj03EJH2WEeWyTbcbYusqJQu1xZykqVg==\"},{\"name\":\"_mcp._agents.sortm..."
                   },
                   "finding": {
                     "outcome": "neutral",
@@ -525,7 +590,7 @@
                     "headers": {
                       "content-type": "application/dns-json"
                     },
-                    "bodyPreview": "{\"Status\":0,\"TC\":false,\"RD\":true,\"RA\":true,\"AD\":true,\"CD\":false,\"Question\":[{\"name\":\"_mcp._agents.sortmy.london\",\"type\":65}],\"Authority\":[{\"name\":\"sortmy.london\",\"type\":6,\"TTL\":1800,\"data\":\"cullen.ns.cloudflare.com. dns.cloudflare.com. 2415052951 10000 2400 604800 1800\"},{\"name\":\"sortmy.london\",\"type\":46,\"TTL\":1800,\"data\":\"SOA 13 2 1800 1789787609 1789607609 34505 sortmy.london. 2XiPxr/9CVs0lPQLAcuqjwbNRZ6Qros6EhJG3qrlrwpTt+iUfaZVd1+PH8LPy8Qux/XdIElMRM1oSPyX/XUVwA==\"},{\"name\":\"_mcp._agents.sortm..."
+                    "bodyPreview": "{\"Status\":0,\"TC\":false,\"RD\":true,\"RA\":true,\"AD\":true,\"CD\":false,\"Question\":[{\"name\":\"_mcp._agents.sortmy.london\",\"type\":65}],\"Authority\":[{\"name\":\"sortmy.london\",\"type\":6,\"TTL\":1800,\"data\":\"cullen.ns.cloudflare.com. dns.cloudflare.com. 2415052951 10000 2400 604800 1800\"},{\"name\":\"sortmy.london\",\"type\":46,\"TTL\":1800,\"data\":\"SOA 13 2 1800 1790007800 1789827800 34505 sortmy.london. kpaO8Z8M9MWVTU+ImyRGsRJL5bYrs06U2tBRk0zrr5PoWcSed2thqOOlwRJhUROtMW9nev6HPE6jLHLqktT9Kg==\"},{\"name\":\"_mcp._agents.sortm..."
                   },
                   "finding": {
                     "outcome": "neutral",
@@ -548,7 +613,7 @@
                     "headers": {
                       "content-type": "application/dns-json"
                     },
-                    "bodyPreview": "{\"Status\":0,\"TC\":false,\"RD\":true,\"RA\":true,\"AD\":true,\"CD\":false,\"Question\":[{\"name\":\"_index._agents.sortmy.london\",\"type\":16}],\"Authority\":[{\"name\":\"sortmy.london\",\"type\":6,\"TTL\":1800,\"data\":\"cullen.ns.cloudflare.com. dns.cloudflare.com. 2415052951 10000 2400 604800 1800\"},{\"name\":\"sortmy.london\",\"type\":46,\"TTL\":1800,\"data\":\"SOA 13 2 1800 1789787609 1789607609 34505 sortmy.london. lLBCv5wpr057KLf2PXtVmkY7jryBVqeRsdtcQNTGVxgyFDETYlZ1edSiHQmAbMMMzVxBm+dQug5WerRrhqVGyg==\"},{\"name\":\"_index._agents.s..."
+                    "bodyPreview": "{\"Status\":0,\"TC\":false,\"RD\":true,\"RA\":true,\"AD\":true,\"CD\":false,\"Question\":[{\"name\":\"_index._agents.sortmy.london\",\"type\":16}],\"Authority\":[{\"name\":\"sortmy.london\",\"type\":6,\"TTL\":1800,\"data\":\"cullen.ns.cloudflare.com. dns.cloudflare.com. 2415052951 10000 2400 604800 1800\"},{\"name\":\"sortmy.london\",\"type\":46,\"TTL\":1800,\"data\":\"SOA 13 2 1800 1790007800 1789827800 34505 sortmy.london. roP67aNb3eF9w4mzdboBuhjXrzkIgQmT+asC8kr8JaRAXXUiNRYw6Hvqt5pzcPf4Q3NAVIkqYjwdzSINpDH36w==\"},{\"name\":\"_index._agents.s..."
                   },
                   "finding": {
                     "outcome": "neutral",
@@ -572,7 +637,7 @@
                   }
                 }
               ],
-              "durationMs": 22
+              "durationMs": 16
             }
           },
           "contentAccessibility": {
@@ -603,7 +668,7 @@
                     "statusText": "OK",
                     "headers": {
                       "content-type": "text/html; charset=utf-8",
-                      "cf-ray": "a3ccd4f5cb29876a-IAD"
+                      "cf-ray": "a3e1d4b09f14f24a-IAD"
                     }
                   }
                 },
@@ -616,13 +681,13 @@
                   }
                 }
               ],
-              "durationMs": 481
+              "durationMs": 295
             }
           },
           "botAccessControl": {
             "robotsTxtAiRules": {
               "status": "pass",
-              "message": "No AI-specific bot rules; wildcard rules apply to all crawlers including AI bots",
+              "message": "Found rules for AI bots: gptbot, chatgpt-user, oai-searchbot, google-extended, ccbot, anthropic-ai, claude-web, perplexitybot",
               "details": {
                 "targetPath": "/",
                 "robotsStatus": "ok",
@@ -630,7 +695,7 @@
                   {
                     "userAgent": "gptbot",
                     "effectiveAccess": "allowed",
-                    "ruleSource": "wildcard",
+                    "ruleSource": "explicit",
                     "rules": [
                       {
                         "directive": "allow",
@@ -645,7 +710,7 @@
                   {
                     "userAgent": "chatgpt-user",
                     "effectiveAccess": "allowed",
-                    "ruleSource": "wildcard",
+                    "ruleSource": "explicit",
                     "rules": [
                       {
                         "directive": "allow",
@@ -660,7 +725,7 @@
                   {
                     "userAgent": "oai-searchbot",
                     "effectiveAccess": "allowed",
-                    "ruleSource": "wildcard",
+                    "ruleSource": "explicit",
                     "rules": [
                       {
                         "directive": "allow",
@@ -675,7 +740,7 @@
                   {
                     "userAgent": "google-extended",
                     "effectiveAccess": "allowed",
-                    "ruleSource": "wildcard",
+                    "ruleSource": "explicit",
                     "rules": [
                       {
                         "directive": "allow",
@@ -690,7 +755,7 @@
                   {
                     "userAgent": "ccbot",
                     "effectiveAccess": "allowed",
-                    "ruleSource": "wildcard",
+                    "ruleSource": "explicit",
                     "rules": [
                       {
                         "directive": "allow",
@@ -705,7 +770,7 @@
                   {
                     "userAgent": "anthropic-ai",
                     "effectiveAccess": "allowed",
-                    "ruleSource": "wildcard",
+                    "ruleSource": "explicit",
                     "rules": [
                       {
                         "directive": "allow",
@@ -720,7 +785,7 @@
                   {
                     "userAgent": "claude-web",
                     "effectiveAccess": "allowed",
-                    "ruleSource": "wildcard",
+                    "ruleSource": "explicit",
                     "rules": [
                       {
                         "directive": "allow",
@@ -750,7 +815,7 @@
                   {
                     "userAgent": "perplexitybot",
                     "effectiveAccess": "allowed",
-                    "ruleSource": "wildcard",
+                    "ruleSource": "explicit",
                     "rules": [
                       {
                         "directive": "allow",
@@ -868,7 +933,7 @@
                     }
                   }
                 ],
-                "checkedBots": [
+                "botsFound": [
                   "gptbot",
                   "chatgpt-user",
                   "oai-searchbot",
@@ -876,15 +941,7 @@
                   "ccbot",
                   "anthropic-ai",
                   "claude-web",
-                  "bytespider",
-                  "perplexitybot",
-                  "cohere-ai",
-                  "applebot-extended",
-                  "amazonbot",
-                  "meta-externalagent",
-                  "facebookbot",
-                  "omgilibot",
-                  "diffbot"
+                  "perplexitybot"
                 ]
               },
               "evidence": [
@@ -900,9 +957,9 @@
                     "statusText": "OK",
                     "headers": {
                       "content-type": "text/plain; charset=utf-8",
-                      "cf-ray": "a3ccd4ebde814967-IAD"
+                      "cf-ray": "a3e1d4aa4a764967-IAD"
                     },
-                    "bodyPreview": "# sortmy.london — a free civic wayfinder; fully crawlable.\nUser-agent: *\nAllow: /\nContent-Signal: ai-input=yes, ai-train=no\n\nSitemap: https://sortmy.london/sitemap.xml\n"
+                    "bodyPreview": "# sortmy.london — a free civic wayfinder; fully crawlable.\nUser-agent: *\nAllow: /\nContent-Signal: ai-input=yes, ai-train=no\n\n# Explicit per-bot allow for known AI crawlers/agents (the wildcard rule above already allows\n# everyone — these lines exist so a scanner that only checks for named AI user-agents, not\n# wildcard coverage, can see the intent stated explicitly too).\nUser-agent: GPTBot\nAllow: /\nUser-agent: ChatGPT-User\nAllow: /\nUser-agent: OAI-SearchBot\nAllow: /\nUser-agent: ClaudeBot\nAllow: ..."
                   },
                   "finding": {
                     "outcome": "positive",
@@ -914,7 +971,7 @@
                   "label": "Scan for AI bot User-agent directives",
                   "finding": {
                     "outcome": "positive",
-                    "summary": "Checked 16 AI bot user agents -- none found, but wildcard rules apply"
+                    "summary": "Found rules for AI bots: gptbot, chatgpt-user, oai-searchbot, google-extended, ccbot, anthropic-ai, claude-web, perplexitybot"
                   }
                 },
                 {
@@ -922,7 +979,7 @@
                   "label": "Conclusion",
                   "finding": {
                     "outcome": "positive",
-                    "summary": "No AI-specific bot rules; wildcard rules apply to all crawlers including AI bots"
+                    "summary": "Found rules for 8 AI bots"
                   }
                 }
               ],
@@ -955,9 +1012,9 @@
                     "statusText": "OK",
                     "headers": {
                       "content-type": "text/plain; charset=utf-8",
-                      "cf-ray": "a3ccd4ebde814967-IAD"
+                      "cf-ray": "a3e1d4aa4a764967-IAD"
                     },
-                    "bodyPreview": "# sortmy.london — a free civic wayfinder; fully crawlable.\nUser-agent: *\nAllow: /\nContent-Signal: ai-input=yes, ai-train=no\n\nSitemap: https://sortmy.london/sitemap.xml\n"
+                    "bodyPreview": "# sortmy.london — a free civic wayfinder; fully crawlable.\nUser-agent: *\nAllow: /\nContent-Signal: ai-input=yes, ai-train=no\n\n# Explicit per-bot allow for known AI crawlers/agents (the wildcard rule above already allows\n# everyone — these lines exist so a scanner that only checks for named AI user-agents, not\n# wildcard coverage, can see the intent stated explicitly too).\nUser-agent: GPTBot\nAllow: /\nUser-agent: ChatGPT-User\nAllow: /\nUser-agent: OAI-SearchBot\nAllow: /\nUser-agent: ClaudeBot\nAllow: ..."
                   },
                   "finding": {
                     "outcome": "positive",
@@ -999,7 +1056,7 @@
                     "statusText": "Not Found",
                     "headers": {
                       "content-type": "text/html; charset=utf-8",
-                      "cf-ray": "a3ccd4ebfeb64967-IAD"
+                      "cf-ray": "a3e1d4aa7ac44967-IAD"
                     }
                   },
                   "finding": {
@@ -1016,13 +1073,20 @@
                   }
                 }
               ],
-              "durationMs": 21
+              "durationMs": 33
             }
           },
           "discovery": {
             "apiCatalog": {
-              "status": "fail",
-              "message": "API Catalog not found",
+              "status": "pass",
+              "message": "API Catalog found with 2 APIs listed",
+              "details": {
+                "apiCount": 2,
+                "linksetEntries": 1,
+                "hasItems": true,
+                "hasNestedCatalogs": false,
+                "correctContentType": true
+              },
               "evidence": [
                 {
                   "action": "fetch",
@@ -1035,28 +1099,46 @@
                     }
                   },
                   "response": {
-                    "status": 404,
-                    "statusText": "Not Found",
+                    "status": 200,
+                    "statusText": "OK",
                     "headers": {
-                      "content-type": "text/html; charset=utf-8",
-                      "cf-ray": "a3ccd4ec3f224967-IAD"
-                    }
+                      "content-type": "application/linkset+json; profile=\"https://www.rfc-editor.org/info/rfc9727\"",
+                      "content-length": "529",
+                      "cf-ray": "a3e1d4aacb864967-IAD"
+                    },
+                    "bodyPreview": "{\"linkset\":[{\"anchor\":\"https://sortmy.london/\",\"service-desc\":[{\"href\":\"https://sortmy.london/openapi.json\",\"type\":\"application/json\"}],\"item\":[{\"href\":\"https://sortmy.london/api/run\",\"title\":\"Run a civic-lookup workflow (POST, text/event-stream response)\"},{\"href\":\"https://sortmy.london/api/freshness\",\"title\":\"Corpus freshness and row counts (GET, application/json)\"}]}]}"
                   },
                   "finding": {
-                    "outcome": "negative",
-                    "summary": "Server returned 404 -- API Catalog not found"
+                    "outcome": "positive",
+                    "summary": "Received 200 with valid JSON response"
+                  }
+                },
+                {
+                  "action": "validate",
+                  "label": "Validate Linkset structure",
+                  "finding": {
+                    "outcome": "positive",
+                    "summary": "Found \"linkset\" array with 1 entries"
+                  }
+                },
+                {
+                  "action": "validate",
+                  "label": "Analyze linkset entries",
+                  "finding": {
+                    "outcome": "positive",
+                    "summary": "2 APIs listed, correct content-type"
                   }
                 },
                 {
                   "action": "conclude",
                   "label": "Conclusion",
                   "finding": {
-                    "outcome": "negative",
-                    "summary": "API Catalog not found"
+                    "outcome": "positive",
+                    "summary": "API Catalog found with 2 APIs listed"
                   }
                 }
               ],
-              "durationMs": 57
+              "durationMs": 70
             },
             "oauthDiscovery": {
               "status": "fail",
@@ -1074,7 +1156,7 @@
                     "statusText": "Not Found",
                     "headers": {
                       "content-type": "text/html; charset=utf-8",
-                      "cf-ray": "a3ccd4ebfeb34967-IAD"
+                      "cf-ray": "a3e1d4aa7ac14967-IAD"
                     }
                   },
                   "finding": {
@@ -1094,7 +1176,7 @@
                     "statusText": "Not Found",
                     "headers": {
                       "content-type": "text/html; charset=utf-8",
-                      "cf-ray": "a3ccd4ec0ec94967-IAD"
+                      "cf-ray": "a3e1d4aa8ada4967-IAD"
                     }
                   },
                   "finding": {
@@ -1111,32 +1193,12 @@
                   }
                 }
               ],
-              "durationMs": 25
+              "durationMs": 49
             },
             "oauthProtectedResource": {
               "status": "fail",
               "message": "No OAuth Protected Resource Metadata found",
               "evidence": [
-                {
-                  "action": "fetch",
-                  "label": "GET /.well-known/oauth-protected-resource",
-                  "request": {
-                    "url": "https://sortmy.london/.well-known/oauth-protected-resource",
-                    "method": "GET"
-                  },
-                  "response": {
-                    "status": 404,
-                    "statusText": "Not Found",
-                    "headers": {
-                      "content-type": "text/html; charset=utf-8",
-                      "cf-ray": "a3ccd4ec0ecc4967-IAD"
-                    }
-                  },
-                  "finding": {
-                    "outcome": "negative",
-                    "summary": "Returned 404"
-                  }
-                },
                 {
                   "action": "fetch",
                   "label": "GET /",
@@ -1149,12 +1211,33 @@
                     "statusText": "OK",
                     "headers": {
                       "content-type": "text/html; charset=utf-8",
-                      "cf-ray": "a3ccd4ec1ee54967-IAD"
+                      "link": "</sitemap.xml>; rel=\"sitemap\", </index.md>; rel=\"alternate\"; type=\"text/markdown\", </openapi.json>; rel=\"service-desc\"; type=\"application/json\", </.well-known/api-catalog>; rel=\"api-catalog\"; type=\"application/linkset+json\"",
+                      "cf-ray": "a3e1d4aa9b124967-IAD"
                     }
                   },
                   "finding": {
                     "outcome": "neutral",
                     "summary": "Target resource returned 200 (no WWW-Authenticate header)"
+                  }
+                },
+                {
+                  "action": "fetch",
+                  "label": "GET /.well-known/oauth-protected-resource",
+                  "request": {
+                    "url": "https://sortmy.london/.well-known/oauth-protected-resource",
+                    "method": "GET"
+                  },
+                  "response": {
+                    "status": 404,
+                    "statusText": "Not Found",
+                    "headers": {
+                      "content-type": "text/html; charset=utf-8",
+                      "cf-ray": "a3e1d4aa8ae64967-IAD"
+                    }
+                  },
+                  "finding": {
+                    "outcome": "negative",
+                    "summary": "Returned 404"
                   }
                 },
                 {
@@ -1166,11 +1249,11 @@
                   }
                 }
               ],
-              "durationMs": 34
+              "durationMs": 47
             },
             "authMd": {
               "status": "fail",
-              "message": "auth.md not found",
+              "message": "auth.md exists but is missing the expected Auth.md heading",
               "evidence": [
                 {
                   "action": "fetch",
@@ -1183,16 +1266,26 @@
                     }
                   },
                   "response": {
-                    "status": 404,
-                    "statusText": "Not Found",
+                    "status": 200,
+                    "statusText": "OK",
                     "headers": {
-                      "content-type": "text/html; charset=utf-8",
-                      "cf-ray": "a3ccd4ec2eec4967-IAD"
-                    }
+                      "content-type": "text/markdown; charset=utf-8",
+                      "content-length": "1441",
+                      "cf-ray": "a3e1d4aaab364967-IAD"
+                    },
+                    "bodyPreview": "# Authentication\n\nsortmy.london's API requires **no authentication**. There is no login, no account, no API key\nto request, and no OAuth flow anywhere on this site — this file exists to say so plainly, per\nthe [auth.md convention](https://workos.com/auth-md), rather than leave agents guessing.\n\n## What actually gates access\n\n- **Per-IP rate limiting** on `POST /api/run` (see `/openapi.json`) — excess requests get a\n  `429`. There is no way to authenticate for a higher limit; the limit is the sam..."
                   },
                   "finding": {
+                    "outcome": "positive",
+                    "summary": "Received 200 response with content-type: text/markdown; charset=utf-8"
+                  }
+                },
+                {
+                  "action": "parse",
+                  "label": "Validate auth.md heading",
+                  "finding": {
                     "outcome": "negative",
-                    "summary": "Server returned 404 - auth.md not found"
+                    "summary": "No H1 heading containing \"auth.md\" found"
                   }
                 },
                 {
@@ -1200,11 +1293,11 @@
                   "label": "Conclusion",
                   "finding": {
                     "outcome": "negative",
-                    "summary": "auth.md not found"
+                    "summary": "auth.md exists but is missing the expected Auth.md heading"
                   }
                 }
               ],
-              "durationMs": 38
+              "durationMs": 46
             },
             "mcpServerCard": {
               "status": "fail",
@@ -1222,7 +1315,7 @@
                     "statusText": "Not Found",
                     "headers": {
                       "content-type": "text/html; charset=utf-8",
-                      "cf-ray": "a3ccd4ec2eee4967-IAD"
+                      "cf-ray": "a3e1d4aaab4b4967-IAD"
                     }
                   },
                   "finding": {
@@ -1242,7 +1335,7 @@
                     "statusText": "Not Found",
                     "headers": {
                       "content-type": "text/html; charset=utf-8",
-                      "cf-ray": "a3ccd4ec2ef14967-IAD"
+                      "cf-ray": "a3e1d4aabb624967-IAD"
                     }
                   },
                   "finding": {
@@ -1262,7 +1355,7 @@
                     "statusText": "Not Found",
                     "headers": {
                       "content-type": "text/html; charset=utf-8",
-                      "cf-ray": "a3ccd4ec2efb4967-IAD"
+                      "cf-ray": "a3e1d4aacb774967-IAD"
                     }
                   },
                   "finding": {
@@ -1279,7 +1372,7 @@
                   }
                 }
               ],
-              "durationMs": 42
+              "durationMs": 74
             },
             "a2aAgentCard": {
               "status": "fail",
@@ -1297,7 +1390,7 @@
                     "statusText": "Not Found",
                     "headers": {
                       "content-type": "text/html; charset=utf-8",
-                      "cf-ray": "a3ccd4ec2f054967-IAD"
+                      "cf-ray": "a3e1d4aacb824967-IAD"
                     }
                   },
                   "finding": {
@@ -1314,11 +1407,16 @@
                   }
                 }
               ],
-              "durationMs": 44
+              "durationMs": 74
             },
             "agentSkills": {
-              "status": "fail",
-              "message": "Agent Skills index not found",
+              "status": "pass",
+              "message": "Agent Skills index exists with valid JSON",
+              "details": {
+                "skillCount": 6,
+                "specVersion": "0.1.0",
+                "path": "/.well-known/agent-skills/index.json"
+              },
               "evidence": [
                 {
                   "action": "fetch",
@@ -1328,48 +1426,53 @@
                     "method": "GET"
                   },
                   "response": {
-                    "status": 404,
-                    "statusText": "Not Found",
+                    "status": 200,
+                    "statusText": "OK",
                     "headers": {
-                      "content-type": "text/html; charset=utf-8",
-                      "cf-ray": "a3ccd4ec3f184967-IAD"
+                      "content-type": "application/json",
+                      "content-length": "3073",
+                      "cf-ray": "a3e1d4aacb804967-IAD"
                     }
                   },
                   "finding": {
-                    "outcome": "neutral",
-                    "summary": "v0.2.0 path returned 404 — trying legacy path"
+                    "outcome": "positive",
+                    "summary": "Received 200 response with content-type: application/json"
                   }
                 },
                 {
-                  "action": "fetch",
-                  "label": "GET /.well-known/skills/index.json",
-                  "request": {
-                    "url": "https://sortmy.london/.well-known/skills/index.json",
-                    "method": "GET"
-                  },
-                  "response": {
-                    "status": 404,
-                    "statusText": "Not Found",
-                    "headers": {
-                      "content-type": "text/html; charset=utf-8",
-                      "cf-ray": "a3ccd4ec6f6c4967-IAD"
-                    }
-                  },
+                  "action": "validate",
+                  "label": "Detect spec version",
                   "finding": {
-                    "outcome": "negative",
-                    "summary": "Server returned 404 — Agent Skills index not found"
+                    "outcome": "neutral",
+                    "summary": "No $schema field — treating as v0.1.0 format"
+                  }
+                },
+                {
+                  "action": "validate",
+                  "label": "Count skills",
+                  "finding": {
+                    "outcome": "neutral",
+                    "summary": "Found \"skills\" array with 6 entries"
+                  }
+                },
+                {
+                  "action": "validate",
+                  "label": "Validate skill count",
+                  "finding": {
+                    "outcome": "positive",
+                    "summary": "Index contains 6 skills"
                   }
                 },
                 {
                   "action": "conclude",
                   "label": "Conclusion",
                   "finding": {
-                    "outcome": "negative",
-                    "summary": "Agent Skills index not found"
+                    "outcome": "positive",
+                    "summary": "Agent Skills index exists with valid JSON"
                   }
                 }
               ],
-              "durationMs": 88
+              "durationMs": 73
             },
             "webMcp": {
               "status": "fail",
@@ -1412,7 +1515,7 @@
                   }
                 }
               ],
-              "durationMs": 4535
+              "durationMs": 3932
             },
             "ard": {
               "status": "fail",
@@ -1449,7 +1552,7 @@
                     "statusText": "Not Found",
                     "headers": {
                       "content-type": "text/html; charset=utf-8",
-                      "cf-ray": "a3ccd4ebfeb54967-IAD"
+                      "cf-ray": "a3e1d4aa7ac54967-IAD"
                     }
                   },
                   "finding": {
@@ -1473,7 +1576,7 @@
                     "headers": {
                       "content-type": "application/dns-json"
                     },
-                    "bodyPreview": "{\"Status\":0,\"TC\":false,\"RD\":true,\"RA\":true,\"AD\":true,\"CD\":false,\"Question\":[{\"name\":\"_catalog._agents.sortmy.london\",\"type\":16}],\"Authority\":[{\"name\":\"sortmy.london\",\"type\":6,\"TTL\":1800,\"data\":\"cullen.ns.cloudflare.com. dns.cloudflare.com. 2415052951 10000 2400 604800 1800\"},{\"name\":\"sortmy.london\",\"type\":46,\"TTL\":1800,\"data\":\"SOA 13 2 1800 1789787609 1789607609 34505 sortmy.london. kID6N39zXptlFbVjUrUgI7jZ0/LS4SsRufZ1PsKjV8gJTbxlPpLrgXu1fJDj3W2Ar7LQouRr379gj+M0Lb/7Tg==\"},{\"name\":\"_catalog._agen..."
+                    "bodyPreview": "{\"Status\":0,\"TC\":false,\"RD\":true,\"RA\":true,\"AD\":true,\"CD\":false,\"Question\":[{\"name\":\"_catalog._agents.sortmy.london\",\"type\":16}],\"Authority\":[{\"name\":\"sortmy.london\",\"type\":6,\"TTL\":1800,\"data\":\"cullen.ns.cloudflare.com. dns.cloudflare.com. 2415052951 10000 2400 604800 1800\"},{\"name\":\"sortmy.london\",\"type\":46,\"TTL\":1800,\"data\":\"SOA 13 2 1800 1790007800 1789827800 34505 sortmy.london. Iv8ZnDmiZ6DCY+wRVMBDo7co79A29r/eTCcKt80Kiub9pzuOISlGiXl/M5+6tLv6uYAdwvkBJUutKD3J+MxRIQ==\"},{\"name\":\"_catalog._agen..."
                   },
                   "finding": {
                     "outcome": "neutral",
@@ -1496,7 +1599,7 @@
                     "headers": {
                       "content-type": "application/dns-json"
                     },
-                    "bodyPreview": "{\"Status\":0,\"TC\":false,\"RD\":true,\"RA\":true,\"AD\":true,\"CD\":false,\"Question\":[{\"name\":\"_search._agents.sortmy.london\",\"type\":33}],\"Authority\":[{\"name\":\"sortmy.london\",\"type\":6,\"TTL\":1800,\"data\":\"cullen.ns.cloudflare.com. dns.cloudflare.com. 2415052951 10000 2400 604800 1800\"},{\"name\":\"sortmy.london\",\"type\":46,\"TTL\":1800,\"data\":\"SOA 13 2 1800 1789787609 1789607609 34505 sortmy.london. hVe/q6KOM82vYcVnnTf67cMQ7Rj1ShqoWq5oiXLwjK3Fr3jkYM/ao+d1iJ93Aj9iAPAgFVyurDYwGT4W12fY2Q==\"},{\"name\":\"_search._agents..."
+                    "bodyPreview": "{\"Status\":0,\"TC\":false,\"RD\":true,\"RA\":true,\"AD\":true,\"CD\":false,\"Question\":[{\"name\":\"_search._agents.sortmy.london\",\"type\":33}],\"Authority\":[{\"name\":\"sortmy.london\",\"type\":6,\"TTL\":1800,\"data\":\"cullen.ns.cloudflare.com. dns.cloudflare.com. 2415052951 10000 2400 604800 1800\"},{\"name\":\"sortmy.london\",\"type\":46,\"TTL\":1800,\"data\":\"SOA 13 2 1800 1790007800 1789827800 34505 sortmy.london. 4+/9WZz86AfnmodexkgMLLFng9veSgzWxU8dBA+w5P0QvieOoMlFIydpLg65/lUGhhauwV5Y3K2Mw0zXV/Luhw==\"},{\"name\":\"_search._agents..."
                   },
                   "finding": {
                     "outcome": "neutral",
@@ -1516,7 +1619,7 @@
                 "discoveryMechanisms": [],
                 "searchEndpoints": []
               },
-              "durationMs": 22
+              "durationMs": 46
             }
           },
           "commerce": {
@@ -1536,32 +1639,13 @@
                     "statusText": "OK",
                     "headers": {
                       "content-type": "text/html; charset=utf-8",
-                      "cf-ray": "a3ccd4ec4f2e4967-IAD"
+                      "link": "</sitemap.xml>; rel=\"sitemap\", </index.md>; rel=\"alternate\"; type=\"text/markdown\", </openapi.json>; rel=\"service-desc\"; type=\"application/json\", </.well-known/api-catalog>; rel=\"api-catalog\"; type=\"application/linkset+json\"",
+                      "cf-ray": "a3e1d4aaebcd4967-IAD"
                     }
                   },
                   "finding": {
                     "outcome": "neutral",
                     "summary": "/ returned 200 (not 402)"
-                  }
-                },
-                {
-                  "action": "fetch",
-                  "label": "GET /api",
-                  "request": {
-                    "url": "https://sortmy.london/api",
-                    "method": "GET"
-                  },
-                  "response": {
-                    "status": 404,
-                    "statusText": "Not Found",
-                    "headers": {
-                      "content-type": "text/html; charset=utf-8",
-                      "cf-ray": "a3ccd4ec4f324967-IAD"
-                    }
-                  },
-                  "finding": {
-                    "outcome": "neutral",
-                    "summary": "/api returned 404 (not 402)"
                   }
                 },
                 {
@@ -1577,12 +1661,32 @@
                     "headers": {
                       "content-type": "text/plain;charset=UTF-8",
                       "content-length": "9",
-                      "cf-ray": "a3ccd4ec5f444967-IAD"
+                      "cf-ray": "a3e1d4aafbda4967-IAD"
                     }
                   },
                   "finding": {
                     "outcome": "neutral",
                     "summary": "/api/v1 returned 404 (not 402)"
+                  }
+                },
+                {
+                  "action": "fetch",
+                  "label": "GET /api",
+                  "request": {
+                    "url": "https://sortmy.london/api",
+                    "method": "GET"
+                  },
+                  "response": {
+                    "status": 404,
+                    "statusText": "Not Found",
+                    "headers": {
+                      "content-type": "text/html; charset=utf-8",
+                      "cf-ray": "a3e1d4aafbd54967-IAD"
+                    }
+                  },
+                  "finding": {
+                    "outcome": "neutral",
+                    "summary": "/api returned 404 (not 402)"
                   }
                 },
                 {
@@ -1597,7 +1701,7 @@
                     "statusText": "OK",
                     "headers": {
                       "content-type": "application/json",
-                      "cf-ray": "a3ccd4ec4f274967-IAD"
+                      "cf-ray": "a3e1d4aaebc44967-IAD"
                     }
                   }
                 },
@@ -1622,7 +1726,7 @@
                   }
                 }
               ],
-              "durationMs": 1076
+              "durationMs": 822
             },
             "mpp": {
               "status": "neutral",
@@ -1636,16 +1740,17 @@
                     "method": "GET"
                   },
                   "response": {
-                    "status": 404,
-                    "statusText": "Not Found",
+                    "status": 200,
+                    "statusText": "OK",
                     "headers": {
-                      "content-type": "text/html; charset=utf-8",
-                      "cf-ray": "a3ccd4ec5f564967-IAD"
+                      "content-type": "application/json",
+                      "content-length": "3760",
+                      "cf-ray": "a3e1d4aafbdc4967-IAD"
                     }
                   },
                   "finding": {
                     "outcome": "neutral",
-                    "summary": "/openapi.json returned 404"
+                    "summary": "/openapi.json found but no operations with x-payment-info"
                   }
                 },
                 {
@@ -1657,7 +1762,7 @@
                   }
                 }
               ],
-              "durationMs": 77
+              "durationMs": 90
             },
             "ucp": {
               "status": "neutral",
@@ -1675,7 +1780,7 @@
                     "statusText": "Not Found",
                     "headers": {
                       "content-type": "text/html; charset=utf-8",
-                      "cf-ray": "a3ccd4ec3f244967-IAD"
+                      "cf-ray": "a3e1d4aadbaf4967-IAD"
                     }
                   },
                   "finding": {
@@ -1692,7 +1797,7 @@
                   }
                 }
               ],
-              "durationMs": 56
+              "durationMs": 82
             },
             "acp": {
               "status": "neutral",
@@ -1710,7 +1815,7 @@
                     "statusText": "Not Found",
                     "headers": {
                       "content-type": "text/html; charset=utf-8",
-                      "cf-ray": "a3ccd4ec5f584967-IAD"
+                      "cf-ray": "a3e1d4ab0bec4967-IAD"
                     }
                   },
                   "finding": {
@@ -1727,7 +1832,7 @@
                   }
                 }
               ],
-              "durationMs": 76
+              "durationMs": 103
             },
             "ap2": {
               "status": "neutral",
@@ -1779,6 +1884,6 @@
       "evidence": {}
     }
   ],
-  "score": 23,
-  "grade": "F"
+  "score": 39,
+  "grade": "D"
 }

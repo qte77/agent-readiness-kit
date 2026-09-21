@@ -5,10 +5,10 @@
  * `cloudflareMcp.ts` checks the static presence/shape of `/.well-known/agent-card.json`.
  * This module re-fetches that card (module independence — no cross-module Finding passing,
  * per architecture.md; the orchestrator merges each source's Finding[] independently),
- * reads its declared service endpoint (`url`), and attempts a minimal JSON-RPC 2.0
- * `message/send` round trip against it (A2A protocol spec,
- * a2a-protocol.org/v0.3.0/specification — verified at source 2026-09-16). A live round
- * trip that returns a well-formed `result` upgrades the static "file exists" pass to a
+ * reads its declared service endpoint (`url`, or `supportedInterfaces[]`'s JSONRPC-binding
+ * entry), and attempts a minimal JSON-RPC 2.0 `SendMessage` round trip against it (A2A
+ * protocol spec, a2a-protocol.org/v1.0.0/specification — verified at source 2026-09-21). A
+ * live round trip that returns a well-formed `result` upgrades the static "file exists" pass to a
  * stronger pass; an unreachable/non-conformant endpoint downgrades to fail/warn. Both
  * Findings share the same crosswalk signal id (`a2a-agent-card`) but are distinct entries
  * (source-prefixed `id`) — see `cloudflareMcp.ts` for the static half.
@@ -24,15 +24,41 @@ function buildMessageSendRequest(): unknown {
   return {
     jsonrpc: "2.0",
     id: "agent-readiness-kit-probe",
-    method: "message/send",
+    method: "SendMessage",
     params: {
       message: {
-        role: "user",
-        parts: [{ kind: "text", text: "agent-readiness-kit readiness probe" }],
+        role: "ROLE_USER",
+        parts: [{ text: "agent-readiness-kit readiness probe" }],
         messageId: "agent-readiness-kit-probe-message",
       },
     },
   };
+}
+
+/**
+ * v1.0.0 dropped AgentCard's flat `url` in favor of `supportedInterfaces[]` (each entry
+ * naming a `protocolBinding` + its own `url`). Accept either shape: a real card may still
+ * be the legacy v0.3.0 flat-`url` form, or the new interfaces array with a JSONRPC entry.
+ */
+function extractEndpoint(cardBody: unknown): string | undefined {
+  if (typeof cardBody !== "object" || cardBody === null) return undefined;
+  const record = cardBody as Record<string, unknown>;
+
+  const url = record["url"];
+  if (typeof url === "string" && url.length > 0) return url;
+
+  const interfaces = record["supportedInterfaces"];
+  if (Array.isArray(interfaces) && interfaces.length > 0) {
+    const jsonRpcInterface = interfaces.find((entry) => {
+      if (typeof entry !== "object" || entry === null) return false;
+      const binding = (entry as Record<string, unknown>)["protocolBinding"];
+      return typeof binding === "string" && binding.toLowerCase() === "jsonrpc";
+    }) as Record<string, unknown> | undefined;
+    const jsonRpcUrl = jsonRpcInterface?.["url"];
+    if (typeof jsonRpcUrl === "string" && jsonRpcUrl.length > 0) return jsonRpcUrl;
+  }
+
+  return undefined;
 }
 
 function isJsonRpcResult(body: unknown): boolean {
@@ -92,16 +118,13 @@ export async function scanMcpA2aProbe(baseUrl: string): Promise<Finding[]> {
     ];
   }
 
-  const endpoint =
-    typeof cardBody === "object" && cardBody !== null
-      ? (cardBody as Record<string, unknown>)["url"]
-      : undefined;
+  const endpoint = extractEndpoint(cardBody);
 
-  if (typeof endpoint !== "string" || endpoint.length === 0) {
+  if (endpoint === undefined) {
     return [
       finding(
         "unknown",
-        `${AGENT_CARD_PATH} has no usable "url" field; skipping live A2A probe`,
+        `${AGENT_CARD_PATH} has no usable "url" or "supportedInterfaces" field; skipping live A2A probe`,
       ),
     ];
   }
@@ -117,8 +140,8 @@ export async function scanMcpA2aProbe(baseUrl: string): Promise<Finding[]> {
     return [
       finding(
         "fail",
-        `POST message/send to ${endpoint} failed: ${errorMessage(cause)}`,
-        `Ensure the A2A endpoint declared in ${AGENT_CARD_PATH} ("url": "${endpoint}") accepts a JSON-RPC 2.0 message/send request.`,
+        `POST SendMessage to ${endpoint} failed: ${errorMessage(cause)}`,
+        `Ensure the A2A endpoint declared in ${AGENT_CARD_PATH} (resolved to "${endpoint}") accepts a JSON-RPC 2.0 SendMessage request.`,
         { endpoint },
       ),
     ];
@@ -128,7 +151,7 @@ export async function scanMcpA2aProbe(baseUrl: string): Promise<Finding[]> {
     return [
       finding(
         "warn",
-        `POST message/send to ${endpoint} returned ${probeResponse.status} — endpoint is reachable but requires auth this unauthenticated probe cannot provide`,
+        `POST SendMessage to ${endpoint} returned ${probeResponse.status} — endpoint is reachable but requires auth this unauthenticated probe cannot provide`,
         `Confirm the auth flow declared in the agent card's securitySchemes lets a legitimate A2A client reach ${endpoint}; an unauthenticated probe cannot verify full protocol conformance behind auth.`,
         { endpoint, httpStatus: probeResponse.status },
       ),
@@ -139,8 +162,8 @@ export async function scanMcpA2aProbe(baseUrl: string): Promise<Finding[]> {
     return [
       finding(
         "fail",
-        `POST message/send to ${endpoint} returned ${probeResponse.status}`,
-        `Ensure the A2A endpoint declared in ${AGENT_CARD_PATH} handles message/send and returns a successful JSON-RPC 2.0 response.`,
+        `POST SendMessage to ${endpoint} returned ${probeResponse.status}`,
+        `Ensure the A2A endpoint declared in ${AGENT_CARD_PATH} handles SendMessage and returns a successful JSON-RPC 2.0 response.`,
         { endpoint, httpStatus: probeResponse.status },
       ),
     ];
@@ -153,7 +176,7 @@ export async function scanMcpA2aProbe(baseUrl: string): Promise<Finding[]> {
     return [
       finding(
         "fail",
-        `POST message/send to ${endpoint} returned ${probeResponse.status} but the body is not valid JSON`,
+        `POST SendMessage to ${endpoint} returned ${probeResponse.status} but the body is not valid JSON`,
         `Ensure the A2A endpoint returns a valid JSON-RPC 2.0 response body.`,
         { endpoint, httpStatus: probeResponse.status },
       ),
@@ -164,7 +187,7 @@ export async function scanMcpA2aProbe(baseUrl: string): Promise<Finding[]> {
     return [
       finding(
         "pass",
-        `Live message/send round trip against ${endpoint} succeeded`,
+        `Live SendMessage round trip against ${endpoint} succeeded`,
         undefined,
         { endpoint, httpStatus: probeResponse.status },
       ),
@@ -175,8 +198,8 @@ export async function scanMcpA2aProbe(baseUrl: string): Promise<Finding[]> {
     return [
       finding(
         "warn",
-        `${endpoint} speaks JSON-RPC 2.0 but message/send returned an error response`,
-        `Investigate the message/send error at ${endpoint} — the endpoint responds correctly to JSON-RPC but this probe call did not succeed.`,
+        `${endpoint} speaks JSON-RPC 2.0 but SendMessage returned an error response`,
+        `Investigate the SendMessage error at ${endpoint} — the endpoint responds correctly to JSON-RPC but this probe call did not succeed.`,
         { endpoint, httpStatus: probeResponse.status, body: probeBody },
       ),
     ];
@@ -185,8 +208,8 @@ export async function scanMcpA2aProbe(baseUrl: string): Promise<Finding[]> {
   return [
     finding(
       "fail",
-      `${endpoint} returned ${probeResponse.status} but the body is not a recognizable JSON-RPC 2.0 message/send response`,
-      `Ensure the endpoint declared in ${AGENT_CARD_PATH} implements A2A's message/send per the JSON-RPC 2.0 result/error shape.`,
+      `${endpoint} returned ${probeResponse.status} but the body is not a recognizable JSON-RPC 2.0 SendMessage response`,
+      `Ensure the endpoint declared in ${AGENT_CARD_PATH} implements A2A's SendMessage per the JSON-RPC 2.0 result/error shape.`,
       { endpoint, httpStatus: probeResponse.status, body: probeBody },
     ),
   ];

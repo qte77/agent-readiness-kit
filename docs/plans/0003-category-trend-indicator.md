@@ -2,7 +2,7 @@
 title: Agent-Readiness Kit — per-category trend indicator
 description: Add a small "did this category get better/worse since last run" indicator to each dashboard card's category badges, using history data already collected — no new scan sources, no new API calls.
 date: 2026-09-18
-updated: 2026-09-19
+updated: 2026-09-21
 status: closed
 issues: []
 predecessor: 2
@@ -12,28 +12,49 @@ predecessor: 2
 
 ## Status (read this first — onboards the next session)
 
-**Closed 2026-09-19 — shipped with one deferred verification gap.** Rows 1-2 shipped in full
-(PR #49, merged): `scripts/buildSite.ts` computes `categoryStatus`, `site/app.js`/`style.css`
-render the ▲/▼ trend arrow. **Deviation from the design's done-when bar**: row 3's full
-patchright/e2e pass (desktop/mobile/tablet × light/dark, a synthetic history fixture forcing a
-real ▲ and ▼, live re-screenshot) was **not performed** — the implementing agent's session was
+**Fully closed 2026-09-21 — the deferred verification gap is now resolved.** Rows 1-2 shipped in
+full (PR #49, merged): `scripts/buildSite.ts` computes `categoryStatus`, `site/app.js`/
+`style.css` render the ▲/▼ trend arrow. Row 3's real browser verification — deferred at merge
+time (see history below) — has now been done properly, using `polyfetch-scrape`'s patchright/
+Chromium substrate (`/workspaces/qte77/polyfetch-scrape`, `render_session()`), both locally and
+against the live production deploy:
+
+- **Local, real (unchanged) history, 6 viewport/theme combos** (desktop 1280×800, `iPhone 13`,
+  `iPad Pro 11` × light/dark): all 3 cards render, zero `console_errors`, zero `network_failures`,
+  threshold preset buttons (High/Mid/Low) click correctly and flip `aria-pressed`.
+- **Local, synthetic history forcing a real ▲ and ▼** (hand-edited
+  `site-dist/data/history/qte77-github-io.json` — a gitignored build artifact, safe to mutate,
+  regenerated fresh on the next real build): `Agent-to-Agent` (current status `pass`, previous
+  forced to `fail`) correctly showed **▲**; `Discovery` (current `fail`, previous forced to
+  `pass`) correctly showed **▼** — confirmed via 4 independent signals, not just a class name:
+  `inner_text()` ("Disc 2P 4F 0W ▼", "A2A 3P 0F 0W ▲"), the `title`/`aria-label` attribute, the
+  DOM class (`.category-trend-up`/`-down`, count 1 each), and `getComputedStyle(el).color`
+  matching `--color-positive`/`--color-negative`'s exact hex values in **both** light
+  (`#4a6818`/`#983828`) and dark (`#8aa860`/`#c08060`) mode. No inversion, across all 6 combos.
+- **Remote, live production** (`https://qte77.github.io/agent-readiness-kit/`, same 6-combo
+  matrix): 3 cards, 0 arrows (correct — real tracked-property data is still identical
+  run-to-run), zero console errors, zero network failures.
+
+Full verification script output and screenshots were reviewed as part of this check (not
+committed — verification evidence, not repo artifacts). See the remaining-work table below;
+row 3 is now fully done, nothing left open from this arc.
+
+**Deferred-verification history (kept for context, now resolved):** row 3's full patchright/e2e
+pass was **not performed** before PR #49 merged — the implementing agent's session was
 interrupted mid-arc; recovery work (review + finish) covered unit tests (152→155 passing),
-`tsc --noEmit`, and a build/inspect smoke test against real history (confirmed `categoryStatus`
-backfills correctly, and the real "no-change" case renders no arrows), but stopped short of
-actual browser verification. This was disclosed in PR #49's body before merge, and the owner
-chose to merge anyway rather than block on it. A later WebFetch-based live check could not
-substitute for real verification (WebFetch doesn't execute JavaScript, so it can't observe this
-client-rendered dashboard's actual output). **Follow-up**: a real browser check (patchright or
-equivalent) of the live dashboard is still owed — tracked as a fresh small item, not silently
-dropped (see the remaining-work table's row 3 note).
+`tsc --noEmit`, and a build/inspect smoke test against real history only. This was disclosed in
+PR #49's body before merge, and the owner chose to merge anyway rather than block on it. A later
+WebFetch-based live check could not substitute for real verification (WebFetch doesn't execute
+JavaScript, so it can't observe this client-rendered dashboard's actual output) — which is why a
+real patchright pass was still owed until now.
 
 **What shipped, in order** (full detail in the remaining-work table below):
 1. Row 1 — `scripts/buildSite.ts` schema change + pure logic, RED-first tests. **Shipped.**
 2. Row 2 — `site/app.js` + `site/style.css` rendering (depends on row 1's `categoryStatus`
-   field existing). **Shipped**, code-level-verified only (see deviation note above).
+   field existing). **Shipped and now fully browser-verified** (see above).
 3. Row 3 — verification: rebuild against real history, polyfetch/patchright e2e pass, ship.
-   **Partially done** — build/inspect + unit tests done; e2e pass and live re-screenshot still
-   outstanding.
+   **Fully done 2026-09-21** — build/inspect, unit tests, e2e pass, and live re-screenshot all
+   complete.
 
 **The loop** (same one used for every prior row this session): RED-first test → minimum
 implementation to pass → `npx vitest run` + `npx tsc --noEmit` green → commit on a topic
@@ -304,8 +325,8 @@ but it alone cannot prove the arrow-rendering code path works.
 | # | Item | Gate | Depends on | Done-when |
 |---|------|------|------------|-----------|
 | 1 | ~~`scripts/buildSite.ts`: `categoryStatuses()` + `categoryStatus` field on `RunSummary`, RED-first tests~~ | agent | — | **Shipped** (PR #49) — 3 new tests, all pass; `npx tsc --noEmit` clean |
-| 2 | ~~`site/app.js` trend-arrow rendering + `site/style.css` trend classes~~ | agent | 1 | **Shipped** (PR #49) — logic traced correct by hand (rank comparison, no inversion); **not** verified in a real browser (see Status deviation note) |
-| 3 | Real browser (patchright or equivalent) verification of the live dashboard: confirm the real "no-change" case renders cleanly across viewports/themes with zero console errors, then force a synthetic ▲/▼ via a temporary local fixture and confirm correct rendering | agent | 1, 2 | Still open — carried forward from row 3's original done-when, which was not met before merge. Not urgent (all 3 tracked properties currently have identical category status, so the live "no-arrows" case is low-risk), but owed before the arrow-rendering path can be called verified |
+| 2 | ~~`site/app.js` trend-arrow rendering + `site/style.css` trend classes~~ | agent | 1 | **Shipped** (PR #49), **now browser-verified** (2026-09-21) — see row 3 |
+| 3 | ~~Real browser (patchright or equivalent) verification of the live dashboard~~ | agent | 1, 2 | **Done 2026-09-21** — `polyfetch-scrape`'s patchright substrate, 6 viewport/theme combos (desktop/`iPhone 13`/`iPad Pro 11` × light/dark), local real-data baseline (0 arrows, 0 console errors, 0 network failures) + local synthetic fixture (real ▲ and ▼, correct direction/color via `inner_text`/`title`/class/`getComputedStyle`, no inversion) + remote production re-screenshot (0 arrows, 0 errors, matches local baseline) |
 
 ## Tests (strict RED-first; modules only)
 
@@ -335,9 +356,9 @@ but it alone cannot prove the arrow-rendering code path works.
 
 ## At arc close
 
-**Closed 2026-09-19.** Rows 1-2 shipped as designed — the `STATUS_PRIORITY` index-inversion risk
-the design flagged did **not** need different handling; the implementation matched the design
-exactly (`statusRank(current) > statusRank(previous)` ⇒ improved). Row 3's browser-verification
-gap (see Status section) is migrated forward rather than left silently dropped — no dedicated
-new arc needed for one verification task; do it opportunistically alongside the next dashboard
-change, or promote it to its own row if a dashboard-focused arc opens before then.
+**Closed 2026-09-19, verification gap resolved 2026-09-21 — arc fully complete, nothing
+outstanding.** Rows 1-2 shipped as designed — the `STATUS_PRIORITY` index-inversion risk the
+design flagged did **not** need different handling; the implementation matched the design
+exactly (`statusRank(current) > statusRank(previous)` ⇒ improved), confirmed by both a code
+trace (2026-09-19) and now a real browser check across 6 viewport/theme combinations, locally
+and in production (2026-09-21). No bugs found. No further rows to migrate forward.

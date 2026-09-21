@@ -2,7 +2,7 @@
 title: Agent-Readiness Kit — crosswalk signal accuracy audit + gap analysis
 description: Verify every scan signal's spec/RFC/draft citation at source, fix what's stale, and propose well-established signals missing from the crosswalk — triggered by a user request to explore agent-native aspects beyond what's already implemented.
 date: 2026-09-18
-updated: 2026-09-19
+updated: 2026-09-21
 status: open
 issues: []
 predecessor: 3
@@ -29,13 +29,11 @@ in **Findings** below.
    (`contentSignal.ts` + `playbook.ts`). 3 new RED-first tests in `test/scan/sources/wellKnown.test.ts`
    cover row 1's fallback logic; rows 2-4 were wording-only, existing tests unmodified and still
    green (155 total, 0 failed). `npx tsc --noEmit` clean throughout.
-2. Row 5 — **the one row still needing more research before coding**: the A2A signal has a real
-   functional-risk schema drift (see Findings). Do not implement against the field-level facts
-   already gathered here alone — fetch the complete `AgentCard`/`AgentInterface`/`SendMessage`
-   message definitions from `specification/a2a.proto`
-   (<https://github.com/a2aproject/A2A/blob/main/specification/a2a.proto>) first; this arc's
-   research confirmed individual field names/requiredness, not the full shape needed to write a
-   correct, non-false-failing check.
+2. ~~Row 5~~ — **promoted 2026-09-21 to its own plan**, `docs/plans/0005-a2a-agentcard-v1-migration.md`.
+   The schema research this row was gated on is now done there (found even more drift than this
+   arc's own partial research had — 8 `REQUIRED` `AgentCard` fields, not 3, plus the JSON-RPC
+   method name, `role` enum value, and `Part` shape all needed fixing too). See that doc for the
+   full findings, design, and remaining-work table; not re-described here.
 3. Rows 6-7 — owner-gated: an upstream doc PR (different repo) and a gap-analysis decision on
    which candidate new signals (if any) to adopt.
 
@@ -317,7 +315,7 @@ existing convention this repo already enforces structurally for *presence*, just
 | 2 | ~~`mcp-server-card`: add a code comment...~~ **Shipped 2026-09-19.** `cloudflareMcp.ts`'s docstring now notes the SEP-2127 Draft status and the decide-by-default (keep grading pass/fail). `src/playbook.ts:93-96`'s copy needed no change (already hedged). | agent | — | Done — comment added, no probe-path/logic change, `npx tsc --noEmit` clean |
 | 3 | ~~`oauth-oidc-discovery`: reword remediation string...~~ **Shipped 2026-09-19.** `wellKnown.ts`'s remediation now cites OpenID Connect Discovery 1.0 explicitly, distinct from RFC 8414's own default path. `src/playbook.ts:111-113` needed no change (already accurate). | agent | — | Done — existing tests pass unmodified |
 | 4 | ~~`web-bot-auth`: update citation from expired `draft-meunier-*` names...~~ **Shipped 2026-09-19.** Both `contentSignal.ts` and `src/playbook.ts:84-87` now cite `draft-ietf-webbotauth-httpsig-protocol`. Wording only — well-known path and `keys` format unchanged. | agent | — | Done — existing tests pass unmodified |
-| 5 | `a2a-agent-card`: fix schema-drift risk. **First** fetch the complete `AgentCard`/`AgentInterface`/`SendMessage` definitions from `specification/a2a.proto` (not yet done this session — only individual field facts were confirmed). Then update `cloudflareMcp.ts`'s `AGENT_CARD_KEYS` to not hard-require a flat `url` (accept `supported_interfaces[]` as the v1.0.0-correct shape, ideally accepting either shape so a v0.3.0-era card doesn't suddenly fail either), and update `mcpA2aProbe.ts`'s live probe to use the current method name and correct endpoint-selection logic (`supported_interfaces` is a list, not one string) — update citations from v0.3.0 to v1.0.0 throughout. Update tests for both files. | agent | full a2a.proto schema read (not yet done) | A conformant v1.0.0 AgentCard and a legacy v0.3.0-shaped one both grade correctly (no false-fail on either); live probe uses the current JSON-RPC method; `npx vitest run` + `npx tsc --noEmit` clean; spot-check against a real reachable A2A v1.0.0 server if one is publicly documented |
+| 5 | ~~`a2a-agent-card`: fix schema-drift risk...~~ **Promoted 2026-09-21** to its own plan doc, `docs/plans/0005-a2a-agentcard-v1-migration.md` — the full `a2a.proto` read this row was gated on is done there, along with the design and a 2-parallel-worktree remaining-work table. Track completion in that doc, not here. | agent | see 0005 | See `docs/plans/0005-a2a-agentcard-v1-migration.md`'s own remaining-work table |
 | 6 | Open a PR in `agenthud-agui-a2ui/docs/agent-readiness.md` (different repo) correcting its own `ai-catalog.json`→ARD and `mcp/server-card.json` references per Findings #1-#2 above, so the two repos' crosswalk sources don't drift back apart. | owner | — | Owner opens/reviews/merges that PR, or explicitly defers — either way this repo's rows 1-5 are not blocked on it |
 | 7 | Decide whether to adopt any of the 3 gap-analysis candidates (`AGENTS.md` presence check, IETF AIPREF watch, `llms-full.txt`). If yes for any, register the signal id upstream first (crosswalk source of truth), then it becomes a small new row in a future arc. | owner | 6 (same upstream doc) | Owner picks yes/no/defer per candidate; recorded in this doc's "At arc close" note |
 

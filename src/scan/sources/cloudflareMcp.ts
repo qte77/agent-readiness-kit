@@ -41,18 +41,29 @@ const MCP_SERVER_CARD_KEYS: readonly KeySpec[] = [
 ];
 
 /**
- * Subset of the A2A protocol's AgentCard fields (a2a-protocol.org/v0.3.0/specification,
- * verified at source 2026-09-16) — enough to distinguish a real card from an empty/garbage
- * JSON file without reimplementing the full spec as a validator.
+ * Subset of the A2A protocol's AgentCard fields (a2a-protocol.org/v1.0.0/specification,
+ * verified at source 2026-09-21) — enough to distinguish a real card from an empty/garbage
+ * JSON file without reimplementing the full spec as a validator — see
+ * docs/plans/0005-a2a-agentcard-v1-migration.md.
  */
 const AGENT_CARD_KEYS: readonly KeySpec[] = [
   ["name", "string"],
   ["description", "string"],
-  ["url", "string"],
   ["version", "string"],
   ["capabilities", "object"],
   ["skills", "array"],
 ];
+
+/**
+ * v1.0.0 replaced AgentCard's flat `url` with `supportedInterfaces[]`, but a real v0.3.0-era
+ * card may still only have `url` — accept either shape rather than false-failing one of them.
+ */
+const AGENT_CARD_URL_CHECK: ExtraCheck = {
+  label: "url-or-supportedInterfaces",
+  passes: (body: Record<string, unknown>): boolean =>
+    (typeof body["url"] === "string" && body["url"].length > 0) ||
+    (Array.isArray(body["supportedInterfaces"]) && body["supportedInterfaces"].length > 0),
+};
 
 interface ShapeCheckResult {
   status: Finding["status"];
@@ -71,11 +82,17 @@ function missingKeys(body: Record<string, unknown>, keys: readonly KeySpec[]): s
   return keys.filter(([key, kind]) => !hasKind(body[key], kind)).map(([key]) => key);
 }
 
+interface ExtraCheck {
+  label: string;
+  passes: (body: Record<string, unknown>) => boolean;
+}
+
 async function checkWellKnownJson(
   path: string,
   absoluteUrl: string,
   keys: readonly KeySpec[],
   whatLabel: string,
+  extraCheck?: ExtraCheck,
 ): Promise<ShapeCheckResult> {
   let response: Response;
   try {
@@ -120,6 +137,9 @@ async function checkWellKnownJson(
   }
 
   const missing = missingKeys(body as Record<string, unknown>, keys);
+  if (extraCheck && !extraCheck.passes(body as Record<string, unknown>)) {
+    missing.push(extraCheck.label);
+  }
   if (missing.length > 0) {
     return {
       status: "warn",
@@ -163,7 +183,8 @@ export async function scanCloudflareMcp(baseUrl: string): Promise<Finding[]> {
       AGENT_CARD_PATH,
       agentCardUrl,
       AGENT_CARD_KEYS,
-      "A2A agent card (name/description/url/version/capabilities/skills[])",
+      "A2A agent card (name/description/url-or-supportedInterfaces/version/capabilities/skills[])",
+      AGENT_CARD_URL_CHECK,
     ),
   ]);
 

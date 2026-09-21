@@ -3,7 +3,7 @@ title: Agent-Readiness Kit — A2A AgentCard v1.0.0 migration
 description: Fix the a2a-agent-card signal's real functional-risk schema drift (A2A protocol v0.3.0→v1.0.0) in the static shape check and the live JSON-RPC probe, using the fully-resolved v1.0.0 schema — promoted from arc 0004's row 5 once that research was completed.
 date: 2026-09-21
 updated: 2026-09-21
-status: open
+status: closed
 issues: []
 predecessor: 4
 ---
@@ -12,16 +12,18 @@ predecessor: 4
 
 ## Status (read this first — onboards the next session)
 
-**Nothing shipped yet — this arc has not started implementation.** This plan was designed in
-Claude Code Plan Mode and approved by the owner; it promotes arc 0004's row 5 (`a2a-agent-card`
-schema drift) into its own plan doc, now that the schema research that row 5 was gated on is
-complete (see Findings below — done in this plan-mode session, 2026-09-21).
+**Closed 2026-09-21 — shipped in full, same day as planned.** All 3 rows done: row 1 (PR #61) and
+row 2 (PR #62) were dispatched genuinely in parallel across 2 git worktrees, as planned; both
+merged clean with zero file overlap. Row 3 (cross-module verification) confirmed the two
+independently-written pieces compose correctly — see "At arc close" for the concrete evidence.
 
-**What's next, in order** (full detail in the remaining-work table):
-1. Rows 1 and 2 — **dispatch in parallel, each its own git worktree**, unlike arc 0003. See "Why
-   this is parallelizable" below for why that's the correct call here, not a shortcut.
-2. Row 3 — verification, after both 1 and 2 merge. Not parallelizable (needs both pieces to exist
-   together to confirm they compose correctly). Do this one directly, not via a dispatched agent.
+**What shipped, in order** (full detail in the remaining-work table):
+1. Rows 1 and 2 — dispatched in parallel, each its own git worktree, unlike arc 0003. **Shipped.**
+   See "Why this is parallelizable" below for why that was the correct call here, not a shortcut
+   — it held up: neither agent touched the other's files, both implemented the same
+   already-specified algorithm without needing to coordinate.
+2. Row 3 — verification, after both 1 and 2 merged. **Shipped**, done directly (not dispatched),
+   per the plan.
 
 **The loop** (same one used for every prior row this session): RED-first test → minimum
 implementation → `npx vitest run` + `npx tsc --noEmit` green → commit on a topic branch → push +
@@ -196,9 +198,9 @@ dispatched in parallel across worktrees), not arc 0002/0003's single-dependency-
 
 | # | Item | Gate | Depends on | Done-when |
 |---|------|------|------------|-----------|
-| 1 | `cloudflareMcp.ts` static shape check: drop required `url`, add url-or-supportedInterfaces leniency (design decision 1), update v1.0.0 citations. RED-first tests. | agent (worktree A, parallel with row 2) | — | New test: a `supportedInterfaces`-only card passes. Existing "warns when required keys are missing" case (neither `url` nor `supportedInterfaces`) still warns, not passes. `npx vitest run` + `npx tsc --noEmit` clean. |
-| 2 | `mcpA2aProbe.ts` live probe: `SendMessage` method, `ROLE_USER` role, part without `kind`, new endpoint-extraction (design decision 2). RED-first tests, **including updating the two stale existing assertions** (method/role) called out in the Source map. | agent (worktree B, parallel with row 1) | — | Existing test's method/role assertions updated to the new values. New tests: `supportedInterfaces`-only extraction works; a multi-interface card correctly picks the JSONRPC-binding entry (not index 0). Outbound request body has no `kind` key. `npx vitest run` + `npx tsc --noEmit` clean. |
-| 3 | Verification: after both 1 and 2 merge, confirm the two independently-written pieces compose — construct a synthetic v1.0.0 AgentCard (supportedInterfaces with a JSONRPC entry, no flat `url`) and confirm both the static check passes it AND the live probe extracts the same correct endpoint from it. Update this doc's Status + arc 0004's row 5 cross-reference. | agent (direct, not dispatched) | 1, 2 | Full suite green on `main` post-merge; the cross-module synthetic-fixture check passes; arc 0004's row 5 updated |
+| 1 | ~~`cloudflareMcp.ts` static shape check: drop required `url`, add url-or-supportedInterfaces leniency...~~ **Shipped 2026-09-21 (PR #61).** Implemented as an `extraCheck` predicate threaded through `checkWellKnownJson` (a small deviation from "post-check" wording — same effect, `checkWellKnownJson` didn't expose the parsed body to a separate post-hoc function). 157/157 tests passing, `npx tsc --noEmit` clean. | agent (worktree A, parallel with row 2) | — | Done |
+| 2 | ~~`mcpA2aProbe.ts` live probe: `SendMessage` method, `ROLE_USER` role, part without `kind`, new endpoint-extraction...~~ **Shipped 2026-09-21 (PR #62).** Also swept remaining `message/send`-citing remediation/summary strings and test titles the plan's design decision 3 covered but didn't enumerate line-by-line. 157/157 tests passing, `npx tsc --noEmit` clean, zero file overlap with row 1. | agent (worktree B, parallel with row 1) | — | Done |
+| 3 | ~~Verification: after both 1 and 2 merge...~~ **Shipped 2026-09-21.** Full suite green post-merge (159/159). Cross-module synthetic-AgentCard check (a real v1.0.0 shape: `supportedInterfaces` with a GRPC entry *and* a JSONRPC entry, no flat `url`) confirmed both pieces compose: the static check passed it, and the live probe correctly selected the JSONRPC entry over GRPC (proving selection filters by `protocolBinding`, not array order) and sent a request with `method: "SendMessage"`, `role: "ROLE_USER"`, and no `kind` key on the part. Verification test was temporary (not committed — a one-off cross-module check, not a permanent fixture; each module's own PR already has thorough permanent coverage). | agent (direct, not dispatched) | 1, 2 | Done |
 
 ## Tests (strict RED-first; modules only)
 
@@ -217,7 +219,13 @@ config/wiring exemption applies here (unlike, say, `site/app.js`).
 
 ## At arc close
 
-Tick the remaining-work table against what merged, update this Status section, note any
-deviations from the design decisions above (especially if the JSONRPC-binding interface
-selection needed different handling than described), and update arc 0004's row 5 to point here
+**Closed 2026-09-21.** All 3 rows shipped same-day as planned (PRs #61, #62; row 3 verified
+directly). The JSONRPC-binding interface selection needed no different handling than described —
+the design held up exactly as specified, confirmed by a multi-interface test fixture (row 2) and
+the cross-module verification (row 3) both putting the GRPC entry first in the array specifically
+to prove selection filters by `protocolBinding` rather than defaulting to index 0. Two minor,
+harmless deviations from the literal plan text, both already noted in the table: row 1's shape
+check is an `extraCheck` predicate rather than a separate post-hoc function (same effect); row 2
+additionally swept stale `message/send`-citing prose beyond the plan's line-by-line enumeration
+(within the scope design decision 3 already called for). Arc 0004's row 5 already points here
 as the closed-out detail rather than re-describing it there.

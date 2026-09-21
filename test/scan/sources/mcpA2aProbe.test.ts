@@ -26,7 +26,7 @@ describe("scanMcpA2aProbe", () => {
     vi.unstubAllGlobals();
   });
 
-  it("passes with a strong verdict when message/send round-trips a result", async () => {
+  it("passes with a strong verdict when SendMessage round-trips a result", async () => {
     fetchMock.mockImplementation(async (url: string, init?: RequestInit) => {
       if (url === AGENT_CARD_URL) {
         return jsonResponse({ name: "Example Agent", url: ENDPOINT });
@@ -57,12 +57,66 @@ describe("scanMcpA2aProbe", () => {
       params: { message: { role: string; parts: unknown[]; messageId: string } };
     };
     expect(requestBody.jsonrpc).toBe("2.0");
-    expect(requestBody.method).toBe("message/send");
-    expect(requestBody.params.message.role).toBe("user");
+    expect(requestBody.method).toBe("SendMessage");
+    expect(requestBody.params.message.role).toBe("ROLE_USER");
     expect(requestBody.params.message.messageId).toEqual(expect.any(String));
+    expect(requestBody.params.message.parts[0]).toEqual({
+      text: "agent-readiness-kit readiness probe",
+    });
   });
 
-  it("warns when the endpoint speaks JSON-RPC but message/send errors", async () => {
+  it("extracts the endpoint from supportedInterfaces when there is no flat url field", async () => {
+    fetchMock.mockImplementation(async (url: string) => {
+      if (url === AGENT_CARD_URL) {
+        return jsonResponse({
+          name: "Example Agent",
+          supportedInterfaces: [
+            { url: ENDPOINT, protocolBinding: "JSONRPC", protocolVersion: "1.0" },
+          ],
+        });
+      }
+      if (url === ENDPOINT) {
+        return jsonResponse({
+          jsonrpc: "2.0",
+          id: "agent-readiness-kit-probe",
+          result: { role: "ROLE_AGENT", parts: [], messageId: "reply-1" },
+        });
+      }
+      throw new Error(`unexpected fetch: ${url}`);
+    });
+
+    const findings = await scanMcpA2aProbe(BASE_URL);
+    expect(findings[0]?.status).toBe("pass");
+    expect(findings[0]?.evidence?.["endpoint"]).toBe(ENDPOINT);
+  });
+
+  it("picks the JSONRPC-binding interface even when it is not first in supportedInterfaces", async () => {
+    const grpcEndpoint = "https://example.com/a2a/grpc";
+    fetchMock.mockImplementation(async (url: string) => {
+      if (url === AGENT_CARD_URL) {
+        return jsonResponse({
+          supportedInterfaces: [
+            { url: grpcEndpoint, protocolBinding: "GRPC", protocolVersion: "1.0" },
+            { url: ENDPOINT, protocolBinding: "JSONRPC", protocolVersion: "1.0" },
+          ],
+        });
+      }
+      if (url === ENDPOINT) {
+        return jsonResponse({
+          jsonrpc: "2.0",
+          id: "agent-readiness-kit-probe",
+          result: { role: "ROLE_AGENT", parts: [], messageId: "reply-1" },
+        });
+      }
+      throw new Error(`unexpected fetch: ${url}`);
+    });
+
+    const findings = await scanMcpA2aProbe(BASE_URL);
+    expect(findings[0]?.status).toBe("pass");
+    expect(findings[0]?.evidence?.["endpoint"]).toBe(ENDPOINT);
+  });
+
+  it("warns when the endpoint speaks JSON-RPC but SendMessage errors", async () => {
     fetchMock.mockImplementation(async (url: string) => {
       if (url === AGENT_CARD_URL) return jsonResponse({ url: ENDPOINT });
       if (url === ENDPOINT) {

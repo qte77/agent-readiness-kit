@@ -7,3 +7,5 @@ worker/dist/
 worker/.wrangler/
 MEMORY.md
 site-dist/
+.vitest/
+worker/.vitest/

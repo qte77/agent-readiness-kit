@@ -9,6 +9,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- `.gitignore`: `.vitest/` and `worker/.vitest/` — vitest 5's own JSON-report output directory
+  (new in v5, didn't exist under v4), noticed as an untracked directory after the vitest
+  4.1.11→5.0.1 Dependabot bump (PRs #51/#52).
 - Per-category trend indicator on dashboard cards (arc 0003, PR #49):
   `scripts/buildSite.ts` adds `categoryStatus: Record<Category, Status>` to `RunSummary` (worst
   status per category, backfilled retroactively for every historical revision on rebuild — no

@@ -9,6 +9,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- `docs/architecture.md`: documented why `scan.yml`'s PRs sit with `CI`/`CodeQL` stuck in
+  `action_required` until they expire (GitHub's 2026-06-11 policy requiring a human to approve
+  workflow runs on `github-actions[bot]`-authored PRs before other workflows execute against
+  them — not a repo misconfiguration, no opt-out found) and the fix (approve the pending run
+  before merging, don't just `--admin` past it).
+- `docs/plans/0003-category-trend-indicator.md`: closed the deferred patchright e2e
+  verification gap — full local (real + synthetic history) and remote production checks
+  across desktop/mobile/tablet × light/dark, zero console errors/network failures, correct
+  ▲/▼ direction and color confirmed, no bugs found (PR #59).
 - `.gitignore`: `.vitest/` and `worker/.vitest/` — vitest 5's own JSON-report output directory
   (new in v5, didn't exist under v4), noticed as an untracked directory after the vitest
   4.1.11→5.0.1 Dependabot bump (PRs #51/#52).

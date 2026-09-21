@@ -70,6 +70,34 @@ plus a changelog comment — never silently reuse a stale issue. This is the exa
 that prevented (and, when absent elsewhere in this estate, caused) a 35-duplicate-issue bug
 class; do not skip the dedup check when implementing `src/remediation/issue.ts`.
 
+## `scan.yml` PRs need a manual workflow-run approval before CI/CodeQL run at all
+
+Not a repo misconfiguration — a deliberate GitHub platform security policy, verified at source
+2026-09-20/21. `scan.yml` opens its `data/scans/*.json` update as a PR authored by the
+`github-actions[bot]` identity (using the repo's own `GITHUB_TOKEN`, escalated to `contents:
+write` + `pull-requests: write` in that job's own `permissions:` block — the repo-wide default
+stays read-only, confirmed in Settings → Actions → General, and that's correct, not the issue).
+
+Per GitHub's own changelog (2026-06-11, "Bot-created pull requests can run workflows if
+approved"): any PR opened by `github-actions[bot]` now requires a human with write access to
+explicitly approve its workflow run before **other** workflows (`ci.yml`, `codeql.yml`) will
+execute against it — a deliberate gate against a bot-authored PR smuggling something that then
+runs with full CI credentials unreviewed. Confirmed live on this repo: PR #48 (2026-09-18) and
+PR #55 (2026-09-20) both show `pull_requests: []` and zero jobs ever created on their `CI`/
+`CodeQL` runs, with the run page itself stating "This workflow run required approval but was not
+approved before it expired." Dependabot-authored PRs (a distinct, pre-vetted first-party GitHub
+App, not `GITHUB_TOKEN`) are unaffected — their checks ran normally in the same window (PRs
+#51/#52).
+
+**No opt-out found** in GitHub's own changelog post for this policy — don't spend more time
+looking for a settings toggle to disable it. The correct handling going forward: **approve the
+pending workflow run on each new `scan.yml` PR before merging** — PR's Actions tab, or `gh api
+repos/qte77/agent-readiness-kit/actions/runs/<run_id>/approve -X POST` (needs write access) —
+so CI/CodeQL actually validate the change instead of an `--admin` merge silently bypassing a
+check that never ran. `scan.yml` only ever touches `data/scans/*.json` (pure data, no executable
+code), which kept the practical risk of skipping this low so far, but it's not a substitute for
+the check actually running.
+
 ## Scope boundary (v1)
 
 PR-generation (auto-writing missing `.well-known/*` files to remediation repos) is

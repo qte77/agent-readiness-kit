@@ -160,6 +160,54 @@ describe("scanCloudflareMcp", () => {
 
       expect(finding?.status).toBe("warn");
     });
+
+    it("passes when the card uses supportedInterfaces instead of a flat url (v1.0.0 shape)", async () => {
+      fetchMock.mockImplementation(async (url: string) => {
+        if (url === AGENT_CARD_URL) {
+          return jsonResponse({
+            name: "Example Agent",
+            description: "An example A2A agent",
+            version: "1.0.0",
+            capabilities: {},
+            skills: [],
+            supportedInterfaces: [
+              { url: "https://example.com/a2a/v1", protocolBinding: "JSONRPC", protocolVersion: "1.0" },
+            ],
+          });
+        }
+        if (url === SERVER_CARD_URL) return jsonResponse({}, 404);
+        throw new Error(`unexpected fetch: ${url}`);
+      });
+
+      const findings = await scanCloudflareMcp(BASE_URL);
+      const finding = findings.find((f) => f.id === "cloudflareMcp.a2a-agent-card");
+
+      expect(finding?.status).toBe("pass");
+    });
+
+    it("warns when the card has all other keys but neither url nor supportedInterfaces", async () => {
+      fetchMock.mockImplementation(async (url: string) => {
+        if (url === AGENT_CARD_URL) {
+          return jsonResponse({
+            name: "Example Agent",
+            description: "An example A2A agent",
+            version: "1.0.0",
+            capabilities: {},
+            skills: [],
+          });
+        }
+        if (url === SERVER_CARD_URL) return jsonResponse({}, 404);
+        throw new Error(`unexpected fetch: ${url}`);
+      });
+
+      const findings = await scanCloudflareMcp(BASE_URL);
+      const finding = findings.find((f) => f.id === "cloudflareMcp.a2a-agent-card");
+
+      expect(finding?.status).toBe("warn");
+      expect(finding?.evidence?.["missingKeys"]).toEqual(
+        expect.arrayContaining(["url-or-supportedInterfaces"]),
+      );
+    });
   });
 
   it("returns exactly the two owned Findings", async () => {

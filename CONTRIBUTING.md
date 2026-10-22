@@ -61,7 +61,7 @@ The dashboard itself (`https://qte77.github.io/agent-readiness-kit/`) is deploye
 [docs/plans/0002-readiness-dashboard.md](docs/plans/0002-readiness-dashboard.md).
 
 Run `make typecheck test` before opening a PR (CI enforces both; no linter is configured
-yet — see the plan's remaining-work table).
+yet).
 
 `worker/` (the read-only MCP layer) is a separate package with its own lockfile — run its
 own gate too when you touch it (CI enforces both jobs):

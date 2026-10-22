@@ -7,6 +7,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+- `README.md`: Status now says scan results land through a PR that needs a manual workflow-run
+  approval, lists arc 0005 as complete, and documents `POLYFETCH_SCRAPE_DIR` next to
+  `GITHUB_TOKEN`.
+- `docs/plans/0002-readiness-dashboard.md`: closed (its last item was verified in arc 0003).
+- `docs/plans/0004-crosswalk-accuracy-and-gaps.md`: new owner-gated row 8 for the four stuck
+  weekly scan PRs (#67, #73, #78, #80); row 1's ora.ai follow-up now points at issue #75.
+- `CONTRIBUTING.md`: removed a pointer to a lint row that no plan contains.
+
 ### Added
 
 - `docs/architecture.md`: documented why `scan.yml`'s PRs sit with `CI`/`CodeQL` stuck in

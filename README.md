@@ -22,12 +22,15 @@ static GitHub Pages site rebuilt on every push touching `data/scans/**` or `site
 ## Status
 
 **Live.** [`.github/workflows/scan.yml`](.github/workflows/scan.yml) scans every tracked
-property weekly (Monday 06:00 UTC, or on demand via `workflow_dispatch`), commits results to
+property weekly (Monday 06:00 UTC, or on demand via `workflow_dispatch`), opens a PR updating
 [`data/scans/`](data/scans/), and files/updates a dedup-safe remediation issue per property.
+Each scan PR needs a manual workflow-run approval before it can merge (a GitHub policy for
+bot-authored PRs — see [`docs/architecture.md`](docs/architecture.md)), so the dashboard only
+moves once those are merged.
 [`.github/workflows/pages.yml`](.github/workflows/pages.yml) rebuilds the dashboard above on
-every push touching `data/scans/**` or `site/**`. Arcs 0001-0003 (scan engine, dashboard,
-per-category trend indicator) are complete. Arc 0004 (crosswalk signal accuracy audit) is the
-current work — see
+every push touching `data/scans/**` or `site/**`. Arcs 0001-0003 and 0005 (scan engine,
+dashboard, per-category trend indicator, A2A AgentCard v1.0.0 migration) are complete. Arc 0004
+(crosswalk signal accuracy audit) is the current work — see
 [`docs/plans/0004-crosswalk-accuracy-and-gaps.md`](docs/plans/0004-crosswalk-accuracy-and-gaps.md)'s
 opening `## Status` section for what shipped, what's next, commands, and watch-outs. Ongoing and
 future work lives under [`docs/plans/`](docs/plans/), one file per arc.
@@ -58,7 +61,9 @@ npx tsc --noEmit  # typecheck
 npm run build     # compiles to dist/
 npm run scan      # node dist/src/main.js — a real scan over config/properties.ts's
                    # PROPERTIES; needs GITHUB_TOKEN for the issue step (fails gracefully,
-                   # with a clear message, when unset — e.g. a local run)
+                   # with a clear message, when unset — e.g. a local run) and
+                   # POLYFETCH_SCRAPE_DIR (a polyfetch-scrape checkout) for the
+                   # schema.org check, which reports "unknown" without it
 npm run site:build # node dist/scripts/buildSiteCli.js — builds site-dist/ (the dashboard +
                    # its data) from data/scans/ and site/; needs `npm run build` first.
                    # Preview locally with `npx serve site-dist` (or any static file server,

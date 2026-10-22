@@ -2,7 +2,7 @@
 title: Agent-Readiness Kit — crosswalk signal accuracy audit + gap analysis
 description: Verify every scan signal's spec/RFC/draft citation at source, fix what's stale, and propose well-established signals missing from the crosswalk — triggered by a user request to explore agent-native aspects beyond what's already implemented.
 date: 2026-09-18
-updated: 2026-09-21
+updated: 2026-10-22
 status: open
 issues: []
 predecessor: 3
@@ -36,6 +36,10 @@ in **Findings** below.
    full findings, design, and remaining-work table; not re-described here.
 3. Rows 6-7 — owner-gated: an upstream doc PR (different repo) and a gap-analysis decision on
    which candidate new signals (if any) to adopt.
+4. Row 8 — owner-gated: four weekly `scan.yml` PRs (#67, #73, #78, #80) have sat unmerged since
+   2026-09-28, so `data/scans/` and the dashboard are frozen at 2026-09-21 even though every
+   scheduled run succeeded. Handling is already documented in `docs/architecture.md`'s
+   "`scan.yml` PRs need a manual workflow-run approval" section.
 
 **The loop** (same one used for every prior row this session, see `docs/plans/0003-...md` for the
 full description): RED-first test → minimum implementation → `npx vitest run` + `npx tsc
@@ -311,13 +315,14 @@ existing convention this repo already enforces structurally for *presence*, just
 
 | # | Item | Gate | Depends on | Done-when |
 |---|------|------|------------|-----------|
-| 1 | ~~`ai-catalog`: probe `/.well-known/ard.json` as primary, fall back to legacy `/.well-known/ai-catalog.json` on 404; update remediation text in `wellKnown.ts` **and** `src/playbook.ts:47-50` to the current ARD v0.91 path. Signal id unchanged.~~ **Shipped 2026-09-19.** New `evaluateAiCatalog()` in `wellKnown.ts` does the fallback; both remediation copies updated. **Not done**: the ora.ai `ard-catalog`/`ard-entries-valid` check-id spot-check noted under Findings #1 — still needs a live ora.ai response to confirm, carried forward as its own follow-up (not blocking, since it's additive to what shipped). | agent | — | Done — `npx vitest run` (155 passed) + `npx tsc --noEmit` clean |
+| 1 | ~~`ai-catalog`: probe `/.well-known/ard.json` as primary, fall back to legacy `/.well-known/ai-catalog.json` on 404; update remediation text in `wellKnown.ts` **and** `src/playbook.ts:47-50` to the current ARD v0.91 path. Signal id unchanged.~~ **Shipped 2026-09-19.** New `evaluateAiCatalog()` in `wellKnown.ts` does the fallback; both remediation copies updated. **Not done**: the ora.ai `ard-catalog`/`ard-entries-valid` check-id spot-check noted under Findings #1 — still needs a live ora.ai response to confirm, carried forward as its own follow-up (not blocking, since it's additive to what shipped). **Now tracked in issue #75** (non-crosswalked ora.ai checks are dropped), which covers this case. | agent | — | Done — `npx vitest run` (155 passed) + `npx tsc --noEmit` clean |
 | 2 | ~~`mcp-server-card`: add a code comment...~~ **Shipped 2026-09-19.** `cloudflareMcp.ts`'s docstring now notes the SEP-2127 Draft status and the decide-by-default (keep grading pass/fail). `src/playbook.ts:93-96`'s copy needed no change (already hedged). | agent | — | Done — comment added, no probe-path/logic change, `npx tsc --noEmit` clean |
 | 3 | ~~`oauth-oidc-discovery`: reword remediation string...~~ **Shipped 2026-09-19.** `wellKnown.ts`'s remediation now cites OpenID Connect Discovery 1.0 explicitly, distinct from RFC 8414's own default path. `src/playbook.ts:111-113` needed no change (already accurate). | agent | — | Done — existing tests pass unmodified |
 | 4 | ~~`web-bot-auth`: update citation from expired `draft-meunier-*` names...~~ **Shipped 2026-09-19.** Both `contentSignal.ts` and `src/playbook.ts:84-87` now cite `draft-ietf-webbotauth-httpsig-protocol`. Wording only — well-known path and `keys` format unchanged. | agent | — | Done — existing tests pass unmodified |
 | 5 | ~~`a2a-agent-card`: fix schema-drift risk...~~ **Promoted 2026-09-21** to its own plan doc, `docs/plans/0005-a2a-agentcard-v1-migration.md` — the full `a2a.proto` read this row was gated on is done there, along with the design and a 2-parallel-worktree remaining-work table. Track completion in that doc, not here. | agent | see 0005 | See `docs/plans/0005-a2a-agentcard-v1-migration.md`'s own remaining-work table |
 | 6 | Open a PR in `agenthud-agui-a2ui/docs/agent-readiness.md` (different repo) correcting its own `ai-catalog.json`→ARD and `mcp/server-card.json` references per Findings #1-#2 above, so the two repos' crosswalk sources don't drift back apart. | owner | — | Owner opens/reviews/merges that PR, or explicitly defers — either way this repo's rows 1-5 are not blocked on it |
 | 7 | Decide whether to adopt any of the 3 gap-analysis candidates (`AGENTS.md` presence check, IETF AIPREF watch, `llms-full.txt`). If yes for any, register the signal id upstream first (crosswalk source of truth), then it becomes a small new row in a future arc. | owner | 6 (same upstream doc) | Owner picks yes/no/defer per candidate; recorded in this doc's "At arc close" note |
+| 8 | Unblock the stuck weekly scan PRs #67, #73, #78, #80 (each only touches `data/scans/*.json`): approve each PR's pending workflow run, then squash-merge oldest-first so `scripts/buildSiteCli.ts`'s git-log walk keeps every weekly trend point; rebase later PRs if an earlier merge conflicts them. Longer term, consider a fix so this doesn't recur weekly. | owner | — | `main` carries the 2026-09-28 → 2026-10-19 scan commits and the dashboard's last-scan date is current |
 
 ## Tests (strict RED-first; modules only)
 

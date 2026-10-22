@@ -11,7 +11,7 @@
     "test": "vitest run"
   },
   "dependencies": {
-    "@modelcontextprotocol/server": "^2.0.0",
+    "@modelcontextprotocol/server": "^2.3.0",
     "zod": "^4.4.0"
   },
   "devDependencies": {

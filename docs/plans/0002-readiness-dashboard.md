@@ -2,8 +2,8 @@
 title: Agent-Readiness Kit — GitHub Pages readiness dashboard
 description: A static GitHub Pages dashboard over the scan engine's committed data/scans/*.json results — score/grade, per-category pass/fail/warn/unknown breakdown, a trend sparkline reconstructed from git history, and a client-side, display-only High/Mid/Low pass/warn/fail threshold preset.
 date: 2026-09-17
-updated: 2026-09-17
-status: open
+updated: 2026-10-22
+status: closed
 issues: []
 predecessor: 1
 ---
@@ -11,6 +11,10 @@ predecessor: 1
 # Arc 0002 — GitHub Pages readiness dashboard
 
 ## Status (read this first — onboards the next session)
+
+**Closed 2026-10-22.** The one open item below — confirming the live Pages deploy serves real
+data — was verified against production in arc 0003 (PR #59, see
+`docs/plans/0003-category-trend-indicator.md`). No open rows remain.
 
 **What shipped (this PR, branch `feat/readiness-dashboard`):**
 - **`scripts/buildSite.ts`** (row 1) — pure `summarizeScanRun`/`capHistory` functions, RED-first

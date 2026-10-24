@@ -26,7 +26,7 @@ typecheck:  ## Static type check with tsc
 build:  ## Compile TypeScript to dist/
 	npm run build
 
-scan:  ## Run a real scan over config/properties.ts's PROPERTIES (needs GITHUB_TOKEN for the issue step)
+scan:  ## Run a real scan over the properties in config/properties.json (needs GITHUB_TOKEN for the issue step)
 	npm run scan
 
 site_build:  ## Build the GitHub Pages dashboard into site-dist/

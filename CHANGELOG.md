@@ -19,6 +19,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- `config/properties.json`: the scanned-property list moved out of `config/properties.ts` into a
+  JSON config file, validated on load by `parseProperties()` (kebab-case unique `id`, http(s)
+  `url`, non-empty `label`). Adding a property is now a config edit, not a code change; the
+  three existing properties are unchanged (#3).
 - `docs/architecture.md`: documented why `scan.yml`'s PRs sit with `CI`/`CodeQL` stuck in
   `action_required` until they expire (GitHub's 2026-06-11 policy requiring a human to approve
   workflow runs on `github-actions[bot]`-authored PRs before other workflows execute against

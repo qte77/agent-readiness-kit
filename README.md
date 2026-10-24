@@ -4,8 +4,10 @@ Scans web properties for "agent-native readiness" across six categories (Discove
 Content, Trust, Execution, Agent-to-Agent, Identity & Auth) and produces concrete remediation
 — not just a score. Runs entirely on GitHub Actions; zero runtime dependencies.
 
-Tracked properties (see [`config/properties.ts`](config/properties.ts)): `qte77.github.io`,
-`agenthud-agui-a2ui`, `sortmy.london`/`ldnmxx-hack`.
+Tracked properties (see [`config/properties.json`](config/properties.json)): `qte77.github.io`,
+`agenthud-agui-a2ui`, `sortmy.london`/`ldnmxx-hack`. To scan another property, append an
+`{ "id", "url", "label" }` entry there — `config/properties.ts` validates the file on load
+(kebab-case unique `id`, http(s) `url`, non-empty `label`).
 
 The six-category crosswalk (category ↔ ora.ai signal ↔ Cloudflare signal) is owned by
 [`agenthud-agui-a2ui/docs/agent-readiness.md`](https://github.com/qte77/agenthud-agui-a2ui/blob/main/docs/agent-readiness.md);
@@ -59,8 +61,8 @@ npm install
 npx vitest run    # tests
 npx tsc --noEmit  # typecheck
 npm run build     # compiles to dist/
-npm run scan      # node dist/src/main.js — a real scan over config/properties.ts's
-                   # PROPERTIES; needs GITHUB_TOKEN for the issue step (fails gracefully,
+npm run scan      # node dist/src/main.js — a real scan over every property in
+                   # config/properties.json; needs GITHUB_TOKEN for the issue step (fails gracefully,
                    # with a clear message, when unset — e.g. a local run) and
                    # POLYFETCH_SCRAPE_DIR (a polyfetch-scrape checkout) for the
                    # schema.org check, which reports "unknown" without it

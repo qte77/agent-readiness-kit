@@ -82,7 +82,11 @@ const REMEDIATION_BY_SIGNAL: Record<string, string> = {
     "Content Signals policy.",
   "bot-rules":
     "Publish explicit per-user-agent allow/disallow rules in robots.txt for known agent " +
-    "crawlers, instead of relying on a bare `User-agent: *` block.",
+    "crawlers, instead of relying on a bare `User-agent: *` block. Trade-off: allowing search " +
+    "and user-triggered agents (e.g. PerplexityBot, ChatGPT-User) explicitly is enough to clear this check; disallowing training " +
+    "crawlers (e.g. GPTBot, ClaudeBot) enforces an ai-train=no Content-Signal but lowers " +
+    "ora.ai's robots-ai-policy-quality score, and blocking Google-Extended also affects Gemini " +
+    "grounding. Leave the choice to the site owner.",
   "web-bot-auth":
     "Adopt Web Bot Auth (HTTP Message Signatures per RFC 9421, the IETF webbotauth working " +
     "group's draft-ietf-webbotauth-httpsig-protocol) so verified agent crawlers can " +

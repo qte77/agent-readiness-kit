@@ -1,5 +1,6 @@
 /**
- * CLI entrypoint (plan row 9): for every property in `config/properties.ts`'s `PROPERTIES`,
+ * CLI entrypoint (plan row 9): for every property in `PROPERTIES` (loaded and validated from
+ * `config/properties.json` by `config/properties.ts`),
  * run the row-6 orchestrator (`scanProperty`), write the resulting `ScanRun` to
  * `data/scans/<propertyId>.json` (`src/checkpoint.ts`), then file/update a dedup-safe
  * remediation issue from it (`src/remediation/issue.ts`).

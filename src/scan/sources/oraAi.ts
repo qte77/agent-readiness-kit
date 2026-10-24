@@ -35,9 +35,17 @@
  * mapCheckStatus below). ora.ai's own `layers[].id`/`name` grouping is NOT used for this
  * module's Finding.category — every Finding is categorized via this repo's own
  * `assignCategory(check.id)` per Design decision 1, independent of how ora.ai groups it.
+ * Only crosswalked check ids become Findings; every other check is returned as raw
+ * evidence in `checks.unmapped` (persisted as `ScanRun.oraAiChecks`) instead of dropped.
  */
 import { SIGNAL_TO_CATEGORY, assignCategory } from "../crosswalk.js";
-import type { Category, Finding, Status } from "../../types.js";
+import type {
+  Category,
+  Finding,
+  OraAiCheckDigest,
+  OraAiCheckEvidence,
+  Status,
+} from "../../types.js";
 
 const SCAN_ENDPOINT = "https://ora.ai/api/scan";
 const SCORE_ENDPOINT_PREFIX = "https://ora.ai/api/score/";
@@ -72,6 +80,8 @@ export interface OraAiScanResult {
   findings: Finding[];
   score?: number;
   grade?: string;
+  /** Present whenever the score response was read; absent when ora.ai was unavailable. */
+  checks?: OraAiCheckDigest;
 }
 
 interface OraAiCheck {
@@ -81,6 +91,8 @@ interface OraAiCheck {
   score?: unknown;
   maxScore?: unknown;
   estScoreGain?: unknown;
+  details?: unknown;
+  recommendation?: unknown;
 }
 
 const defaultSleep = (ms: number): Promise<void> =>
@@ -172,7 +184,28 @@ function findingFromCheck(check: OraAiCheck): Finding | undefined {
       score: check.score,
       maxScore: check.maxScore,
       ...(check.estScoreGain !== undefined ? { estScoreGain: check.estScoreGain } : {}),
+      ...explanation(check),
     },
+  };
+}
+
+/** ora.ai's own `details`/`recommendation` text for a check, when it gave any. */
+function explanation(check: OraAiCheck): Pick<OraAiCheckEvidence, "details" | "recommendation"> {
+  return {
+    ...(typeof check.details === "string" ? { details: check.details } : {}),
+    ...(typeof check.recommendation === "string" ? { recommendation: check.recommendation } : {}),
+  };
+}
+
+/** A check with no crosswalk signal, kept as raw evidence instead of being dropped (#75). */
+function unmappedEvidence(check: OraAiCheck): OraAiCheckEvidence | undefined {
+  if (typeof check.id !== "string" || check.id.length === 0) return undefined;
+  return {
+    id: check.id,
+    status: String(check.status),
+    ...(typeof check.score === "number" ? { score: check.score } : {}),
+    ...(typeof check.maxScore === "number" ? { maxScore: check.maxScore } : {}),
+    ...explanation(check),
   };
 }
 
@@ -237,12 +270,18 @@ export async function scanOraAi(
   }
 
   const findings: Finding[] = [];
+  const unmapped: OraAiCheckEvidence[] = [];
   for (const check of checksFromLayers(body.layers)) {
     const finding = findingFromCheck(check);
-    if (finding) findings.push(finding);
+    if (finding) {
+      findings.push(finding);
+      continue;
+    }
+    const evidence = unmappedEvidence(check);
+    if (evidence) unmapped.push(evidence);
   }
 
-  const result: OraAiScanResult = { findings };
+  const result: OraAiScanResult = { findings, checks: { mapped: findings.length, unmapped } };
   if (typeof body.score === "number") result.score = body.score;
   if (typeof body.grade === "string") result.grade = body.grade;
   return result;

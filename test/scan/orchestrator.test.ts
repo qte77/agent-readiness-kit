@@ -119,6 +119,17 @@ describe("scanProperty", () => {
     const run = await scanProperty(PROPERTY);
     expect(run.score).toBeUndefined();
     expect(run.grade).toBeUndefined();
+    expect(run.oraAiChecks).toBeUndefined();
+  });
+
+  it("persists ora.ai's mapped/unmapped check digest onto the ScanRun (#75)", async () => {
+    const checks = {
+      mapped: 1,
+      unmapped: [{ id: "robots-ai-policy-quality", status: "warning", score: 1, maxScore: 2 }],
+    };
+    vi.mocked(scanOraAi).mockResolvedValue({ findings: [], checks });
+    const run = await scanProperty(PROPERTY);
+    expect(run.oraAiChecks).toEqual(checks);
   });
 
   it("keeps findings that share a signal-id suffix across sources — no cross-source dedup", async () => {

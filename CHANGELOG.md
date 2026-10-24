@@ -16,6 +16,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `docs/plans/0004-crosswalk-accuracy-and-gaps.md`: new owner-gated row 8 for the four stuck
   weekly scan PRs (#67, #73, #78, #80); row 1's ora.ai follow-up now points at issue #75.
 - `CONTRIBUTING.md`: removed a pointer to a lint row that no plan contains.
+- `oraAi.ts` no longer drops ora.ai data (#75): crosswalked findings now carry ora.ai's
+  `details`/`recommendation` text in their evidence, and every non-crosswalked check (id,
+  status, score/maxScore, details, recommendation) plus the mapped count is persisted as the
+  new optional `ScanRun.oraAiChecks`, so a score change can be explained from the scan file
+  alone.
 
 ### Added
 

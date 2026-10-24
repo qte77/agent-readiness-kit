@@ -109,7 +109,12 @@ function evaluateContentSignal(robots: ProbeResult): Finding {
 function evaluateBotRules(robots: ProbeResult): Finding {
   const remediation =
     "Add explicit User-agent blocks (Allow/Disallow) for known AI crawlers (e.g. GPTBot, " +
-    "ClaudeBot, Google-Extended) in /robots.txt.";
+    "ClaudeBot, Google-Extended) in /robots.txt. Trade-off: explicit Allow rules for search " +
+    "and user-triggered agents (e.g. PerplexityBot, ChatGPT-User) clear this warning on their " +
+    "own; disallowing training crawlers " +
+    "(e.g. GPTBot, ClaudeBot) enforces an ai-train=no policy but lowers ora.ai's " +
+    "robots-ai-policy-quality score, and blocking Google-Extended also affects Gemini " +
+    "grounding, not only training. The choice is the site owner's.";
   if (!robots.ok) {
     return finding("bot-rules", "unknown", `Could not fetch /robots.txt: ${robots.error}`, remediation);
   }

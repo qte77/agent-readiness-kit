@@ -9,6 +9,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- `contentSignal.bot-rules` remediation (`src/scan/sources/contentSignal.ts` and the
+  `src/playbook.ts` template) now states the trade-off: allowing search/user agents clears the
+  warning, while disallowing training crawlers enforces `ai-train=no` but lowers ora.ai's
+  `robots-ai-policy-quality` score (#76).
 - `README.md`: Status now says scan results land through a PR that needs a manual workflow-run
   approval, lists arc 0005 as complete, and documents `POLYFETCH_SCRAPE_DIR` next to
   `GITHUB_TOKEN`.

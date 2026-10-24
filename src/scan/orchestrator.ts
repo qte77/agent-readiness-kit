@@ -64,6 +64,7 @@ export async function scanProperty(property: PropertyConfig): Promise<ScanRun> {
   };
   if (oraAi.score !== undefined) scanRun.score = oraAi.score;
   if (oraAi.grade !== undefined) scanRun.grade = oraAi.grade;
+  if (oraAi.checks !== undefined) scanRun.oraAiChecks = oraAi.checks;
 
   return scanRun;
 }

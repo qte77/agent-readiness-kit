@@ -73,4 +73,25 @@ export interface ScanRun {
   /** Optional aggregate score (e.g. from ora.ai), when the source provides one. */
   score?: number;
   grade?: string;
+  /** ora.ai's check digest, so a score change can be explained from the run alone. */
+  oraAiChecks?: OraAiCheckDigest;
+}
+
+/** One raw ora.ai check, kept verbatim (ora.ai's own status vocabulary, not `Status`). */
+export interface OraAiCheckEvidence {
+  id: string;
+  status: string;
+  score?: number;
+  maxScore?: number;
+  details?: string;
+  recommendation?: string;
+}
+
+/**
+ * How many ora.ai checks mapped to a crosswalk signal (those become Findings), plus every
+ * check that didn't — ora.ai returns ~125 checks and only a handful are crosswalked.
+ */
+export interface OraAiCheckDigest {
+  mapped: number;
+  unmapped: OraAiCheckEvidence[];
 }

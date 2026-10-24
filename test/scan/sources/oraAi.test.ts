@@ -495,4 +495,95 @@ describe("scanOraAi", () => {
     expect(result.score).toBe(10);
     expect(result.grade).toBe("F");
   });
+
+  it("surfaces every unmapped check (id/status/points/details) with mapped/unmapped counts", async () => {
+    fetchMock.mockImplementation(async (url: string) => {
+      if (url === SCAN_ENDPOINT) return jsonResponse({});
+      if (url === SCORE_ENDPOINT) return jsonResponse(REALISTIC_SCORE_RESPONSE);
+      throw new Error(`unexpected fetch: ${url}`);
+    });
+
+    const { checks } = await scanOraAi(URL_UNDER_TEST, { sleep: noopSleep });
+
+    expect(checks?.mapped).toBe(7);
+    expect(checks?.unmapped.map((c) => c.id).sort()).toEqual([
+      "ard-catalog",
+      "ard-entries-valid",
+      "brand-search-accuracy",
+      "skills-sh-quality",
+      "wikipedia-presence",
+    ]);
+    expect(checks?.unmapped.find((c) => c.id === "wikipedia-presence")).toEqual({
+      id: "wikipedia-presence",
+      status: "error",
+      score: 0,
+      maxScore: 4,
+      details: "Wikipedia and Wikidata presence could not be verified - try rescanning",
+    });
+  });
+
+  it("keeps ora.ai's details/recommendation text on mapped findings and unmapped checks", async () => {
+    fetchMock.mockImplementation(async (url: string) => {
+      if (url === SCAN_ENDPOINT) return jsonResponse({});
+      if (url === SCORE_ENDPOINT) {
+        return jsonResponse({
+          score: 72,
+          grade: "B",
+          layers: [
+            {
+              id: "accessibility",
+              checks: [
+                {
+                  id: "openapi-spec",
+                  status: "fail",
+                  score: 0,
+                  maxScore: 7,
+                  details: "No OpenAPI document found",
+                  recommendation: "Publish /openapi.json",
+                },
+                {
+                  id: "robots-ai-policy-quality",
+                  status: "warning",
+                  score: 1,
+                  maxScore: 2,
+                  details: "Training: 0/8 page/crawler pairs permitted",
+                  recommendation: "Permit training crawlers",
+                },
+              ],
+            },
+          ],
+        });
+      }
+      throw new Error(`unexpected fetch: ${url}`);
+    });
+
+    const { findings, checks } = await scanOraAi(URL_UNDER_TEST, { sleep: noopSleep });
+
+    expect(findings).toHaveLength(1);
+    expect(findings[0]?.evidence).toMatchObject({
+      details: "No OpenAPI document found",
+      recommendation: "Publish /openapi.json",
+    });
+    expect(checks).toEqual({
+      mapped: 1,
+      unmapped: [
+        {
+          id: "robots-ai-policy-quality",
+          status: "warning",
+          score: 1,
+          maxScore: 2,
+          details: "Training: 0/8 page/crawler pairs permitted",
+          recommendation: "Permit training crawlers",
+        },
+      ],
+    });
+  });
+
+  it("omits checks when ora.ai was unavailable", async () => {
+    fetchMock.mockResolvedValue(jsonResponse({}, 429));
+
+    const result = await scanOraAi(URL_UNDER_TEST, { sleep: noopSleep });
+
+    expect(result.checks).toBeUndefined();
+  });
 });

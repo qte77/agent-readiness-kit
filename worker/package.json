@@ -11,13 +11,13 @@
     "test": "vitest run"
   },
   "dependencies": {
-    "@modelcontextprotocol/server": "^2.0.0",
+    "@modelcontextprotocol/server": "^2.3.0",
     "zod": "^4.4.0"
   },
   "devDependencies": {
     "@cloudflare/workers-types": "^5",
     "typescript": "^7.0.2",
-    "vitest": "^5.0.1",
+    "vitest": "^5.0.5",
     "wrangler": "^4"
   }
 }

@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+
+- Scan PRs can merge again: the "Commit scan results" step commits through the Git Data API with
+  no custom author, so GitHub signs the commit. The old local `git commit` was unsigned, and the
+  `required_signatures` ruleset kept PR #94 and earlier scan PRs blocked even with auto-merge on.
+
 ### Changed
 
 - `contentSignal.bot-rules` remediation (`src/scan/sources/contentSignal.ts` and the

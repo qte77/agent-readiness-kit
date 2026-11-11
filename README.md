@@ -24,11 +24,14 @@ static GitHub Pages site rebuilt on every push touching `data/scans/**` or `site
 ## Status
 
 **Live.** [`.github/workflows/scan.yml`](.github/workflows/scan.yml) scans every tracked
-property weekly (Monday 06:00 UTC, or on demand via `workflow_dispatch`), opens a PR updating
-[`data/scans/`](data/scans/), and files/updates a dedup-safe remediation issue per property.
-Each scan PR needs a manual workflow-run approval before it can merge (a GitHub policy for
-bot-authored PRs — see [`docs/architecture.md`](docs/architecture.md)), so the dashboard only
-moves once those are merged.
+property weekly (Monday 06:00 UTC, or on demand via `workflow_dispatch`), commits the result
+through the Git Data API (so GitHub signs it) and opens a PR updating
+[`data/scans/`](data/scans/), auto-merging once the required `CodeFactor` check reports, and
+files/updates a dedup-safe remediation issue per property. `CI`/`CodeQL` still sit in
+`action_required` on these PRs until a human approves the run (a GitHub policy for
+bot-authored PRs, unrelated to the merge itself — see
+[`docs/architecture.md`](docs/architecture.md)), so they don't validate the change unless
+someone approves them.
 [`.github/workflows/pages.yml`](.github/workflows/pages.yml) rebuilds the dashboard above on
 every push touching `data/scans/**` or `site/**`. Arcs 0001-0003 and 0005 (scan engine,
 dashboard, per-category trend indicator, A2A AgentCard v1.0.0 migration) are complete. Arc 0004

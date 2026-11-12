@@ -49,19 +49,48 @@ jobs:
       - name: Commit scan results
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          REPO: ${{ github.repository }}
+        # Commit through the Git Data API with no custom author, so GitHub signs it: the
+        # required_signatures ruleset blocks a squash-merge whose head commit is unsigned
+        # (a local `git commit` here left PR #94 blocked as "unsigned").
         run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          set -euo pipefail
           git add data/scans/
           if git diff --cached --quiet; then
             echo "No scan changes to commit."
             exit 0
           fi
+
+          base_sha=$(git rev-parse HEAD)
+          base_tree=$(gh api "repos/$REPO/git/commits/$base_sha" --jq '.tree.sha')
+
+          tmp=$(mktemp -d)
+          trap 'rm -rf "$tmp"' EXIT
+          entries="$tmp/entries.jsonl"
+          : > "$entries"
+          while IFS=$'\t' read -r status path; do
+            if [[ "$status" == "D" ]]; then
+              jq -nc --arg p "$path" '{path: $p, mode: "100644", type: "blob", sha: null}' >> "$entries"
+            else
+              base64 -w0 "$path" | jq -Rs '{content: ., encoding: "base64"}' > "$tmp/blob.json"
+              sha=$(gh api "repos/$REPO/git/blobs" --input "$tmp/blob.json" --jq '.sha')
+              jq -nc --arg p "$path" --arg s "$sha" '{path: $p, mode: "100644", type: "blob", sha: $s}' >> "$entries"
+            fi
+          done < <(git diff --cached --name-status --no-renames -- data/scans/)
+
+          jq -s --arg b "$base_tree" '{base_tree: $b, tree: .}' "$entries" > "$tmp/tree.json"
+          tree=$(gh api "repos/$REPO/git/trees" --input "$tmp/tree.json" --jq '.sha')
+
+          jq -n --arg m "chore(scan): update scan results" --arg t "$tree" --arg p "$base_sha" \
+            '{message: $m, tree: $t, parents: [$p]}' > "$tmp/commit.json"
+          commit=$(gh api "repos/$REPO/git/commits" --input "$tmp/commit.json" --jq '.sha')
+
           branch="chore/scan-results-$(date -u +%Y%m%d%H%M%S)"
-          git checkout -b "$branch"
-          git commit -m "chore(scan): update scan results"
-          git push origin "$branch"
+          gh api "repos/$REPO/git/refs" -f "ref=refs/heads/$branch" -f "sha=$commit" --jq '.ref' > /dev/null
+
           gh pr create --title "chore(scan): update scan results" \
             --body "Automated scan results update." \
             --base main --head "$branch"
+          # Required status check (CodeFactor) hasn't reported yet seconds after PR
+          # creation, so an immediate merge is rejected; --auto waits for it instead.
           gh pr merge "$branch" --squash --auto --delete-branch

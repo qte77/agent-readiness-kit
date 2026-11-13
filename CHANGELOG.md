@@ -9,6 +9,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- `data/scans/agenthud-agui-a2ui.json`, `data/scans/qte77-github-io.json`: re-ran `make scan`
+  after `qte77.github.io`'s agent-card was repointed at the agenthud Worker's new domain
+  (qte77.github.io PR #63) — both checkpoints had still been citing the old workers.dev URL for
+  the live A2A probe's `serviceUrl`/endpoint.
 - Scan PRs can merge again: the "Commit scan results" step commits through the Git Data API with
   no custom author, so GitHub signs the commit. The old local `git commit` was unsigned, and the
   `required_signatures` ruleset kept PR #94 and earlier scan PRs blocked even with auto-merge on.

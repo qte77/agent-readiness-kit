@@ -8,6 +8,8 @@ issues: [1, 3, 4, 5, 6, 17]
 predecessor: null
 ---
 
+> **Closed plan, kept as a record.** Commands in it are one machine's history, not procedure; for current steps see the repo's CONTRIBUTING and the newest plan.
+
 # Arc 0001 — Scan Engine + MCP Worker Scaffold
 
 ## Status (read this first — onboards the next session)

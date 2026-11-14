@@ -44,8 +44,8 @@ in **Findings** below.
 **The loop** (same one used for every prior row this session, see `docs/plans/0003-...md` for the
 full description): RED-first test → minimum implementation → `npx vitest run` + `npx tsc
 --noEmit` green → commit on a topic branch → push + open PR (don't merge from inside a dispatched
-agent — that's the coordinating session's job after CI/CodeFactor/CodeQL are green) → `gh pr
-merge --squash --admin --delete-branch` → delete branch → `git fetch --prune`.
+agent — that's the coordinating session's job after CI/CodeFactor/CodeQL are green) →
+squash-merge once CI passes; merging is an owner gate → delete branch → `git fetch --prune`.
 
 **Is this independent of arc 0003?** Yes, confirmed zero file overlap: arc 0003 touches
 `scripts/buildSite.ts`, `test/scripts/buildSite.test.ts`, `site/app.js`, `site/style.css`; this
@@ -60,8 +60,8 @@ signal id there before this repo's code). Rows 1-5 are agent-gated and do not de
 **Commands:** same as arc 0003 — `npm install`, `npx vitest run`, `npx tsc --noEmit`, `npm run
 build && npm run site:build`.
 
-**Watch-outs:** identical to arc 0003's list (`env -u GH_TOKEN -u GITHUB_TOKEN` on every git/gh
-call, `git config commit.gpgsign false` before committing, no literal `()`/`<>` in inline
+**Watch-outs:** identical to arc 0003's list (authenticate git/gh as this machine requires on
+every git/gh call, commit per the repo's signing policy, no literal `()`/`<>` in inline
 `-m`/`--body` text — use `-F`/`--body-file`, `/usr/bin/git` not bare `git` inside worktrees). Not
 repeated in full here to avoid drift between two copies — see `docs/plans/0003-category-trend-indicator.md`'s
 Watch-outs section, still current.

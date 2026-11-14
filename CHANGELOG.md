@@ -35,6 +35,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   status, score/maxScore, details, recommendation) plus the mapped count is persisted as the
   new optional `ScanRun.oraAiChecks`, so a score change can be explained from the scan file
   alone.
+- `docs/plans/0004-crosswalk-accuracy-and-gaps.md`: merge/auth recipes in its loop and
+  Watch-outs reworded to neutral outcomes (its status is still `open`, so these lines govern
+  future sessions). `docs/plans/0001-scan-engine.md`, `0003-category-trend-indicator.md`, and
+  `0005-a2a-agentcard-v1-migration.md` (all closed) each got a one-line banner marking them as
+  historical records rather than current procedure; no other content in those three changed.
 
 ### Added
 

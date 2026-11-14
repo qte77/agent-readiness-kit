@@ -8,6 +8,8 @@ issues: []
 predecessor: 2
 ---
 
+> **Closed plan, kept as a record.** Commands in it are one machine's history, not procedure; for current steps see the repo's CONTRIBUTING and the newest plan.
+
 # Arc 0003 — per-category trend indicator
 
 ## Status (read this first — onboards the next session)

@@ -15,6 +15,12 @@ updates:
       npm-security:
         applies-to: "security-updates"
         patterns: ["*"]
+    ignore:
+      # @types/node tracks the Node runtime major. The repo runs Node 22 (package.json engines,
+      # setup-node 22 in CI), so a types major ahead of it would type-check APIs the runtime lacks.
+      # Lift this when engines and CI move to a newer Node major.
+      - dependency-name: "@types/node"
+        update-types: ["version-update:semver-major"]
 
   - package-ecosystem: "npm"
     directory: "/worker"

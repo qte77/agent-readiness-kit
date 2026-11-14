@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+- `.github/dependabot.yml`: ignore `@types/node` major updates in the root npm entry, so the types
+  stay on the Node 22 line the repo runs (engines `>=22`, setup-node 22); lift with the runtime bump.
+
 ### Fixed
 
 - `data/scans/agenthud-agui-a2ui.json`, `data/scans/qte77-github-io.json`: re-ran `make scan`

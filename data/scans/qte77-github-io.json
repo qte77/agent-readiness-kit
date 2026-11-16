@@ -1,7 +1,7 @@
 {
   "propertyId": "qte77-github-io",
   "url": "https://qte77.github.io",
-  "scannedAt": "2026-11-13T21:11:35.047Z",
+  "scannedAt": "2026-11-16T06:21:05.717Z",
   "findings": [
     {
       "id": "wellKnown.agent-instruction",
@@ -149,10 +149,22 @@
       "id": "discoverSnapshot.schema-type-breadth",
       "category": "Content",
       "source": "discoverSnapshot",
-      "status": "unknown",
-      "summary": "Could not determine schema.org @type breadth: no polyfetch-scrape directory configured — pass polyfetchScrapeDir or set POLYFETCH_SCRAPE_DIR",
+      "status": "pass",
+      "summary": "2 distinct schema.org @type values found (WebSite, SoftwareApplication) — broad structured-data coverage",
       "evidence": {
-        "error": "no polyfetch-scrape directory configured — pass polyfetchScrapeDir or set POLYFETCH_SCRAPE_DIR"
+        "json_ld_types": [
+          "WebSite",
+          "SoftwareApplication"
+        ],
+        "sitemaps": [
+          "https://qte77.github.io/sitemap.xml"
+        ],
+        "feeds": [
+          "https://qte77.github.io/feed.xml"
+        ],
+        "llms_txt": [
+          "https://qte77.github.io/llms.txt"
+        ]
       }
     },
     {
@@ -242,7 +254,7 @@
       "evidence": {
         "level": 2,
         "levelName": "Bot-Aware",
-        "scannedAt": "2026-11-13T21:10:38.401Z",
+        "scannedAt": "2026-11-16T06:20:15.929Z",
         "checks": {
           "discoverability": {
             "robotsTxt": {
@@ -264,7 +276,7 @@
                     "statusText": "OK",
                     "headers": {
                       "content-type": "text/plain; charset=utf-8",
-                      "cf-ray": "a5a0c38becb6294e-AMS",
+                      "cf-ray": "a5b46367febe9614-SEA",
                       "cf-cache-status": "DYNAMIC",
                       "age": "0"
                     },
@@ -326,7 +338,7 @@
                     "statusText": "OK",
                     "headers": {
                       "content-type": "application/xml",
-                      "cf-ray": "a5a0c38cdd5e294e-AMS",
+                      "cf-ray": "a5b463685f979614-SEA",
                       "cf-cache-status": "DYNAMIC",
                       "age": "0"
                     }
@@ -345,7 +357,7 @@
                   }
                 }
               ],
-              "durationMs": 166
+              "durationMs": 92
             },
             "linkHeaders": {
               "status": "fail",
@@ -366,9 +378,9 @@
                     "statusText": "OK",
                     "headers": {
                       "content-type": "text/html; charset=utf-8",
-                      "cf-ray": "a5a0c38f3f16294e-AMS",
+                      "cf-ray": "a5b4636939549614-SEA",
                       "cf-cache-status": "DYNAMIC",
-                      "age": "1"
+                      "age": "0"
                     }
                   },
                   "finding": {
@@ -385,7 +397,7 @@
                   }
                 }
               ],
-              "durationMs": 361
+              "durationMs": 134
             },
             "dnsAid": {
               "status": "fail",
@@ -453,7 +465,7 @@
                     "headers": {
                       "content-type": "application/dns-json"
                     },
-                    "bodyPreview": "{\"Status\":0,\"TC\":false,\"RD\":true,\"RA\":true,\"AD\":false,\"CD\":false,\"Question\":[{\"name\":\"_index._agents.qte77.github.io\",\"type\":65}],\"Authority\":[{\"name\":\"github.io\",\"type\":6,\"TTL\":900,\"data\":\"ns-1622.awsdns-10.co.uk. awsdns-hostmaster.amazon.com. 1 7200 900 1209600 86400\"}]}"
+                    "bodyPreview": "{\"Status\":0,\"TC\":false,\"RD\":true,\"RA\":true,\"AD\":false,\"CD\":false,\"Question\":[{\"name\":\"_index._agents.qte77.github.io\",\"type\":65}],\"Authority\":[{\"name\":\"github.io\",\"type\":6,\"TTL\":3600,\"data\":\"dns1.p05.nsone.net. hostmaster.nsone.net. 1647625169 43200 7200 1209600 3600\"}]}"
                   },
                   "finding": {
                     "outcome": "neutral",
@@ -568,7 +580,7 @@
                     "headers": {
                       "content-type": "application/dns-json"
                     },
-                    "bodyPreview": "{\"Status\":0,\"TC\":false,\"RD\":true,\"RA\":true,\"AD\":false,\"CD\":false,\"Question\":[{\"name\":\"_index._agents.qte77.github.io\",\"type\":16}],\"Authority\":[{\"name\":\"github.io\",\"type\":6,\"TTL\":900,\"data\":\"ns-1622.awsdns-10.co.uk. awsdns-hostmaster.amazon.com. 1 7200 900 1209600 86400\"}]}"
+                    "bodyPreview": "{\"Status\":0,\"TC\":false,\"RD\":true,\"RA\":true,\"AD\":false,\"CD\":false,\"Question\":[{\"name\":\"_index._agents.qte77.github.io\",\"type\":16}],\"Authority\":[{\"name\":\"github.io\",\"type\":6,\"TTL\":3600,\"data\":\"dns1.p05.nsone.net. hostmaster.nsone.net. 1647625169 43200 7200 1209600 3600\"}]}"
                   },
                   "finding": {
                     "outcome": "neutral",
@@ -592,7 +604,7 @@
                   }
                 }
               ],
-              "durationMs": 7
+              "durationMs": 8
             }
           },
           "contentAccessibility": {
@@ -638,7 +650,7 @@
                   }
                 }
               ],
-              "durationMs": 190
+              "durationMs": 405
             }
           },
           "botAccessControl": {
@@ -985,7 +997,7 @@
                     "statusText": "OK",
                     "headers": {
                       "content-type": "text/plain; charset=utf-8",
-                      "cf-ray": "a5a0c38becb6294e-AMS",
+                      "cf-ray": "a5b46367febe9614-SEA",
                       "cf-cache-status": "DYNAMIC",
                       "age": "0"
                     },
@@ -1046,7 +1058,7 @@
                     "statusText": "OK",
                     "headers": {
                       "content-type": "text/plain; charset=utf-8",
-                      "cf-ray": "a5a0c38becb6294e-AMS",
+                      "cf-ray": "a5b46367febe9614-SEA",
                       "cf-cache-status": "DYNAMIC",
                       "age": "0"
                     },
@@ -1100,7 +1112,7 @@
                     "statusText": "Not Found",
                     "headers": {
                       "content-type": "text/html; charset=utf-8",
-                      "cf-ray": "a5a0c38cdd5f294e-AMS",
+                      "cf-ray": "a5b463685f949614-SEA",
                       "cf-cache-status": "DYNAMIC",
                       "age": "0"
                     }
@@ -1119,7 +1131,7 @@
                   }
                 }
               ],
-              "durationMs": 140
+              "durationMs": 6
             }
           },
           "discovery": {
@@ -1145,7 +1157,7 @@
                     "statusText": "Not Found",
                     "headers": {
                       "content-type": "text/html; charset=utf-8",
-                      "cf-ray": "a5a0c38e5e7b294e-AMS",
+                      "cf-ray": "a5b46368d8709614-SEA",
                       "cf-cache-status": "DYNAMIC",
                       "age": "0"
                     }
@@ -1164,7 +1176,7 @@
                   }
                 }
               ],
-              "durationMs": 332
+              "durationMs": 76
             },
             "oauthDiscovery": {
               "status": "fail",
@@ -1185,7 +1197,7 @@
                     "statusText": "Not Found",
                     "headers": {
                       "content-type": "text/html; charset=utf-8",
-                      "cf-ray": "a5a0c38cdd5d294e-AMS",
+                      "cf-ray": "a5b463686fa79614-SEA",
                       "cf-cache-status": "DYNAMIC",
                       "age": "0"
                     }
@@ -1207,7 +1219,7 @@
                     "statusText": "Not Found",
                     "headers": {
                       "content-type": "text/html; charset=utf-8",
-                      "cf-ray": "a5a0c38cdd64294e-AMS",
+                      "cf-ray": "a5b463686fad9614-SEA",
                       "cf-cache-status": "DYNAMIC",
                       "age": "0"
                     }
@@ -1226,7 +1238,7 @@
                   }
                 }
               ],
-              "durationMs": 128
+              "durationMs": 100
             },
             "oauthProtectedResource": {
               "status": "fail",
@@ -1235,28 +1247,6 @@
                 "code": "check.oauthProtectedResource.notFound"
               },
               "evidence": [
-                {
-                  "action": "fetch",
-                  "label": "GET /",
-                  "request": {
-                    "url": "https://qte77.github.io",
-                    "method": "GET"
-                  },
-                  "response": {
-                    "status": 200,
-                    "statusText": "OK",
-                    "headers": {
-                      "content-type": "text/html; charset=utf-8",
-                      "cf-ray": "a5a0c38d8dde294e-AMS",
-                      "cf-cache-status": "DYNAMIC",
-                      "age": "0"
-                    }
-                  },
-                  "finding": {
-                    "outcome": "neutral",
-                    "summary": "Target resource returned 200 (no WWW-Authenticate header)"
-                  }
-                },
                 {
                   "action": "fetch",
                   "label": "GET /.well-known/oauth-protected-resource",
@@ -1269,7 +1259,7 @@
                     "statusText": "Not Found",
                     "headers": {
                       "content-type": "text/html; charset=utf-8",
-                      "cf-ray": "a5a0c38d0d82294e-AMS",
+                      "cf-ray": "a5b463686faf9614-SEA",
                       "cf-cache-status": "DYNAMIC",
                       "age": "0"
                     }
@@ -1277,6 +1267,28 @@
                   "finding": {
                     "outcome": "negative",
                     "summary": "Returned 404"
+                  }
+                },
+                {
+                  "action": "fetch",
+                  "label": "GET /",
+                  "request": {
+                    "url": "https://qte77.github.io",
+                    "method": "GET"
+                  },
+                  "response": {
+                    "status": 200,
+                    "statusText": "OK",
+                    "headers": {
+                      "content-type": "text/html; charset=utf-8",
+                      "cf-ray": "a5b463687fd19614-SEA",
+                      "cf-cache-status": "DYNAMIC",
+                      "age": "0"
+                    }
+                  },
+                  "finding": {
+                    "outcome": "neutral",
+                    "summary": "Target resource returned 200 (no WWW-Authenticate header)"
                   }
                 },
                 {
@@ -1288,7 +1300,7 @@
                   }
                 }
               ],
-              "durationMs": 172
+              "durationMs": 31
             },
             "authMd": {
               "status": "fail",
@@ -1312,7 +1324,7 @@
                     "statusText": "Not Found",
                     "headers": {
                       "content-type": "text/html; charset=utf-8",
-                      "cf-ray": "a5a0c38d9de8294e-AMS",
+                      "cf-ray": "a5b463687fdc9614-SEA",
                       "cf-cache-status": "DYNAMIC",
                       "age": "0"
                     }
@@ -1331,7 +1343,7 @@
                   }
                 }
               ],
-              "durationMs": 230
+              "durationMs": 32
             },
             "mcpServerCard": {
               "status": "fail",
@@ -1352,7 +1364,7 @@
                     "statusText": "Not Found",
                     "headers": {
                       "content-type": "text/html; charset=utf-8",
-                      "cf-ray": "a5a0c38dadf4294e-AMS",
+                      "cf-ray": "a5b463689ffe9614-SEA",
                       "cf-cache-status": "DYNAMIC",
                       "age": "0"
                     }
@@ -1360,28 +1372,6 @@
                   "finding": {
                     "outcome": "negative",
                     "summary": "/.well-known/mcp/server-card.json returned 404"
-                  }
-                },
-                {
-                  "action": "fetch",
-                  "label": "GET /.well-known/mcp.json",
-                  "request": {
-                    "url": "https://qte77.github.io/.well-known/mcp.json",
-                    "method": "GET"
-                  },
-                  "response": {
-                    "status": 404,
-                    "statusText": "Not Found",
-                    "headers": {
-                      "content-type": "text/html; charset=utf-8",
-                      "cf-ray": "a5a0c38dce14294e-AMS",
-                      "cf-cache-status": "DYNAMIC",
-                      "age": "0"
-                    }
-                  },
-                  "finding": {
-                    "outcome": "negative",
-                    "summary": "/.well-known/mcp.json returned 404"
                   }
                 },
                 {
@@ -1396,7 +1386,7 @@
                     "statusText": "Not Found",
                     "headers": {
                       "content-type": "text/html; charset=utf-8",
-                      "cf-ray": "a5a0c38dadfd294e-AMS",
+                      "cf-ray": "a5b4636898009614-SEA",
                       "cf-cache-status": "DYNAMIC",
                       "age": "0"
                     }
@@ -1404,6 +1394,28 @@
                   "finding": {
                     "outcome": "negative",
                     "summary": "/.well-known/mcp/server-cards.json returned 404"
+                  }
+                },
+                {
+                  "action": "fetch",
+                  "label": "GET /.well-known/mcp.json",
+                  "request": {
+                    "url": "https://qte77.github.io/.well-known/mcp.json",
+                    "method": "GET"
+                  },
+                  "response": {
+                    "status": 404,
+                    "statusText": "Not Found",
+                    "headers": {
+                      "content-type": "text/html; charset=utf-8",
+                      "cf-ray": "a5b46368a81c9614-SEA",
+                      "cf-cache-status": "DYNAMIC",
+                      "age": "0"
+                    }
+                  },
+                  "finding": {
+                    "outcome": "negative",
+                    "summary": "/.well-known/mcp.json returned 404"
                   }
                 },
                 {
@@ -1415,7 +1427,7 @@
                   }
                 }
               ],
-              "durationMs": 256
+              "durationMs": 122
             },
             "a2aAgentCard": {
               "status": "pass",
@@ -1466,7 +1478,7 @@
                     "statusText": "OK",
                     "headers": {
                       "content-type": "application/json; charset=utf-8",
-                      "cf-ray": "a5a0c38dee32294e-AMS",
+                      "cf-ray": "a5b46368c8409614-SEA",
                       "cf-cache-status": "DYNAMIC",
                       "age": "0"
                     },
@@ -1502,7 +1514,7 @@
                   }
                 }
               ],
-              "durationMs": 287
+              "durationMs": 66
             },
             "agentSkills": {
               "status": "fail",
@@ -1523,7 +1535,7 @@
                     "statusText": "Not Found",
                     "headers": {
                       "content-type": "text/html; charset=utf-8",
-                      "cf-ray": "a5a0c38dfe3a294e-AMS",
+                      "cf-ray": "a5b46368c8579614-SEA",
                       "cf-cache-status": "DYNAMIC",
                       "age": "0"
                     }
@@ -1545,7 +1557,7 @@
                     "statusText": "Not Found",
                     "headers": {
                       "content-type": "text/html; charset=utf-8",
-                      "cf-ray": "a5a0c38f3f20294e-AMS",
+                      "cf-ray": "a5b4636949729614-SEA",
                       "cf-cache-status": "DYNAMIC",
                       "age": "0"
                     }
@@ -1564,7 +1576,7 @@
                   }
                 }
               ],
-              "durationMs": 493
+              "durationMs": 217
             },
             "webMcp": {
               "status": "fail",
@@ -1610,7 +1622,7 @@
                   }
                 }
               ],
-              "durationMs": 4353
+              "durationMs": 4632
             },
             "ard": {
               "status": "fail",
@@ -1650,7 +1662,7 @@
                     "statusText": "Not Found",
                     "headers": {
                       "content-type": "text/html; charset=utf-8",
-                      "cf-ray": "a5a0c38cdd5b294e-AMS",
+                      "cf-ray": "a5b463685f929614-SEA",
                       "cf-cache-status": "DYNAMIC",
                       "age": "0"
                     }
@@ -1699,7 +1711,7 @@
                     "headers": {
                       "content-type": "application/dns-json"
                     },
-                    "bodyPreview": "{\"Status\":0,\"TC\":false,\"RD\":true,\"RA\":true,\"AD\":false,\"CD\":false,\"Question\":[{\"name\":\"_search._agents.qte77.github.io\",\"type\":33}],\"Authority\":[{\"name\":\"github.io\",\"type\":6,\"TTL\":900,\"data\":\"ns-1622.awsdns-10.co.uk. awsdns-hostmaster.amazon.com. 1 7200 900 1209600 86400\"}]}"
+                    "bodyPreview": "{\"Status\":0,\"TC\":false,\"RD\":true,\"RA\":true,\"AD\":false,\"CD\":false,\"Question\":[{\"name\":\"_search._agents.qte77.github.io\",\"type\":33}],\"Authority\":[{\"name\":\"github.io\",\"type\":6,\"TTL\":3600,\"data\":\"dns1.p05.nsone.net. hostmaster.nsone.net. 1647625169 43200 7200 1209600 3600\"}]}"
                   },
                   "finding": {
                     "outcome": "neutral",
@@ -1719,7 +1731,7 @@
                 "discoveryMechanisms": [],
                 "searchEndpoints": []
               },
-              "durationMs": 109
+              "durationMs": 59
             },
             "personalAgentProtocol": {
               "status": "fail",
@@ -1747,7 +1759,7 @@
                     "statusText": "Not Found",
                     "headers": {
                       "content-type": "text/html; charset=utf-8",
-                      "cf-ray": "a5a0c38becb5294e-AMS",
+                      "cf-ray": "a5b46367febb9614-SEA",
                       "cf-cache-status": "DYNAMIC",
                       "age": "0"
                     }
@@ -1762,7 +1774,7 @@
                   }
                 }
               ],
-              "durationMs": 117
+              "durationMs": 121
             }
           },
           "commerce": {
@@ -1791,7 +1803,7 @@
                     "statusText": "OK",
                     "headers": {
                       "content-type": "text/html; charset=utf-8",
-                      "cf-ray": "a5a0c38e8e9d294e-AMS",
+                      "cf-ray": "a5b46368f8bc9614-SEA",
                       "cf-cache-status": "DYNAMIC",
                       "age": "0"
                     }
@@ -1813,7 +1825,7 @@
                     "statusText": "Not Found",
                     "headers": {
                       "content-type": "text/html; charset=utf-8",
-                      "cf-ray": "a5a0c38e9eac294e-AMS",
+                      "cf-ray": "a5b4636908d39614-SEA",
                       "cf-cache-status": "DYNAMIC",
                       "age": "0"
                     }
@@ -1835,7 +1847,7 @@
                     "statusText": "Not Found",
                     "headers": {
                       "content-type": "text/html; charset=utf-8",
-                      "cf-ray": "a5a0c38ebec7294e-AMS",
+                      "cf-ray": "a5b4636908e59614-SEA",
                       "cf-cache-status": "DYNAMIC",
                       "age": "0"
                     }
@@ -1857,7 +1869,7 @@
                     "statusText": "OK",
                     "headers": {
                       "content-type": "application/json",
-                      "cf-ray": "a5a0c38e6e90294e-AMS",
+                      "cf-ray": "a5b46368e8869614-SEA",
                       "cf-cache-status": "DYNAMIC"
                     }
                   }
@@ -1883,7 +1895,7 @@
                   }
                 }
               ],
-              "durationMs": 929
+              "durationMs": 417
             },
             "mpp": {
               "status": "neutral",
@@ -1910,7 +1922,7 @@
                     "statusText": "OK",
                     "headers": {
                       "content-type": "application/json; charset=utf-8",
-                      "cf-ray": "a5a0c38eced0294e-AMS",
+                      "cf-ray": "a5b4636929329614-SEA",
                       "cf-cache-status": "DYNAMIC",
                       "age": "0"
                     }
@@ -1929,7 +1941,7 @@
                   }
                 }
               ],
-              "durationMs": 416
+              "durationMs": 126
             },
             "ucp": {
               "status": "neutral",
@@ -1956,7 +1968,7 @@
                     "statusText": "Not Found",
                     "headers": {
                       "content-type": "text/html; charset=utf-8",
-                      "cf-ray": "a5a0c38e6e86294e-AMS",
+                      "cf-ray": "a5b46368d8799614-SEA",
                       "cf-cache-status": "DYNAMIC",
                       "age": "0"
                     }
@@ -1975,7 +1987,7 @@
                   }
                 }
               ],
-              "durationMs": 356
+              "durationMs": 146
             },
             "acp": {
               "status": "neutral",
@@ -2002,7 +2014,7 @@
                     "statusText": "Not Found",
                     "headers": {
                       "content-type": "text/html; charset=utf-8",
-                      "cf-ray": "a5a0c38f0efd294e-AMS",
+                      "cf-ray": "a5b4636939449614-SEA",
                       "cf-cache-status": "DYNAMIC",
                       "age": "0"
                     }
@@ -2021,7 +2033,7 @@
                   }
                 }
               ],
-              "durationMs": 433
+              "durationMs": 196
             },
             "ap2": {
               "status": "neutral",
@@ -2101,7 +2113,7 @@
       }
     }
   ],
-  "score": 47,
+  "score": 41,
   "grade": "D",
   "oraAiChecks": {
     "mapped": 6,
@@ -2148,10 +2160,10 @@
       },
       {
         "id": "brand-search-accuracy",
-        "status": "pass",
-        "score": 3,
+        "status": "fail",
+        "score": 0,
         "maxScore": 3,
-        "details": "qte77.github.io ranks #1 for \"Recap on ML — AI Agents & Dev Tooling by qte77 lab automation\" but is not in the top 10 for \"Recap on ML — AI Agents & Dev Tooling by qte77 Claude Code\"",
+        "details": "qte77.github.io was not in the top 10 for \"Recap on ML — AI Agents & Dev Tooling by qte77 Claude Code\" or \"Recap on ML — AI Agents & Dev Tooling by qte77 lab automation\"",
         "recommendation": "Make sure your own domain ranks in the top results when people search your brand together with your main product (for example \"Acme payments API\"). Ora first reads product terms from your homepage's JSON-LD keywords or knowsAbout, or its meta keywords tag. If none qualifies, it checks the main service's serviceType in JSON-LD, then a short product phrase in the page title. If those do not qualify, it checks product names in the homepage business's JSON-LD offers. Use clear product terms that also appear on the page. If no term qualifies, Ora searches your brand name alone. If your domain does not rank, your brand may be too generic, conflict with a more established term, or not yet indexed. Strengthen it by describing your main product clearly in your homepage title and headings, earning press mentions that link to your domain, and avoiding redirect chains that mask your main domain in search results."
       },
       {
@@ -2262,7 +2274,7 @@
         "status": "pass",
         "score": 1,
         "maxScore": 1,
-        "details": "60 official skills published on skills.sh - 135 total installs (skills.sh/qte77)",
+        "details": "60 official skills published on skills.sh - 137 total installs (skills.sh/qte77)",
         "recommendation": "Publish agent skills on skills.sh so AI agents can discover your product's capabilities. Create a SKILL.md in your GitHub repo and register it with 'npx skills add'. See skills.sh/docs."
       },
       {
@@ -2366,7 +2378,7 @@
         "status": "warning",
         "score": 1,
         "maxScore": 2,
-        "details": "Skills.sh presence exists but limited - 135 installs (goal: 200+)",
+        "details": "Skills.sh presence exists but limited - 137 installs (goal: 200+)",
         "recommendation": "Expand your skills.sh presence with multiple skill repos covering different use cases. Add descriptive skill names, clear SKILL.md files, and organize by capability area."
       },
       {
@@ -2655,7 +2667,7 @@
         "score": 0,
         "maxScore": 2,
         "details": "Not published",
-        "recommendation": "Publish a Personal Agent Protocol discovery file at /.well-known/poppy.json on the exact host agents request, served over HTTPS as a JSON object. Set protocol_version to \"1.0\": Draft 1.0 is still in progress, but it starts from 0.4, takes only fixes, and is the version the spec's authors ask builders to use. Agents on 0.4, the latest published version, do not use a 1.0 file, so also link a 0.4 document in supported_versions, on the same host, and a document for any older version you still serve; serve each linked document at its URL without a redirect, with the protocol_version it is listed under, no supported_versions, and the same organization.domain and issuer. Set organization.domain to the host that serves the file (after any redirect, with www. if that host has it), and end any redirect at /.well-known/poppy.json itself. Describe at least one interface (agent, apis, or web). Agents find your OAuth issuer in the protected resource metadata at /.well-known/oauth-protected-resource on that host: its resource must be https:// plus your domain, and the server it lists in authorization_servers becomes your issuer, whose metadata must then list your domain in protected_resources (with several servers, name one in auth.issuer). With no issuer at all, let that URL answer 404; if it names an issuer but you offer agents no sign-in yet, set auth.disabled to true. Every URL in the file must be https://. Spec: https://personalagentprotocol.org/docs/1.0/spec"
+        "recommendation": "Publish a Personal Agent Protocol discovery file at /.well-known/poppy.json on the exact host agents request, served over HTTPS as a JSON object. Set protocol_version to \"1.0\", the latest published version (November 14, 2026). If you still serve an older version for agents that have not moved, link its document in supported_versions, on the same host; serve each linked document at its URL without a redirect, with the protocol_version it is listed under, no supported_versions, and the same organization.domain and issuer. Set organization.domain to the host that serves the file (after any redirect, with www. if that host has it), and end any redirect at /.well-known/poppy.json itself. Describe at least one interface (agent, apis, or web). Agents find your OAuth issuer in the protected resource metadata at /.well-known/oauth-protected-resource on that host: its resource must be https:// plus your domain, and the server it lists in authorization_servers becomes your issuer, whose metadata must then list your domain in protected_resources (with several servers, name one in auth.issuer). With no issuer at all, let that URL answer 404; if it names an issuer but you offer agents no sign-in yet, set auth.disabled to true. Every URL in the file must be https://. Spec: https://personalagentprotocol.org/docs/1.0/spec"
       },
       {
         "id": "pap-issuer-binding",
@@ -2663,7 +2675,7 @@
         "score": 0,
         "maxScore": 2,
         "details": "Not published",
-        "recommendation": "Serve RFC 8414 authorization server metadata for your OAuth issuer at /.well-known/oauth-authorization-server (inserted before the issuer's path when it has one). The metadata `issuer` must match your issuer exactly, and `protected_resources` must list https:// plus this domain. Advertise token_endpoint, revocation_endpoint and a grant_types_supported list that includes refresh_token, plus authorization_endpoint when that list has authorization_code and device_authorization_endpoint when it has the device code grant. Accept client assertions signed with ES256 and with PS384: when token_endpoint_auth_methods_supported lists private_key_jwt, RFC 8414 requires token_endpoint_auth_signing_alg_values_supported, so list it with both and never none. Every domain your issuer lists must select that same issuer, and list only S256 in code_challenge_methods_supported. Spec: https://personalagentprotocol.org/docs/1.0/spec"
+        "recommendation": "Serve RFC 8414 authorization server metadata for your OAuth issuer at /.well-known/oauth-authorization-server (inserted before the issuer's path when it has one). The metadata `issuer` must match your issuer exactly, and `protected_resources` must list https:// plus this domain. Advertise token_endpoint, revocation_endpoint and a grant_types_supported list that includes refresh_token, plus authorization_endpoint when that list has authorization_code and device_authorization_endpoint when it has the device code grant. If you set require_pushed_authorization_requests to true, list pushed_authorization_request_endpoint as an https URL, where agents push their Direct Sign-In requests. Accept client assertions signed with ES256 and with PS384: when token_endpoint_auth_methods_supported lists private_key_jwt, RFC 8414 requires token_endpoint_auth_signing_alg_values_supported, so list it with both and never none. Write every protected_resources entry as an https URL with no fragment, and list each of your other domains as https:// plus the domain, with no path or trailing slash (a port only when it is not 443). Every domain your issuer lists must select that same issuer, and list only S256 in code_challenge_methods_supported. Spec: https://personalagentprotocol.org/docs/1.0/spec"
       },
       {
         "id": "pap-auth-config",
@@ -2671,7 +2683,7 @@
         "score": 0,
         "maxScore": 2,
         "details": "Not published",
-        "recommendation": "Describe each scope you offer agents, in auth.scopes (scope name to description) or in the OAuth security scheme of an OpenAPI document you list, so an agent can ask for only what a task needs. auth.scope_hints is optional; each entry you add has a changes value and a boolean personal_data. If you offer Mediated Sign-In, list it as mediated-sign-in with a version 1 entry holding its fields (each with name, label, and secret) and scopes, add https://personalagentprotocol.org/grant/mediated-sign-in to your issuer's grant_types_supported, and leave auth.disabled unset. Name the protocol's own extensions by their plain name and your own with a prefix from your domain. List each extension as a list with an entry per version you support: operations at version 3 and browser-control at version 1. An operations entry with an endpoint for website operations needs web.browser_session_endpoint, and browser-control is listed with it. Set web.disabled only with agent or apis and no browser_session_endpoint, and web.unscoped only with one. If you list web.browser_session_endpoint and offer sign-in, include poppy:browser-sign-in in scopes_supported, in your issuer's metadata or in the protected resource metadata of your domain (agents read both). A file that still declares 0.3 lists each extension as one object with a version, and operations at version 2. Spec: https://personalagentprotocol.org/docs/1.0/spec"
+        "recommendation": "If you offer sign-in, list every scope an agent can request in scopes_supported, in your issuer's metadata, the protected resource metadata of your domain, or both. Describe each scope you offer agents, in auth.scopes (scope name to description) or in the OAuth security scheme of an OpenAPI document you list, so an agent can ask for only what a task needs. auth.scope_hints is optional; each entry you add has a changes value and a boolean personal_data. If you offer Mediated Sign-In, list it as mediated-sign-in with a version 1 entry holding its fields (each with name, label, and secret) and scopes, add https://personalagentprotocol.org/grant/mediated-sign-in to your issuer's grant_types_supported, and leave auth.disabled unset. Name the protocol's own extensions by their plain name and your own with a prefix from your domain. List each extension as a list with an entry per version you support: operations at version 3 and browser-control at version 1. An operations entry with an endpoint for website operations needs web.browser_session_endpoint, and browser-control is listed with it. Set web.disabled only with agent or apis and no browser_session_endpoint, and web.unscoped only with one. If you list web.browser_session_endpoint and offer sign-in, include poppy:browser-sign-in in scopes_supported, in your issuer's metadata or in the protected resource metadata of your domain (agents read both). A file that still declares 0.3 lists each extension as one object with a version, and operations at version 2. Spec: https://personalagentprotocol.org/docs/1.0/spec"
       },
       {
         "id": "pap-interfaces",
@@ -2679,7 +2691,7 @@
         "score": 0,
         "maxScore": 2,
         "details": "Not published",
-        "recommendation": "Complete every interface entry in poppy.json: each agent.protocols entry needs a type, an https:// endpoint and a description of what your agent there can help with, and each apis entry needs a type, a url, and a description. Set access to signed_in only when you have an issuer. Point OpenAPI entries at a document that parses as OpenAPI 3.0 or 3.1. An MCP server that offers account access publishes RFC 9728 protected resource metadata at its own well-known URL, whose resource is the server's url and whose authorization_servers includes your OAuth issuer. To tell agents which tasks you do not offer, which skills you publish and where to send feedback, list tasks.endpoint, an https URL that answers per Session. A file that still declares 0.3 lists excluded_tasks.url instead, a JSON document whose tasks list gives each task a short phrase; an alternative carries instructions or references, and a reference of type openapi or mcp names an API the file lists. Spec: https://personalagentprotocol.org/docs/1.0/spec"
+        "recommendation": "Complete every interface entry in poppy.json: each agent.protocols entry needs a type, an https:// endpoint and a description of what your agent there can help with, and each apis entry needs a type, a url, and a description. Set access to signed_in only when you have an issuer. Point OpenAPI entries at a document that parses as OpenAPI 3.0 or 3.1. An MCP server that offers account access publishes RFC 9728 protected resource metadata at its own well-known URL (or at the resource_metadata URL its 401 names), whose resource is the server's url and whose authorization_servers includes your OAuth issuer. To tell agents which tasks you do not offer, which skills you publish and where to send feedback, list tasks.endpoint, an https URL on a public host that answers per Session. A file that still declares 0.3 lists excluded_tasks.url instead, a JSON document whose tasks list gives each task a short phrase; an alternative carries instructions or references, and a reference of type openapi or mcp names an API the file lists. Spec: https://personalagentprotocol.org/docs/1.0/spec"
       },
       {
         "id": "pap-endpoint-enforcement",
@@ -2687,7 +2699,7 @@
         "score": 0,
         "maxScore": 2,
         "details": "Not published",
-        "recommendation": "Reject agents that send no credentials in the shape PAP defines. Your token endpoint answers a refresh_token grant carrying a refresh token you never issued with invalid_grant or invalid_client, never unsupported_grant_type, since every issuer supports that grant. Your conversation endpoint answers a request without the Poppy-Session header with 400 and `{\"error\": \"invalid_session\"}`. An MCP server that needs a token answers a request without one with 401 and a challenge carrying resource_metadata, the URL of its RFC 9728 metadata. Your browser_session_endpoint page, loaded with a plain GET, is an HTML form carrying a one-time code, sets a cookie tying the code to that browser with SameSite Strict or Lax and a __Host- name, so other hosts on your domain cannot set it, and sends Cache-Control: no-store, frame-ancestors 'none' or X-Frame-Options: DENY, and a Cross-Origin-Opener-Policy that severs the opener. That endpoint answers a form submitting a code it never issued with an error status and no cookie, and {browser_session_endpoint}/authorize answers a code sent without a Poppy-Session header with 400 invalid_session. Answer the token, revocation and device authorization endpoints, your APIs, {browser_session_endpoint}/authorize, and the conversation, tasks, feedback and extension endpoints at the address you publish, without redirects, since an agent sends no token, Session JWT, assertion or credentials to the URL one redirects to. A file that still declares Draft 0.1 or 0.2 is graded by that draft: the token endpoint rejects a junk JWT bearer grant with invalid_client (401) or invalid_grant (400), and the conversation, operations and feedback endpoints answer 401 with a `WWW-Authenticate: DPoP` challenge. Spec: https://personalagentprotocol.org/docs/1.0/spec"
+        "recommendation": "Reject agents that send no credentials in the shape PAP defines. Your token endpoint answers a refresh_token grant carrying a refresh token you never issued with invalid_grant or invalid_client, never unsupported_grant_type, since every issuer supports that grant. Your conversation endpoint answers a request without the Poppy-Session header with 400 and `{\"error\": \"invalid_session\"}`. An MCP server that needs a token answers a request without one with 401 and a challenge carrying resource_metadata, the URL of its RFC 9728 metadata. Your browser_session_endpoint page, loaded with a plain GET, is an HTML form carrying a one-time code, sets a cookie tying the code to that browser with SameSite Strict or Lax and a __Host- name, so other hosts on your domain cannot set it, and sends Cache-Control: no-store, frame-ancestors 'none' or X-Frame-Options: DENY, and a Cross-Origin-Opener-Policy that severs the opener. That endpoint answers a form submitting a code it never issued with an error status and no cookie, and {browser_session_endpoint}/authorize answers a code sent without a Poppy-Session header with 400 invalid_session. If you list a website operations endpoint (operations version 3), it answers a request without the Poppy-Session header with 400 invalid_session too. When you rate-limit a request, answer 429 with a Retry-After header. Answer the token, revocation and device authorization endpoints, your APIs, {browser_session_endpoint}/authorize, and the conversation, tasks, feedback and extension endpoints at the address you publish, without redirects, since an agent sends no token, Session JWT, assertion or credentials to the URL one redirects to. A file that still declares Draft 0.1 or 0.2 is graded by that draft: the token endpoint rejects a junk JWT bearer grant with invalid_client (401) or invalid_grant (400), and the conversation, operations and feedback endpoints answer 401 with a `WWW-Authenticate: DPoP` challenge. Spec: https://personalagentprotocol.org/docs/1.0/spec"
       },
       {
         "id": "pap-cross-protocol",
@@ -2986,7 +2998,7 @@
         "status": "warning",
         "score": 1,
         "maxScore": 2,
-        "details": "The nonexistent path https://qte77.github.io/__ora-404-probe-n6qhh7qf correctly returns HTTP 404. Partial credit: no Markdown error body was detected.",
+        "details": "The nonexistent path https://qte77.github.io/__ora-404-probe-uphjurwo correctly returns HTTP 404. Partial credit: no Markdown error body was detected.",
         "recommendation": "Keep the correct HTTP 404 status. The remaining requirement is a Markdown error body when agents request Accept: text/markdown. Include at least 20 characters explaining the error and a link to your docs, sitemap, or llms.txt. Verify with `curl -sS -L -i -H 'Accept: text/markdown' https://yourdomain.com/some-path-that-does-not-exist`. Check both the final 404 status and the Markdown body with Content-Type: text/markdown. Checking the status alone does not verify the missing requirement."
       },
       {

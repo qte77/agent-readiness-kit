@@ -588,45 +588,11 @@ describe("scanOraAi", () => {
   });
 });
 
+
 /**
- * #74: `fresh: true` reads ora.ai's fresh-scan event stream instead of the cached
- * `POST /api/scan` + `GET /api/score` pair. Fixture shape follows one live capture
- * (2026-11-21, keyless, against https://qte77.github.io): `data:` lines carrying JSON with a
- * `type`; `scan_complete.result` has the same `{score, grade, layers[].checks[]}` shape as
- * `GET /api/score`; `relevance_assessed` carries the displayed (relevance-weighted)
- * `score`/`grade` and the `naCheckIds` it judged not applicable. Values here are synthetic.
+ * #74: `fresh: true` sends ora.ai's documented `force: true` POST body field (public API docs,
+ * https://ora.ai/docs/api/scanning, read 2026-11-21), which bypasses the freshness window.
  */
-const STREAM_ENDPOINT = "https://ora.ai/api/scan/stream?domain=qte77.github.io&fresh=1";
-
-function sse(events: unknown[]): Response {
-  const body = events.map((e) => `data: ${JSON.stringify(e)}\n\n`).join("");
-  return new Response(body, { status: 200, headers: { "content-type": "text/event-stream" } });
-}
-
-const FRESH_RESULT = {
-  score: 45,
-  grade: "D",
-  layers: [
-    {
-      id: "access",
-      checks: [
-        { id: "openapi-spec", name: "OpenAPI spec", status: "pass", score: 7, maxScore: 7 },
-        { id: "oauth-protected-resource", name: "OAuth PRM", status: "fail", score: 0, maxScore: 2 },
-        { id: "some-unregistered-check", name: "Other", status: "warning", score: 1, maxScore: 2 },
-      ],
-    },
-  ],
-};
-
-const FRESH_STREAM = [
-  { type: "kind_detecting" },
-  { type: "check_start", checkId: "openapi-spec" },
-  { type: "check_complete", checkId: "openapi-spec", status: "pass", score: 7, maxScore: 7 },
-  { type: "scan_complete", result: FRESH_RESULT },
-  { type: "relevance_assessed", naCheckIds: ["oauth-protected-resource"], score: 47, grade: "D" },
-  { type: "summary_ready", agenticSummary: "synthetic" },
-];
-
 describe("scanOraAi with fresh: true (#74)", () => {
   let fetchMock: ReturnType<typeof vi.fn>;
 
@@ -639,92 +605,76 @@ describe("scanOraAi with fresh: true (#74)", () => {
     vi.unstubAllGlobals();
   });
 
-  it("reads the fresh-scan stream once, with no POST and no settle wait", async () => {
+  function postBodies(): unknown[] {
+    return fetchMock.mock.calls
+      .filter((c) => c[0] === SCAN_ENDPOINT)
+      .map((c) => JSON.parse(String((c[1] as RequestInit).body)));
+  }
+
+  it("does not send force by default", async () => {
+    fetchMock.mockImplementation(async (url: string) =>
+      url === SCAN_ENDPOINT ? jsonResponse({}) : jsonResponse(REALISTIC_SCORE_RESPONSE),
+    );
+
+    await scanOraAi(URL_UNDER_TEST, { sleep: async () => {} });
+
+    expect(postBodies()).toEqual([{ url: URL_UNDER_TEST }]);
+  });
+
+  it("sends force: true and uses a complete 200 result directly, with no wait or GET", async () => {
     fetchMock.mockImplementation(async (url: string) => {
-      if (url === STREAM_ENDPOINT) return sse(FRESH_STREAM);
+      if (url === SCAN_ENDPOINT) return jsonResponse(REALISTIC_SCORE_RESPONSE);
       throw new Error(`unexpected fetch: ${url}`);
     });
     const sleep = vi.fn(async () => {});
 
     const result = await scanOraAi(URL_UNDER_TEST, { fresh: true, sleep });
 
+    expect(postBodies()).toEqual([{ url: URL_UNDER_TEST, force: true }]);
     expect(fetchMock).toHaveBeenCalledTimes(1);
-    expect(fetchMock.mock.calls[0]?.[0]).toBe(STREAM_ENDPOINT);
     expect(sleep).not.toHaveBeenCalled();
-    expect(result.findings.map((f) => f.id).sort()).toEqual([
-      "oraAi.oauth-protected-resource",
-      "oraAi.openapi-spec",
-    ]);
-    expect(result.checks?.unmapped.map((c) => c.id)).toEqual(["some-unregistered-check"]);
+    expect(result.score).toBe(60);
+    expect(result.grade).toBe("C");
+    expect(result.findings.length).toBeGreaterThan(0);
   });
 
-  it("takes score and grade from relevance_assessed, the score ora.ai displays", async () => {
-    fetchMock.mockResolvedValue(sse(FRESH_STREAM));
-
-    const result = await scanOraAi(URL_UNDER_TEST, { fresh: true });
-
-    expect(result.score).toBe(47);
-    expect(result.grade).toBe("D");
-  });
-
-  it("falls back to scan_complete's score when relevance_assessed never arrives", async () => {
-    fetchMock.mockResolvedValue(sse(FRESH_STREAM.slice(0, 4)));
-
-    const result = await scanOraAi(URL_UNDER_TEST, { fresh: true });
-
-    expect(result.score).toBe(45);
-    expect(result.findings).toHaveLength(2);
-  });
-
-  it("treats a check relevance_assessed marked not applicable as na, not its raw status", async () => {
-    fetchMock.mockResolvedValue(sse(FRESH_STREAM));
-
-    const { findings } = await scanOraAi(URL_UNDER_TEST, { fresh: true });
-    const oauth = findings.find((f) => f.id === "oraAi.oauth-protected-resource");
-
-    expect(oauth?.status).toBe("unknown");
-    expect(oauth?.summary).toContain('"na"');
-  });
-
-  it("flags every finding's evidence as coming from ora.ai's internal stream endpoint", async () => {
-    fetchMock.mockResolvedValue(sse(FRESH_STREAM));
-
-    const { findings } = await scanOraAi(URL_UNDER_TEST, { fresh: true });
-
-    for (const f of findings) {
-      expect(f.evidence?.oraAiEndpoint).toBe("internal:/api/scan/stream");
-    }
-  });
-
-  it("sends the optional partner key as a Bearer token on the stream call", async () => {
-    fetchMock.mockResolvedValue(sse(FRESH_STREAM));
-
-    await scanOraAi(URL_UNDER_TEST, { fresh: true, oraAiApiKey: "k-123" });
-
-    const init = fetchMock.mock.calls[0]?.[1] as RequestInit | undefined;
-    expect((init?.headers as Record<string, string>)?.Authorization).toBe("Bearer k-123");
-  });
-
-  it.each([
-    ["the stream request throws", () => Promise.reject(new Error("socket hang up"))],
-    ["the stream returns 429", () => Promise.resolve(jsonResponse({}, 429))],
-    ["the stream ends without scan_complete", () => Promise.resolve(sse(FRESH_STREAM.slice(0, 3)))],
-  ])("falls back to the cached POST-then-GET path when %s", async (_label, streamReply) => {
+  it("waits and reads GET /api/score when the forced scan is still partial (202)", async () => {
     fetchMock.mockImplementation(async (url: string) => {
-      if (url === STREAM_ENDPOINT) return streamReply();
-      if (url === SCAN_ENDPOINT) return jsonResponse({});
+      if (url === SCAN_ENDPOINT) return jsonResponse({ analysisStatus: "partial" }, 202);
+      if (url === SCORE_ENDPOINT) return jsonResponse(REALISTIC_SCORE_RESPONSE);
+      throw new Error(`unexpected fetch: ${url}`);
+    });
+    const sleep = vi.fn(async () => {});
+
+    const result = await scanOraAi(URL_UNDER_TEST, { fresh: true, sleep, settleDelayMs: 45000 });
+
+    expect(sleep).toHaveBeenCalledWith(45000);
+    expect(fetchMock.mock.calls.map((c) => c[0])).toEqual([SCAN_ENDPOINT, SCORE_ENDPOINT]);
+    expect(result.score).toBe(60);
+  });
+
+  it("falls back to an unforced scan when the forced-scan budget answers 429", async () => {
+    let posts = 0;
+    fetchMock.mockImplementation(async (url: string) => {
+      if (url === SCAN_ENDPOINT) return ++posts === 1 ? jsonResponse({}, 429) : jsonResponse({});
       if (url === SCORE_ENDPOINT) return jsonResponse(REALISTIC_SCORE_RESPONSE);
       throw new Error(`unexpected fetch: ${url}`);
     });
 
     const result = await scanOraAi(URL_UNDER_TEST, { fresh: true, sleep: async () => {} });
 
-    expect(fetchMock.mock.calls.map((c) => c[0])).toEqual([
-      STREAM_ENDPOINT,
-      SCAN_ENDPOINT,
-      SCORE_ENDPOINT,
-    ]);
+    expect(postBodies()).toEqual([{ url: URL_UNDER_TEST, force: true }, { url: URL_UNDER_TEST }]);
     expect(result.score).toBe(60);
-    expect(result.findings.every((f) => f.evidence?.oraAiEndpoint === undefined)).toBe(true);
+  });
+
+  it("accepts a bare domain like the default path does, never throwing", async () => {
+    fetchMock.mockImplementation(async (url: string) =>
+      url === SCAN_ENDPOINT ? jsonResponse(REALISTIC_SCORE_RESPONSE) : jsonResponse({}),
+    );
+
+    const result = await scanOraAi("example.com", { fresh: true, sleep: async () => {} });
+
+    expect(postBodies()).toEqual([{ url: "example.com", force: true }]);
+    expect(result.score).toBe(60);
   });
 });

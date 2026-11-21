@@ -9,11 +9,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- `scanOraAi(url, { fresh: true })` (#74): forces a fresh ora.ai scan through the internal event
-  stream ora.ai's own rescan page uses, instead of the cached `POST /api/scan` + `GET /api/score`
-  pair that can return a pre-deploy result. Score and grade come from its relevance-weighted
-  `relevance_assessed` event; findings are flagged with `evidence.oraAiEndpoint`; any stream
-  failure falls back to the cached path. Opt-in; `scanProperty` is unchanged.
+- `scanOraAi(url, { fresh: true })` (#74): sends ora.ai's documented `force: true` field on
+  `POST /api/scan`, so a scan right after a deploy runs live instead of returning a stored result
+  from the freshness window. A complete 200 result is used directly; a 202 waits and reads
+  `GET /api/score`; a 429 from the forced-scan budget falls back to the unforced scan. Opt-in;
+  `scanProperty` is unchanged.
 
 ### Changed
 

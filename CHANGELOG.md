@@ -7,6 +7,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- `scanOraAi(url, { fresh: true })` (#74): forces a fresh ora.ai scan through the internal event
+  stream ora.ai's own rescan page uses, instead of the cached `POST /api/scan` + `GET /api/score`
+  pair that can return a pre-deploy result. Score and grade come from its relevance-weighted
+  `relevance_assessed` event; findings are flagged with `evidence.oraAiEndpoint`; any stream
+  failure falls back to the cached path. Opt-in; `scanProperty` is unchanged.
+
 ### Changed
 
 - `.github/dependabot.yml`: ignore `@types/node` major updates in the root npm entry, so the types

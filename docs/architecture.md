@@ -53,6 +53,14 @@ persisted pending-state is needed (GHA jobs have no Worker-style CPU-time limit,
 Worker), and no repeated poll loop, since no repeated-polling behavior was ever verified at
 source.
 
+That cached pair can still return a result from before a deploy (#74). `scanOraAi(url, {
+fresh: true })` instead reads the event stream ora.ai's own rescan page uses (`GET
+/api/scan/stream?domain=<host>&fresh=1`, keyless, internal and undocumented): its
+`scan_complete` result has the same shape as `GET /api/score`, and `relevance_assessed`
+carries the displayed, relevance-weighted score/grade and the checks it judged not
+applicable. Findings read from it carry `evidence.oraAiEndpoint`; any failure falls back to
+the cached pair. It is opt-in: `scanProperty` still uses the cached path.
+
 isitagentready.com (`src/scan/sources/isitAgentReady.ts`) — which superseded the
 originally-planned Cloudflare URL Scanner API before any code existed for it — is not async at
 all: a single `POST https://isitagentready.com/api/scan` call returns the full result

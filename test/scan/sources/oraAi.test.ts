@@ -587,3 +587,94 @@ describe("scanOraAi", () => {
     expect(result.checks).toBeUndefined();
   });
 });
+
+
+/**
+ * #74: `fresh: true` sends ora.ai's documented `force: true` POST body field (public API docs,
+ * https://ora.ai/docs/api/scanning, read 2026-11-21), which bypasses the freshness window.
+ */
+describe("scanOraAi with fresh: true (#74)", () => {
+  let fetchMock: ReturnType<typeof vi.fn>;
+
+  beforeEach(() => {
+    fetchMock = vi.fn();
+    vi.stubGlobal("fetch", fetchMock);
+  });
+
+  afterEach(() => {
+    vi.unstubAllGlobals();
+  });
+
+  function postBodies(): unknown[] {
+    return fetchMock.mock.calls
+      .filter((c) => c[0] === SCAN_ENDPOINT)
+      .map((c) => JSON.parse(String((c[1] as RequestInit).body)));
+  }
+
+  it("does not send force by default", async () => {
+    fetchMock.mockImplementation(async (url: string) =>
+      url === SCAN_ENDPOINT ? jsonResponse({}) : jsonResponse(REALISTIC_SCORE_RESPONSE),
+    );
+
+    await scanOraAi(URL_UNDER_TEST, { sleep: async () => {} });
+
+    expect(postBodies()).toEqual([{ url: URL_UNDER_TEST }]);
+  });
+
+  it("sends force: true and uses a complete 200 result directly, with no wait or GET", async () => {
+    fetchMock.mockImplementation(async (url: string) => {
+      if (url === SCAN_ENDPOINT) return jsonResponse(REALISTIC_SCORE_RESPONSE);
+      throw new Error(`unexpected fetch: ${url}`);
+    });
+    const sleep = vi.fn(async () => {});
+
+    const result = await scanOraAi(URL_UNDER_TEST, { fresh: true, sleep });
+
+    expect(postBodies()).toEqual([{ url: URL_UNDER_TEST, force: true }]);
+    expect(fetchMock).toHaveBeenCalledTimes(1);
+    expect(sleep).not.toHaveBeenCalled();
+    expect(result.score).toBe(60);
+    expect(result.grade).toBe("C");
+    expect(result.findings.length).toBeGreaterThan(0);
+  });
+
+  it("waits and reads GET /api/score when the forced scan is still partial (202)", async () => {
+    fetchMock.mockImplementation(async (url: string) => {
+      if (url === SCAN_ENDPOINT) return jsonResponse({ analysisStatus: "partial" }, 202);
+      if (url === SCORE_ENDPOINT) return jsonResponse(REALISTIC_SCORE_RESPONSE);
+      throw new Error(`unexpected fetch: ${url}`);
+    });
+    const sleep = vi.fn(async () => {});
+
+    const result = await scanOraAi(URL_UNDER_TEST, { fresh: true, sleep, settleDelayMs: 45000 });
+
+    expect(sleep).toHaveBeenCalledWith(45000);
+    expect(fetchMock.mock.calls.map((c) => c[0])).toEqual([SCAN_ENDPOINT, SCORE_ENDPOINT]);
+    expect(result.score).toBe(60);
+  });
+
+  it("falls back to an unforced scan when the forced-scan budget answers 429", async () => {
+    let posts = 0;
+    fetchMock.mockImplementation(async (url: string) => {
+      if (url === SCAN_ENDPOINT) return ++posts === 1 ? jsonResponse({}, 429) : jsonResponse({});
+      if (url === SCORE_ENDPOINT) return jsonResponse(REALISTIC_SCORE_RESPONSE);
+      throw new Error(`unexpected fetch: ${url}`);
+    });
+
+    const result = await scanOraAi(URL_UNDER_TEST, { fresh: true, sleep: async () => {} });
+
+    expect(postBodies()).toEqual([{ url: URL_UNDER_TEST, force: true }, { url: URL_UNDER_TEST }]);
+    expect(result.score).toBe(60);
+  });
+
+  it("accepts a bare domain like the default path does, never throwing", async () => {
+    fetchMock.mockImplementation(async (url: string) =>
+      url === SCAN_ENDPOINT ? jsonResponse(REALISTIC_SCORE_RESPONSE) : jsonResponse({}),
+    );
+
+    const result = await scanOraAi("example.com", { fresh: true, sleep: async () => {} });
+
+    expect(postBodies()).toEqual([{ url: "example.com", force: true }]);
+    expect(result.score).toBe(60);
+  });
+});

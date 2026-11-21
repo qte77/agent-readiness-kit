@@ -37,6 +37,15 @@
  * `assignCategory(check.id)` per Design decision 1, independent of how ora.ai groups it.
  * Only crosswalked check ids become Findings; every other check is returned as raw
  * evidence in `checks.unmapped` (persisted as `ScanRun.oraAiChecks`) instead of dropped.
+ *
+ * Fresh scans (#74, opt-in `fresh: true`): `POST /api/scan` returns a stored result younger
+ * than ora.ai's freshness window (default 6 h) instead of rescanning, so a scan soon after a
+ * deploy can miss it. ora.ai's public API docs (https://ora.ai/docs/api/scanning, read
+ * 2026-11-21) give the documented bypass: the `force: true` body field ("Always run a live
+ * scan, whatever the age of the stored result."). A forced POST that answers 200 carries the
+ * complete result (same shape as `GET /api/score`), which is used directly; a 202 (analysis
+ * still partial) continues with the usual wait-then-GET. Forced scans have their own budget
+ * (the docs give 6 per day per IP); when it answers 429 the unforced path runs instead.
  */
 import { SIGNAL_TO_CATEGORY, assignCategory } from "../crosswalk.js";
 import type {
@@ -74,6 +83,11 @@ export interface OraAiOptions {
   sleep?: (ms: number) => Promise<void>;
   /** Delay between POST and GET. Default matches architecture.md's observed ~45s window. */
   settleDelayMs?: number;
+  /**
+   * Force a live scan (`force: true`) instead of accepting a stored result from ora.ai's
+   * freshness window, so a scan right after a deploy sees it (#74). Off by default.
+   */
+  fresh?: boolean;
 }
 
 export interface OraAiScanResult {
@@ -213,6 +227,10 @@ export async function scanOraAi(
   url: string,
   options: OraAiOptions = {},
 ): Promise<OraAiScanResult> {
+  return scan(url, options, options.fresh === true);
+}
+
+async function scan(url: string, options: OraAiOptions, force: boolean): Promise<OraAiScanResult> {
   const sleep = options.sleep ?? defaultSleep;
   const settleDelayMs = options.settleDelayMs ?? DEFAULT_SETTLE_DELAY_MS;
   const headers = authHeaders(options.oraAiApiKey);
@@ -222,13 +240,15 @@ export async function scanOraAi(
     scanResponse = await fetch(SCAN_ENDPOINT, {
       method: "POST",
       headers: { "content-type": "application/json", ...headers },
-      body: JSON.stringify({ url }),
+      body: JSON.stringify(force ? { url, force: true } : { url }),
     });
   } catch (cause) {
     return unavailableResult(`POST ${SCAN_ENDPOINT} failed: ${errorMessage(cause)}`);
   }
 
   if (scanResponse.status === 429) {
+    // The forced-scan budget is separate and smaller; fall back to the stored result.
+    if (force) return scan(url, options, false);
     return unavailableResult(
       `POST ${SCAN_ENDPOINT} was rate-limited (429) by ora.ai`,
       retryAfterEvidence(scanResponse),
@@ -238,6 +258,11 @@ export async function scanOraAi(
     return unavailableResult(`POST ${SCAN_ENDPOINT} returned ${scanResponse.status}`, {
       httpStatus: scanResponse.status,
     });
+  }
+
+  if (force && scanResponse.status === 200) {
+    const forced = await completeBody(scanResponse);
+    if (forced !== undefined) return resultFromScore(forced);
   }
 
   await sleep(settleDelayMs);
@@ -262,13 +287,34 @@ export async function scanOraAi(
     });
   }
 
-  let body: { score?: unknown; grade?: unknown; layers?: unknown };
+  let body: ScoreBody;
   try {
-    body = (await scoreResponse.json()) as { score?: unknown; grade?: unknown; layers?: unknown };
+    body = (await scoreResponse.json()) as ScoreBody;
   } catch (cause) {
     return unavailableResult(`GET ${scoreUrl} returned a non-JSON body: ${errorMessage(cause)}`);
   }
 
+  return resultFromScore(body);
+}
+
+interface ScoreBody {
+  score?: unknown;
+  grade?: unknown;
+  layers?: unknown;
+}
+
+/** A forced POST's 200 body when it carries the result's layers; otherwise `undefined`. */
+async function completeBody(response: Response): Promise<ScoreBody | undefined> {
+  try {
+    const body = (await response.json()) as ScoreBody;
+    return Array.isArray(body.layers) ? body : undefined;
+  } catch {
+    return undefined;
+  }
+}
+
+/** Findings, unmapped evidence, score and grade from one `GET /api/score`-shaped body. */
+function resultFromScore(body: ScoreBody): OraAiScanResult {
   const findings: Finding[] = [];
   const unmapped: OraAiCheckEvidence[] = [];
   for (const check of checksFromLayers(body.layers)) {

@@ -7,6 +7,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- `scanOraAi(url, { fresh: true })` (#74): sends ora.ai's documented `force: true` field on
+  `POST /api/scan`, so a scan right after a deploy runs live instead of returning a stored result
+  from the freshness window. A complete 200 result is used directly; a 202 waits and reads
+  `GET /api/score`; a 429 from the forced-scan budget falls back to the unforced scan. Opt-in;
+  `scanProperty` is unchanged.
+
 ### Changed
 
 - `.github/dependabot.yml`: ignore `@types/node` major updates in the root npm entry, so the types

@@ -17,7 +17,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
-- Node 24 only: the CI, Pages and scan workflows set up Node 24, and `engines.node` is `>=24.15` (was `>=22`); CONTRIBUTING updated.
+- Node 24 only: the CI, Pages and scan workflows set up Node 24, and `engines.node` is `>=24.15` (was `>=22`); CONTRIBUTING updated. In the Pages workflow, `pages: write` and `id-token: write` move from the workflow level to the `deploy` job, the only job that uses them.
 - `.github/dependabot.yml`: ignore `@types/node` major updates in the root npm entry, so the types
   stay on the Node 22 line the repo runs (engines `>=22`, setup-node 22); lift with the runtime bump.
 

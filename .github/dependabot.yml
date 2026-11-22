@@ -16,9 +16,9 @@ updates:
         applies-to: "security-updates"
         patterns: ["*"]
     ignore:
-      # @types/node tracks the Node runtime major. The repo runs Node 22 (package.json engines,
-      # setup-node 22 in CI), so a types major ahead of it would type-check APIs the runtime lacks.
-      # Lift this when engines and CI move to a newer Node major.
+      # @types/node tracks the Node runtime major. The repo runs Node 24 (package.json engines,
+      # setup-node 24 in CI), so a types major ahead of it would type-check APIs the runtime lacks.
+      # Bump the types major by hand together with engines and CI when the runtime moves.
       - dependency-name: "@types/node"
         update-types: ["version-update:semver-major"]
 

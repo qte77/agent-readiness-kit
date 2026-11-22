@@ -34,7 +34,7 @@ One audience per file — reference, don't duplicate
 
 ## Development
 
-Requires Node.js 22+.
+Requires Node.js 24.15+.
 
 A [`Makefile`](Makefile) wraps this repo's commands — run `make help` to list them, grouped
 by section:

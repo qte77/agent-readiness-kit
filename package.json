@@ -5,7 +5,7 @@
   "description": "Scans web properties for agent-native readiness (Discovery/Content/Trust/Execution/A2A/Identity) and produces concrete remediation.",
   "type": "module",
   "engines": {
-    "node": ">=22"
+    "node": ">=24.15"
   },
   "scripts": {
     "test": "vitest run",

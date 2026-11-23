@@ -1,7 +1,7 @@
 {
   "propertyId": "sortmy-london",
   "url": "https://sortmy.london",
-  "scannedAt": "2026-11-16T06:22:54.835Z",
+  "scannedAt": "2026-11-23T06:21:23.232Z",
   "findings": [
     {
       "id": "wellKnown.agent-instruction",
@@ -237,11 +237,12 @@
       "id": "oraAi.oauth-protected-resource",
       "category": "Identity & Auth",
       "source": "oraAi",
-      "status": "unknown",
-      "summary": "ora.ai check \"OAuth Protected Resource metadata (RFC 9728)\" (oauth-protected-resource) reported status \"na\"",
+      "status": "fail",
+      "summary": "ora.ai check \"OAuth Protected Resource metadata (RFC 9728)\" (oauth-protected-resource) reported status \"fail\"",
       "evidence": {
         "score": 0,
         "maxScore": 2,
+        "estScoreGain": 1.2,
         "details": "No /.well-known/oauth-protected-resource found (RFC 9728)",
         "recommendation": "Publish RFC 9728 protected-resource metadata at /.well-known/oauth-protected-resource. Include the resource field plus enough supporting metadata - your authorization servers, supported scopes, accepted bearer methods - that an agent can work out how to authenticate without first triggering a 401."
       }
@@ -268,7 +269,7 @@
       "evidence": {
         "level": 2,
         "levelName": "Bot-Aware",
-        "scannedAt": "2026-11-16T06:22:06.489Z",
+        "scannedAt": "2026-11-23T06:20:35.272Z",
         "checks": {
           "discoverability": {
             "robotsTxt": {
@@ -291,7 +292,7 @@
                     "headers": {
                       "content-type": "text/plain; charset=utf-8",
                       "content-length": "3391",
-                      "cf-ray": "a5b4661f5a8a2819-SEA",
+                      "cf-ray": "a5ee117fd82528fe-MSP",
                       "cf-cache-status": "REVALIDATED"
                     },
                     "bodyPreview": "# As a condition of accessing this website, you agree to abide by the following\n# content signals:\n\n# (a)  If a Content-Signal = yes, you may collect content for the corresponding\n#      use.\n# (b)  If a Content-Signal = no, you may not collect content for the\n#      corresponding use.\n# (c)  If the website operator does not include a Content-Signal for a\n#      corresponding use, the website operator neither grants nor restricts\n#      permission via Content-Signal with respect to the correspon..."
@@ -353,7 +354,7 @@
                     "headers": {
                       "content-type": "application/xml",
                       "content-length": "461",
-                      "cf-ray": "a5b4661f9a912819-SEA",
+                      "cf-ray": "a5ee117ff89c28fe-MSP",
                       "cf-cache-status": "DYNAMIC"
                     }
                   },
@@ -371,7 +372,7 @@
                   }
                 }
               ],
-              "durationMs": 85
+              "durationMs": 13
             },
             "linkHeaders": {
               "status": "pass",
@@ -420,7 +421,7 @@
                     "headers": {
                       "content-type": "text/html; charset=utf-8",
                       "link": "</sitemap.xml>; rel=\"sitemap\", </index.md>; rel=\"alternate\"; type=\"text/markdown\", </openapi.json>; rel=\"service-desc\"; type=\"application/json\", </.well-known/api-catalog>; rel=\"api-catalog\"; type=\"application/linkset+json\"",
-                      "cf-ray": "a5b46620aac92819-SEA",
+                      "cf-ray": "a5ee1180aac128fe-MSP",
                       "cf-cache-status": "DYNAMIC"
                     }
                   },
@@ -454,7 +455,7 @@
                   }
                 }
               ],
-              "durationMs": 203
+              "durationMs": 139
             },
             "dnsAid": {
               "status": "fail",
@@ -499,7 +500,7 @@
                     "headers": {
                       "content-type": "application/dns-json"
                     },
-                    "bodyPreview": "{\"Status\":0,\"TC\":false,\"RD\":true,\"RA\":true,\"AD\":true,\"CD\":false,\"Question\":[{\"name\":\"_index._agents.sortmy.london\",\"type\":64}],\"Authority\":[{\"name\":\"sortmy.london\",\"type\":6,\"TTL\":1800,\"data\":\"cullen.ns.cloudflare.com. dns.cloudflare.com. 2420148682 10000 2400 604800 1800\"},{\"name\":\"sortmy.london\",\"type\":46,\"TTL\":1800,\"data\":\"SOA 13 2 1800 1794900122 1794720122 34505 sortmy.london. EPBcZNZEBQpsxNudRxX7mtpuy2chvqYWJb5OELCnowNuZHoDM9u6Gr9ymi21ANCtsRnqCzdewOMpoGxgweUJnQ==\"},{\"name\":\"_index._agents.s..."
+                    "bodyPreview": "{\"Status\":0,\"TC\":false,\"RD\":true,\"RA\":true,\"AD\":true,\"CD\":false,\"Question\":[{\"name\":\"_index._agents.sortmy.london\",\"type\":64}],\"Authority\":[{\"name\":\"sortmy.london\",\"type\":6,\"TTL\":1800,\"data\":\"cullen.ns.cloudflare.com. dns.cloudflare.com. 2420725769 10000 2400 604800 1800\"},{\"name\":\"sortmy.london\",\"type\":46,\"TTL\":1800,\"data\":\"SOA 13 2 1800 1795504830 1795324830 34505 sortmy.london. GdEsJFHjpLrks6E98uiVIc3vRML7YZE3M85Ptwsm8i/fQXOmhH1DnLf4PyXODxcY3kbyxSy73aWgVR/gWWO7Jw==\"},{\"name\":\"_index._agents.s..."
                   },
                   "finding": {
                     "outcome": "neutral",
@@ -522,7 +523,7 @@
                     "headers": {
                       "content-type": "application/dns-json"
                     },
-                    "bodyPreview": "{\"Status\":0,\"TC\":false,\"RD\":true,\"RA\":true,\"AD\":true,\"CD\":false,\"Question\":[{\"name\":\"_index._agents.sortmy.london\",\"type\":65}],\"Authority\":[{\"name\":\"sortmy.london\",\"type\":6,\"TTL\":1800,\"data\":\"cullen.ns.cloudflare.com. dns.cloudflare.com. 2420148682 10000 2400 604800 1800\"},{\"name\":\"sortmy.london\",\"type\":46,\"TTL\":1800,\"data\":\"SOA 13 2 1800 1794900122 1794720122 34505 sortmy.london. sH9eSRw7yi+FDd3Jwi1mQrQ/7vd6b65V7OIIgIXVeNyy1el0yapbaSRXClPJn6bhgr6Mumoht8XJJZZ1oRwTbQ==\"},{\"name\":\"_index._agents.s..."
+                    "bodyPreview": "{\"Status\":0,\"TC\":false,\"RD\":true,\"RA\":true,\"AD\":true,\"CD\":false,\"Question\":[{\"name\":\"_index._agents.sortmy.london\",\"type\":65}],\"Authority\":[{\"name\":\"sortmy.london\",\"type\":6,\"TTL\":1800,\"data\":\"cullen.ns.cloudflare.com. dns.cloudflare.com. 2420725769 10000 2400 604800 1800\"},{\"name\":\"sortmy.london\",\"type\":46,\"TTL\":1800,\"data\":\"SOA 13 2 1800 1795504829 1795324829 34505 sortmy.london. nmMPPU896zZD2HtsKKUJ7ICndnSeIgfDFwdTQNccATgaABEeS41m12OZXDi9UyHoEaaAckchA6xI728yXHqtwQ==\"},{\"name\":\"_index._agents.s..."
                   },
                   "finding": {
                     "outcome": "neutral",
@@ -545,7 +546,7 @@
                     "headers": {
                       "content-type": "application/dns-json"
                     },
-                    "bodyPreview": "{\"Status\":0,\"TC\":false,\"RD\":true,\"RA\":true,\"AD\":true,\"CD\":false,\"Question\":[{\"name\":\"_a2a._agents.sortmy.london\",\"type\":64}],\"Authority\":[{\"name\":\"sortmy.london\",\"type\":6,\"TTL\":1800,\"data\":\"cullen.ns.cloudflare.com. dns.cloudflare.com. 2420148682 10000 2400 604800 1800\"},{\"name\":\"sortmy.london\",\"type\":46,\"TTL\":1800,\"data\":\"SOA 13 2 1800 1794900122 1794720122 34505 sortmy.london. WIqYLhA/kOHgBLR+gz/SKRpOnkVVw20yC4qM3EOlndI+/5O2RpKDAfou8rhQH0QAvfI3DHwQM4gJD8bZOir/bw==\"},{\"name\":\"_a2a._agents.sortm..."
+                    "bodyPreview": "{\"Status\":0,\"TC\":false,\"RD\":true,\"RA\":true,\"AD\":true,\"CD\":false,\"Question\":[{\"name\":\"_a2a._agents.sortmy.london\",\"type\":64}],\"Authority\":[{\"name\":\"sortmy.london\",\"type\":6,\"TTL\":1800,\"data\":\"cullen.ns.cloudflare.com. dns.cloudflare.com. 2420725769 10000 2400 604800 1800\"},{\"name\":\"sortmy.london\",\"type\":46,\"TTL\":1800,\"data\":\"SOA 13 2 1800 1795504830 1795324830 34505 sortmy.london. q603CqWBl6cMP2q0IMeZyVtCzZlYZofp/mTZvUj2kOl4BOMT3N2bmu84OwqZLdrVuYj6NkoipMcdGh5T78nAeQ==\"},{\"name\":\"_a2a._agents.sortm..."
                   },
                   "finding": {
                     "outcome": "neutral",
@@ -568,7 +569,7 @@
                     "headers": {
                       "content-type": "application/dns-json"
                     },
-                    "bodyPreview": "{\"Status\":0,\"TC\":false,\"RD\":true,\"RA\":true,\"AD\":true,\"CD\":false,\"Question\":[{\"name\":\"_a2a._agents.sortmy.london\",\"type\":65}],\"Authority\":[{\"name\":\"sortmy.london\",\"type\":6,\"TTL\":1800,\"data\":\"cullen.ns.cloudflare.com. dns.cloudflare.com. 2420148682 10000 2400 604800 1800\"},{\"name\":\"sortmy.london\",\"type\":46,\"TTL\":1800,\"data\":\"SOA 13 2 1800 1794900122 1794720122 34505 sortmy.london. T33FPMrKiW8uZ89tShCRmpUZ4N+ABX/GR6xedoRw76i2LfiyBUy2L4wO+2ZVaMV5KaGLPVHoHTS7S6cLUOQBLA==\"},{\"name\":\"_a2a._agents.sortm..."
+                    "bodyPreview": "{\"Status\":0,\"TC\":false,\"RD\":true,\"RA\":true,\"AD\":true,\"CD\":false,\"Question\":[{\"name\":\"_a2a._agents.sortmy.london\",\"type\":65}],\"Authority\":[{\"name\":\"sortmy.london\",\"type\":6,\"TTL\":1800,\"data\":\"cullen.ns.cloudflare.com. dns.cloudflare.com. 2420725769 10000 2400 604800 1800\"},{\"name\":\"sortmy.london\",\"type\":46,\"TTL\":1800,\"data\":\"SOA 13 2 1800 1795504829 1795324829 34505 sortmy.london. w2vEhjdO6oE9l+3F2jfd/ShgQoNQhAlePLM6o2zzvggY2t9nBW5XX/165UXkKhqUTIlH51FAExv/c02dV+b5sw==\"},{\"name\":\"_a2a._agents.sortm..."
                   },
                   "finding": {
                     "outcome": "neutral",
@@ -591,7 +592,7 @@
                     "headers": {
                       "content-type": "application/dns-json"
                     },
-                    "bodyPreview": "{\"Status\":0,\"TC\":false,\"RD\":true,\"RA\":true,\"AD\":true,\"CD\":false,\"Question\":[{\"name\":\"_mcp._agents.sortmy.london\",\"type\":64}],\"Authority\":[{\"name\":\"sortmy.london\",\"type\":6,\"TTL\":1800,\"data\":\"cullen.ns.cloudflare.com. dns.cloudflare.com. 2420148682 10000 2400 604800 1800\"},{\"name\":\"sortmy.london\",\"type\":46,\"TTL\":1800,\"data\":\"SOA 13 2 1800 1794900122 1794720122 34505 sortmy.london. CXC+Gf/HWQNoM/DRxMTszMck39mhfYJivWab/btWDdLZlY/8sYdN/BDRydF8WL4h68ulShBo1IzgRgIXaql4hg==\"},{\"name\":\"_mcp._agents.sortm..."
+                    "bodyPreview": "{\"Status\":0,\"TC\":false,\"RD\":true,\"RA\":true,\"AD\":true,\"CD\":false,\"Question\":[{\"name\":\"_mcp._agents.sortmy.london\",\"type\":64}],\"Authority\":[{\"name\":\"sortmy.london\",\"type\":6,\"TTL\":1800,\"data\":\"cullen.ns.cloudflare.com. dns.cloudflare.com. 2420725769 10000 2400 604800 1800\"},{\"name\":\"sortmy.london\",\"type\":46,\"TTL\":1800,\"data\":\"SOA 13 2 1800 1795504830 1795324830 34505 sortmy.london. brVVAn9tenZF9IzfMA+8dC4Gm+AIV+O5SH2ok2r8zIbazxlQyo/jjpQHyWuyO0DfXJknoMv8XV22dJoBxcxWww==\"},{\"name\":\"_mcp._agents.sortm..."
                   },
                   "finding": {
                     "outcome": "neutral",
@@ -614,7 +615,7 @@
                     "headers": {
                       "content-type": "application/dns-json"
                     },
-                    "bodyPreview": "{\"Status\":0,\"TC\":false,\"RD\":true,\"RA\":true,\"AD\":true,\"CD\":false,\"Question\":[{\"name\":\"_mcp._agents.sortmy.london\",\"type\":65}],\"Authority\":[{\"name\":\"sortmy.london\",\"type\":6,\"TTL\":1800,\"data\":\"cullen.ns.cloudflare.com. dns.cloudflare.com. 2420148682 10000 2400 604800 1800\"},{\"name\":\"sortmy.london\",\"type\":46,\"TTL\":1800,\"data\":\"SOA 13 2 1800 1794900122 1794720122 34505 sortmy.london. R3jvXO7m1lAbeMjcbCOG4DVtLlAbJiid+a+IrrVa2qsZ2MyNjTVtXYeElKU51+4W6gwRn5txpcTWQcXJOtJe8w==\"},{\"name\":\"_mcp._agents.sortm..."
+                    "bodyPreview": "{\"Status\":0,\"TC\":false,\"RD\":true,\"RA\":true,\"AD\":true,\"CD\":false,\"Question\":[{\"name\":\"_mcp._agents.sortmy.london\",\"type\":65}],\"Authority\":[{\"name\":\"sortmy.london\",\"type\":6,\"TTL\":1800,\"data\":\"cullen.ns.cloudflare.com. dns.cloudflare.com. 2420725769 10000 2400 604800 1800\"},{\"name\":\"sortmy.london\",\"type\":46,\"TTL\":1800,\"data\":\"SOA 13 2 1800 1795504830 1795324830 34505 sortmy.london. d8qrRtjZQ3fBO3NL+C81tlIeCw64xlGaEMqGLETqQRUTVJhKC+tyXlZjQBCLsowkJBTnf6QOabEIIqwcLRqVOw==\"},{\"name\":\"_mcp._agents.sortm..."
                   },
                   "finding": {
                     "outcome": "neutral",
@@ -637,7 +638,7 @@
                     "headers": {
                       "content-type": "application/dns-json"
                     },
-                    "bodyPreview": "{\"Status\":0,\"TC\":false,\"RD\":true,\"RA\":true,\"AD\":true,\"CD\":false,\"Question\":[{\"name\":\"_index._agents.sortmy.london\",\"type\":16}],\"Authority\":[{\"name\":\"sortmy.london\",\"type\":6,\"TTL\":1800,\"data\":\"cullen.ns.cloudflare.com. dns.cloudflare.com. 2420148682 10000 2400 604800 1800\"},{\"name\":\"sortmy.london\",\"type\":46,\"TTL\":1800,\"data\":\"SOA 13 2 1800 1794900122 1794720122 34505 sortmy.london. bxymNRHoAD4ht6k/ygiZ2IOA5NktsSpKutpn1iH4Is2G4wdgsD7gG+4GGwihIMRhkcTXSvg7oAL1I1m3kOYMtA==\"},{\"name\":\"_index._agents.s..."
+                    "bodyPreview": "{\"Status\":0,\"TC\":false,\"RD\":true,\"RA\":true,\"AD\":true,\"CD\":false,\"Question\":[{\"name\":\"_index._agents.sortmy.london\",\"type\":16}],\"Authority\":[{\"name\":\"sortmy.london\",\"type\":6,\"TTL\":1800,\"data\":\"cullen.ns.cloudflare.com. dns.cloudflare.com. 2420725769 10000 2400 604800 1800\"},{\"name\":\"sortmy.london\",\"type\":46,\"TTL\":1800,\"data\":\"SOA 13 2 1800 1795504830 1795324830 34505 sortmy.london. OFFRF3OL8nOA/saPVG2e5dQCb2ndS1N3dZxymJcqmaYW6sD0bnGQgOWR9/hyQxkgsw0LrM+fTpocqExgewvbXQ==\"},{\"name\":\"_index._agents.s..."
                   },
                   "finding": {
                     "outcome": "neutral",
@@ -661,7 +662,7 @@
                   }
                 }
               ],
-              "durationMs": 67
+              "durationMs": 141
             }
           },
           "contentAccessibility": {
@@ -695,7 +696,7 @@
                     "statusText": "OK",
                     "headers": {
                       "content-type": "text/html; charset=utf-8",
-                      "cf-ray": "a5b46622bc2da9f8-SEA"
+                      "cf-ray": "a5ee11855d8ecb6b-EWR"
                     }
                   }
                 },
@@ -708,7 +709,7 @@
                   }
                 }
               ],
-              "durationMs": 456
+              "durationMs": 322
             }
           },
           "botAccessControl": {
@@ -1098,7 +1099,7 @@
                     "headers": {
                       "content-type": "text/plain; charset=utf-8",
                       "content-length": "3391",
-                      "cf-ray": "a5b4661f5a8a2819-SEA",
+                      "cf-ray": "a5ee117fd82528fe-MSP",
                       "cf-cache-status": "REVALIDATED"
                     },
                     "bodyPreview": "# As a condition of accessing this website, you agree to abide by the following\n# content signals:\n\n# (a)  If a Content-Signal = yes, you may collect content for the corresponding\n#      use.\n# (b)  If a Content-Signal = no, you may not collect content for the\n#      corresponding use.\n# (c)  If the website operator does not include a Content-Signal for a\n#      corresponding use, the website operator neither grants nor restricts\n#      permission via Content-Signal with respect to the correspon..."
@@ -1164,7 +1165,7 @@
                     "headers": {
                       "content-type": "text/plain; charset=utf-8",
                       "content-length": "3391",
-                      "cf-ray": "a5b4661f5a8a2819-SEA",
+                      "cf-ray": "a5ee117fd82528fe-MSP",
                       "cf-cache-status": "REVALIDATED"
                     },
                     "bodyPreview": "# As a condition of accessing this website, you agree to abide by the following\n# content signals:\n\n# (a)  If a Content-Signal = yes, you may collect content for the corresponding\n#      use.\n# (b)  If a Content-Signal = no, you may not collect content for the\n#      corresponding use.\n# (c)  If the website operator does not include a Content-Signal for a\n#      corresponding use, the website operator neither grants nor restricts\n#      permission via Content-Signal with respect to the correspon..."
@@ -1217,7 +1218,7 @@
                     "statusText": "Not Found",
                     "headers": {
                       "content-type": "text/html; charset=utf-8",
-                      "cf-ray": "a5b4661f9a922819-SEA",
+                      "cf-ray": "a5ee117ff89d28fe-MSP",
                       "cf-cache-status": "DYNAMIC"
                     }
                   },
@@ -1272,7 +1273,7 @@
                     "headers": {
                       "content-type": "application/linkset+json; profile=\"https://www.rfc-editor.org/info/rfc9727\"",
                       "content-length": "529",
-                      "cf-ray": "a5b466202aaf2819-SEA",
+                      "cf-ray": "a5ee118069ea28fe-MSP",
                       "cf-cache-status": "DYNAMIC"
                     },
                     "bodyPreview": "{\"linkset\":[{\"anchor\":\"https://sortmy.london/\",\"service-desc\":[{\"href\":\"https://sortmy.london/openapi.json\",\"type\":\"application/json\"}],\"item\":[{\"href\":\"https://sortmy.london/api/run\",\"title\":\"Run a civic-lookup workflow (POST, text/event-stream response)\"},{\"href\":\"https://sortmy.london/api/freshness\",\"title\":\"Corpus freshness and row counts (GET, application/json)\"}]}]}"
@@ -1307,7 +1308,7 @@
                   }
                 }
               ],
-              "durationMs": 107
+              "durationMs": 112
             },
             "oauthDiscovery": {
               "status": "fail",
@@ -1316,27 +1317,6 @@
                 "code": "check.oauthDiscovery.notFound"
               },
               "evidence": [
-                {
-                  "action": "fetch",
-                  "label": "GET /.well-known/openid-configuration",
-                  "request": {
-                    "url": "https://sortmy.london/.well-known/openid-configuration",
-                    "method": "GET"
-                  },
-                  "response": {
-                    "status": 404,
-                    "statusText": "Not Found",
-                    "headers": {
-                      "content-type": "text/html; charset=utf-8",
-                      "cf-ray": "a5b4661f9a952819-SEA",
-                      "cf-cache-status": "DYNAMIC"
-                    }
-                  },
-                  "finding": {
-                    "outcome": "negative",
-                    "summary": "openid-configuration returned 404"
-                  }
-                },
                 {
                   "action": "fetch",
                   "label": "GET /.well-known/oauth-authorization-server",
@@ -1349,13 +1329,34 @@
                     "statusText": "Not Found",
                     "headers": {
                       "content-type": "text/html; charset=utf-8",
-                      "cf-ray": "a5b4661f9a962819-SEA",
+                      "cf-ray": "a5ee117ff8c028fe-MSP",
                       "cf-cache-status": "DYNAMIC"
                     }
                   },
                   "finding": {
                     "outcome": "negative",
                     "summary": "oauth-authorization-server returned 404"
+                  }
+                },
+                {
+                  "action": "fetch",
+                  "label": "GET /.well-known/openid-configuration",
+                  "request": {
+                    "url": "https://sortmy.london/.well-known/openid-configuration",
+                    "method": "GET"
+                  },
+                  "response": {
+                    "status": 404,
+                    "statusText": "Not Found",
+                    "headers": {
+                      "content-type": "text/html; charset=utf-8",
+                      "cf-ray": "a5ee117ff8bb28fe-MSP",
+                      "cf-cache-status": "DYNAMIC"
+                    }
+                  },
+                  "finding": {
+                    "outcome": "negative",
+                    "summary": "openid-configuration returned 404"
                   }
                 },
                 {
@@ -1367,7 +1368,7 @@
                   }
                 }
               ],
-              "durationMs": 224
+              "durationMs": 65
             },
             "oauthProtectedResource": {
               "status": "fail",
@@ -1376,27 +1377,6 @@
                 "code": "check.oauthProtectedResource.notFound"
               },
               "evidence": [
-                {
-                  "action": "fetch",
-                  "label": "GET /.well-known/oauth-protected-resource",
-                  "request": {
-                    "url": "https://sortmy.london/.well-known/oauth-protected-resource",
-                    "method": "GET"
-                  },
-                  "response": {
-                    "status": 404,
-                    "statusText": "Not Found",
-                    "headers": {
-                      "content-type": "text/html; charset=utf-8",
-                      "cf-ray": "a5b4661faa972819-SEA",
-                      "cf-cache-status": "DYNAMIC"
-                    }
-                  },
-                  "finding": {
-                    "outcome": "negative",
-                    "summary": "Returned 404"
-                  }
-                },
                 {
                   "action": "fetch",
                   "label": "GET /",
@@ -1410,13 +1390,34 @@
                     "headers": {
                       "content-type": "text/html; charset=utf-8",
                       "link": "</sitemap.xml>; rel=\"sitemap\", </index.md>; rel=\"alternate\"; type=\"text/markdown\", </openapi.json>; rel=\"service-desc\"; type=\"application/json\", </.well-known/api-catalog>; rel=\"api-catalog\"; type=\"application/linkset+json\"",
-                      "cf-ray": "a5b4661fba992819-SEA",
+                      "cf-ray": "a5ee1180292328fe-MSP",
                       "cf-cache-status": "DYNAMIC"
                     }
                   },
                   "finding": {
                     "outcome": "neutral",
                     "summary": "Target resource returned 200 (no WWW-Authenticate header)"
+                  }
+                },
+                {
+                  "action": "fetch",
+                  "label": "GET /.well-known/oauth-protected-resource",
+                  "request": {
+                    "url": "https://sortmy.london/.well-known/oauth-protected-resource",
+                    "method": "GET"
+                  },
+                  "response": {
+                    "status": 404,
+                    "statusText": "Not Found",
+                    "headers": {
+                      "content-type": "text/html; charset=utf-8",
+                      "cf-ray": "a5ee118008da28fe-MSP",
+                      "cf-cache-status": "DYNAMIC"
+                    }
+                  },
+                  "finding": {
+                    "outcome": "negative",
+                    "summary": "Returned 404"
                   }
                 },
                 {
@@ -1428,7 +1429,7 @@
                   }
                 }
               ],
-              "durationMs": 48
+              "durationMs": 70
             },
             "authMd": {
               "status": "fail",
@@ -1453,7 +1454,7 @@
                     "headers": {
                       "content-type": "text/markdown; charset=utf-8",
                       "content-length": "1441",
-                      "cf-ray": "a5b4661fca9c2819-SEA",
+                      "cf-ray": "a5ee1180498228fe-MSP",
                       "cf-cache-status": "DYNAMIC"
                     },
                     "bodyPreview": "# Authentication\n\nsortmy.london's API requires **no authentication**. There is no login, no account, no API key\nto request, and no OAuth flow anywhere on this site — this file exists to say so plainly, per\nthe [auth.md convention](https://workos.com/auth-md), rather than leave agents guessing.\n\n## What actually gates access\n\n- **Per-IP rate limiting** on `POST /api/run` (see `/openapi.json`) — excess requests get a\n  `429`. There is no way to authenticate for a higher limit; the limit is the sam..."
@@ -1480,7 +1481,7 @@
                   }
                 }
               ],
-              "durationMs": 85
+              "durationMs": 65
             },
             "mcpServerCard": {
               "status": "pass",
@@ -1524,34 +1525,13 @@
                     "headers": {
                       "content-type": "application/json",
                       "content-length": "2396",
-                      "cf-ray": "a5b4661feaa42819-SEA",
+                      "cf-ray": "a5ee1180499428fe-MSP",
                       "cf-cache-status": "DYNAMIC"
                     }
                   },
                   "finding": {
                     "outcome": "positive",
                     "summary": "Found valid MCP Server Card (registry format) at /.well-known/mcp/server-card.json"
-                  }
-                },
-                {
-                  "action": "fetch",
-                  "label": "GET /.well-known/mcp.json",
-                  "request": {
-                    "url": "https://sortmy.london/.well-known/mcp.json",
-                    "method": "GET"
-                  },
-                  "response": {
-                    "status": 404,
-                    "statusText": "Not Found",
-                    "headers": {
-                      "content-type": "text/html; charset=utf-8",
-                      "cf-ray": "a5b4661feaa62819-SEA",
-                      "cf-cache-status": "DYNAMIC"
-                    }
-                  },
-                  "finding": {
-                    "outcome": "negative",
-                    "summary": "/.well-known/mcp.json returned 404"
                   }
                 },
                 {
@@ -1566,13 +1546,34 @@
                     "statusText": "Not Found",
                     "headers": {
                       "content-type": "text/html; charset=utf-8",
-                      "cf-ray": "a5b4661feaa52819-SEA",
+                      "cf-ray": "a5ee118049a728fe-MSP",
                       "cf-cache-status": "DYNAMIC"
                     }
                   },
                   "finding": {
                     "outcome": "negative",
                     "summary": "/.well-known/mcp/server-cards.json returned 404"
+                  }
+                },
+                {
+                  "action": "fetch",
+                  "label": "GET /.well-known/mcp.json",
+                  "request": {
+                    "url": "https://sortmy.london/.well-known/mcp.json",
+                    "method": "GET"
+                  },
+                  "response": {
+                    "status": 404,
+                    "statusText": "Not Found",
+                    "headers": {
+                      "content-type": "text/html; charset=utf-8",
+                      "cf-ray": "a5ee118059c728fe-MSP",
+                      "cf-cache-status": "DYNAMIC"
+                    }
+                  },
+                  "finding": {
+                    "outcome": "negative",
+                    "summary": "/.well-known/mcp.json returned 404"
                   }
                 },
                 {
@@ -1592,7 +1593,7 @@
                   }
                 }
               ],
-              "durationMs": 138
+              "durationMs": 85
             },
             "a2aAgentCard": {
               "status": "fail",
@@ -1613,7 +1614,7 @@
                     "statusText": "Not Found",
                     "headers": {
                       "content-type": "text/html; charset=utf-8",
-                      "cf-ray": "a5b466202aad2819-SEA",
+                      "cf-ray": "a5ee118059cf28fe-MSP",
                       "cf-cache-status": "DYNAMIC"
                     }
                   },
@@ -1631,7 +1632,7 @@
                   }
                 }
               ],
-              "durationMs": 136
+              "durationMs": 83
             },
             "agentSkills": {
               "status": "pass",
@@ -1658,7 +1659,7 @@
                     "headers": {
                       "content-type": "application/json",
                       "content-length": "3221",
-                      "cf-ray": "a5b466202aae2819-SEA",
+                      "cf-ray": "a5ee118059d628fe-MSP",
                       "cf-cache-status": "DYNAMIC"
                     }
                   },
@@ -1700,7 +1701,7 @@
                   }
                 }
               ],
-              "durationMs": 104
+              "durationMs": 107
             },
             "webMcp": {
               "status": "fail",
@@ -1746,7 +1747,7 @@
                   }
                 }
               ],
-              "durationMs": 4019
+              "durationMs": 4505
             },
             "ard": {
               "status": "fail",
@@ -1786,7 +1787,7 @@
                     "statusText": "Not Found",
                     "headers": {
                       "content-type": "text/html; charset=utf-8",
-                      "cf-ray": "a5b4661f9a902819-SEA",
+                      "cf-ray": "a5ee117ff89b28fe-MSP",
                       "cf-cache-status": "DYNAMIC"
                     }
                   },
@@ -1811,7 +1812,7 @@
                     "headers": {
                       "content-type": "application/dns-json"
                     },
-                    "bodyPreview": "{\"Status\":0,\"TC\":false,\"RD\":true,\"RA\":true,\"AD\":true,\"CD\":false,\"Question\":[{\"name\":\"_catalog._agents.sortmy.london\",\"type\":16}],\"Authority\":[{\"name\":\"sortmy.london\",\"type\":6,\"TTL\":1800,\"data\":\"cullen.ns.cloudflare.com. dns.cloudflare.com. 2420148682 10000 2400 604800 1800\"},{\"name\":\"sortmy.london\",\"type\":46,\"TTL\":1800,\"data\":\"SOA 13 2 1800 1794900122 1794720122 34505 sortmy.london. Vzfw8L0FZcE86pyZqudKhr4idLXL/YJr/LsSfhMiwWwOLsoRutEKNONtNewKmCBtNHyu6/AiCrwm5KknBZQYGQ==\"},{\"name\":\"_catalog._agen..."
+                    "bodyPreview": "{\"Status\":0,\"TC\":false,\"RD\":true,\"RA\":true,\"AD\":true,\"CD\":false,\"Question\":[{\"name\":\"_catalog._agents.sortmy.london\",\"type\":16}],\"Authority\":[{\"name\":\"sortmy.london\",\"type\":6,\"TTL\":1800,\"data\":\"cullen.ns.cloudflare.com. dns.cloudflare.com. 2420725769 10000 2400 604800 1800\"},{\"name\":\"sortmy.london\",\"type\":46,\"TTL\":1800,\"data\":\"SOA 13 2 1800 1795504830 1795324830 34505 sortmy.london. nqJLaQhY9ql8yKkPaADU6y2wtcFH4wNrUcBRYK7sUsLmEkUPqFiZGT8ds38KjkK0ocJn9quXeodD/gH9MKZCfQ==\"},{\"name\":\"_catalog._agen..."
                   },
                   "finding": {
                     "outcome": "neutral",
@@ -1834,7 +1835,7 @@
                     "headers": {
                       "content-type": "application/dns-json"
                     },
-                    "bodyPreview": "{\"Status\":0,\"TC\":false,\"RD\":true,\"RA\":true,\"AD\":true,\"CD\":false,\"Question\":[{\"name\":\"_search._agents.sortmy.london\",\"type\":33}],\"Authority\":[{\"name\":\"sortmy.london\",\"type\":6,\"TTL\":1800,\"data\":\"cullen.ns.cloudflare.com. dns.cloudflare.com. 2420148682 10000 2400 604800 1800\"},{\"name\":\"sortmy.london\",\"type\":46,\"TTL\":1800,\"data\":\"SOA 13 2 1800 1794900122 1794720122 34505 sortmy.london. v7ly42UtxTWwwjRQg8S73gHLEy9FeNE9mMPzGeVxHw4moSu0LC74yOA4YOG5z7RZWKGr4ojOfSQfo5obmsGfzA==\"},{\"name\":\"_search._agents..."
+                    "bodyPreview": "{\"Status\":0,\"TC\":false,\"RD\":true,\"RA\":true,\"AD\":true,\"CD\":false,\"Question\":[{\"name\":\"_search._agents.sortmy.london\",\"type\":33}],\"Authority\":[{\"name\":\"sortmy.london\",\"type\":6,\"TTL\":1800,\"data\":\"cullen.ns.cloudflare.com. dns.cloudflare.com. 2420725769 10000 2400 604800 1800\"},{\"name\":\"sortmy.london\",\"type\":46,\"TTL\":1800,\"data\":\"SOA 13 2 1800 1795504830 1795324830 34505 sortmy.london. A9eCo+S1Ew6yteZrzXGbkKzdEMSDw4MDkK0/1MjxsJjc2f4cQGE1M8mwohoF6JEtwQzE29TokZ53kisAUVIqQg==\"},{\"name\":\"_search._agents..."
                   },
                   "finding": {
                     "outcome": "neutral",
@@ -1854,7 +1855,7 @@
                 "discoveryMechanisms": [],
                 "searchEndpoints": []
               },
-              "durationMs": 49
+              "durationMs": 62
             },
             "personalAgentProtocol": {
               "status": "fail",
@@ -1882,7 +1883,7 @@
                     "statusText": "Not Found",
                     "headers": {
                       "content-type": "text/html; charset=utf-8",
-                      "cf-ray": "a5b4661f5a892819-SEA",
+                      "cf-ray": "a5ee117f7f2728fe-MSP",
                       "cf-cache-status": "DYNAMIC"
                     }
                   }
@@ -1896,7 +1897,7 @@
                   }
                 }
               ],
-              "durationMs": 75
+              "durationMs": 104
             }
           },
           "commerce": {
@@ -1926,7 +1927,7 @@
                     "headers": {
                       "content-type": "text/html; charset=utf-8",
                       "link": "</sitemap.xml>; rel=\"sitemap\", </index.md>; rel=\"alternate\"; type=\"text/markdown\", </openapi.json>; rel=\"service-desc\"; type=\"application/json\", </.well-known/api-catalog>; rel=\"api-catalog\"; type=\"application/linkset+json\"",
-                      "cf-ray": "a5b466206abc2819-SEA",
+                      "cf-ray": "a5ee11807a3b28fe-MSP",
                       "cf-cache-status": "DYNAMIC"
                     }
                   },
@@ -1947,7 +1948,7 @@
                     "statusText": "Not Found",
                     "headers": {
                       "content-type": "text/html; charset=utf-8",
-                      "cf-ray": "a5b466207abd2819-SEA",
+                      "cf-ray": "a5ee11807a4628fe-MSP",
                       "cf-cache-status": "DYNAMIC"
                     }
                   },
@@ -1969,7 +1970,7 @@
                     "headers": {
                       "content-type": "text/plain;charset=UTF-8",
                       "content-length": "9",
-                      "cf-ray": "a5b466207ac12819-SEA"
+                      "cf-ray": "a5ee11809a8728fe-MSP"
                     }
                   },
                   "finding": {
@@ -1989,7 +1990,7 @@
                     "statusText": "OK",
                     "headers": {
                       "content-type": "application/json",
-                      "cf-ray": "a5b466204ab42819-SEA",
+                      "cf-ray": "a5ee11807a2e28fe-MSP",
                       "cf-cache-status": "DYNAMIC"
                     }
                   }
@@ -2015,7 +2016,7 @@
                   }
                 }
               ],
-              "durationMs": 504
+              "durationMs": 489
             },
             "mpp": {
               "status": "neutral",
@@ -2043,7 +2044,7 @@
                     "headers": {
                       "content-type": "application/json",
                       "content-length": "3760",
-                      "cf-ray": "a5b466208ac22819-SEA",
+                      "cf-ray": "a5ee1180aaa828fe-MSP",
                       "cf-cache-status": "DYNAMIC"
                     }
                   },
@@ -2061,7 +2062,7 @@
                   }
                 }
               ],
-              "durationMs": 158
+              "durationMs": 123
             },
             "ucp": {
               "status": "neutral",
@@ -2088,7 +2089,7 @@
                     "statusText": "Not Found",
                     "headers": {
                       "content-type": "text/html; charset=utf-8",
-                      "cf-ray": "a5b466204ab22819-SEA",
+                      "cf-ray": "a5ee118069ee28fe-MSP",
                       "cf-cache-status": "DYNAMIC"
                     }
                   },
@@ -2106,7 +2107,7 @@
                   }
                 }
               ],
-              "durationMs": 129
+              "durationMs": 100
             },
             "acp": {
               "status": "neutral",
@@ -2133,7 +2134,7 @@
                     "statusText": "Not Found",
                     "headers": {
                       "content-type": "text/html; charset=utf-8",
-                      "cf-ray": "a5b466209ac82819-SEA",
+                      "cf-ray": "a5ee1180aab128fe-MSP",
                       "cf-cache-status": "DYNAMIC"
                     }
                   },
@@ -2151,7 +2152,7 @@
                   }
                 }
               ],
-              "durationMs": 223
+              "durationMs": 129
             },
             "ap2": {
               "status": "neutral",
@@ -2211,7 +2212,7 @@
       "evidence": {}
     }
   ],
-  "score": 35,
+  "score": 37,
   "grade": "D",
   "oraAiChecks": {
     "mapped": 6,
@@ -2277,8 +2278,8 @@
         "status": "fail",
         "score": 0,
         "maxScore": 3,
-        "details": "No verified entry in the official MCP Registry or on Smithery, and no npm or PyPI package of yours that runs as an MCP server. To pass, publish the server to the official MCP Registry under your domain's namespace (com.example/server for example.com), get a verified Smithery listing with non-zero usage, or publish it to npm or PyPI with \"mcp\" in the package name and your site as its homepage. On npm it needs a `bin` entry so `npx` can start it; on PyPI its summary has to say it is an MCP server. You can also link the registry entry or npm package from your homepage or docs. Smithery did not answer our lookups.",
-        "recommendation": "Publish your MCP server where agent platforms look for one: the official MCP Registry (registry.modelcontextprotocol.io) under your domain's namespace, Smithery (smithery.ai), or an npm or PyPI package that runs as an MCP server, with \"mcp\" in the package name. On npm give it a `bin` entry so `npx` can start it; on PyPI say it is an MCP server in its summary. Link the registry entry or package from your homepage or docs, or set the package's homepage to your site, so we can confirm it is yours."
+        "details": "Agents can still use your MCP server, but people adding servers to their agent apps won't find it in a registry: no verified entry in the official MCP Registry or on Smithery, and no npm or PyPI package of yours that runs as an MCP server. To pass, publish the server to the official MCP Registry under your domain's namespace (com.example/server for example.com, com.example.docs/server for docs.example.com), get a verified Smithery listing with non-zero usage, or publish it to npm or PyPI with \"mcp\" in the package name and your site as its homepage. On npm it needs a `bin` entry so `npx` can start it; on PyPI its summary has to say it is an MCP server. You can also link the registry entry or npm package from your homepage or docs. Smithery did not answer our lookups.",
+        "recommendation": "Publish your MCP server where developers and agent apps look when they add a server: the official MCP Registry (registry.modelcontextprotocol.io) under your domain's namespace, Smithery (smithery.ai), or an npm or PyPI package that runs as an MCP server, with \"mcp\" in the package name. On npm give it a `bin` entry so `npx` can start it; on PyPI say it is an MCP server in its summary. Link the registry entry or package from your homepage or docs, or set the package's homepage to your site, so we can confirm it is yours."
       },
       {
         "id": "npm-sdk-package",
@@ -2346,10 +2347,10 @@
       },
       {
         "id": "bot-detection",
-        "status": "pass",
-        "score": 2,
+        "status": "warning",
+        "score": 1,
         "maxScore": 2,
-        "details": "Site accessible to 4 agent user-agents (ChatGPT-User, OAI-SearchBot, Claude-User, PerplexityBot).",
+        "details": "Some agents blocked: PerplexityBot. A normal browser visit from us got in.",
         "recommendation": "Let the agents that act for users and search (ChatGPT-User, OAI-SearchBot, Claude-User, PerplexityBot) through your WAF and bot rules. On Cloudflare, allow verified bots rather than matching User-Agent strings, which anyone can fake."
       },
       {
@@ -2373,7 +2374,7 @@
         "status": "fail",
         "score": 0,
         "maxScore": 1,
-        "details": "No official skills self-published on skills.sh (27 community skills with potential relation to this domain found, but only self-published official skills count)",
+        "details": "No official skills self-published on skills.sh (31 community skills with potential relation to this domain found, but only self-published official skills count)",
         "recommendation": "Publish agent skills on skills.sh so AI agents can discover your product's capabilities. Create a SKILL.md in your GitHub repo and register it with 'npx skills add'. See skills.sh/docs."
       },
       {
@@ -2486,7 +2487,7 @@
         "score": 0,
         "maxScore": 1,
         "details": "No sameAs entity linking in JSON-LD  - agents cannot disambiguate your brand",
-        "recommendation": "Add sameAs links in your JSON-LD structured data pointing to your Wikipedia page, Wikidata entry, GitHub org, and social profiles. This helps AI disambiguate your brand from similarly named entities."
+        "recommendation": "Add sameAs links in your JSON-LD structured data pointing to your profiles on Wikipedia, Wikidata, LinkedIn, Crunchbase or GitHub. This helps AI disambiguate your brand from similarly named entities."
       },
       {
         "id": "metadata-completeness",
@@ -2514,10 +2515,10 @@
       },
       {
         "id": "llms-txt-links-resolve",
-        "status": "warning",
-        "score": 1,
+        "status": "pass",
+        "score": 2,
         "maxScore": 2,
-        "details": "2 of 5 probed llms.txt links do not resolve: https://sortmy.london/api/run and https://sortmy.london/api/mcp",
+        "details": "All 5 probed llms.txt links resolve. 2 are live API endpoints that reject a plain GET: https://sortmy.london/api/run (HTTP 405) and https://sortmy.london/api/mcp (HTTP 405)",
         "recommendation": "Make every link your llms.txt declares resolve to real content. Verify each one with `curl -L <url>` - you should see the linked document, not your homepage. If your app returns the homepage shell for unknown paths (common with single-page apps), a 200 status is not proof: check the body. Fix or remove any dead link; agents that follow the index treat a broken link as a dead end."
       },
       {
@@ -2610,10 +2611,10 @@
       },
       {
         "id": "agent-crawler-reachability",
-        "status": "pass",
-        "score": 1,
+        "status": "warning",
+        "score": 0,
         "maxScore": 1,
-        "details": "Reachable to every agent we tested - ChatGPT-User: reachable, OAI-SearchBot: reachable, Claude-User: reachable, PerplexityBot: reachable",
+        "details": "Some agents are blocked - ChatGPT-User: reachable, OAI-SearchBot: reachable, Claude-User: reachable, PerplexityBot: blocked. A normal browser visit from us got in.",
         "recommendation": "Let ChatGPT-User, OAI-SearchBot, Claude-User, PerplexityBot reach your homepage through your WAF, bot rules, and robots.txt."
       },
       {
@@ -2653,10 +2654,10 @@
       },
       {
         "id": "public-api",
-        "status": "warning",
-        "score": 3.43,
+        "status": "pass",
+        "score": 8,
         "maxScore": 8,
-        "details": "API described in documentation at https://sortmy.london/auth.md but no machine-verifiable API surface confirmed. Best-of-protocols score: 3/7.",
+        "details": "REST API from the OpenAPI spec is live: GET https://sortmy.london/api/freshness answered 200 without credentials. Best-of-protocols score: 7/7.",
         "recommendation": "Expose a public REST or GraphQL API. AI agents need programmatic access  - not just a web UI  - to integrate with your product."
       },
       {
@@ -2749,7 +2750,7 @@
         "status": "fail",
         "score": 0,
         "maxScore": 1,
-        "details": "No 401 with WWW-Authenticate: Bearer resource_metadata=... found. Probed [https://sortmy.london/api, https://sortmy.london/api/v1, https://sortmy.london/v1, https://sortmy.london/v2, https://sortmy.london/agent/identity, https://sortmy.london/agent/auth, https://sortmy.london/api/mcp, https://sortmy.london/openapi.json, https://api.sortmy.london/api, https://api.sortmy.london/api/v1, https://api.sortmy.london/v1, https://api.sortmy.london/v2, https://api.sortmy.london/agent/identity, https://api.sortmy.london/agent/auth].",
+        "details": "No 401 with WWW-Authenticate: Bearer resource_metadata=... found. Probed [https://sortmy.london/, https://sortmy.london/api, https://sortmy.london/api/mcp, https://sortmy.london/openapi.json, https://api.sortmy.london/].",
         "recommendation": "Return a 401 carrying a spec-shaped `WWW-Authenticate: Bearer resource_metadata=\"<your protected-resource metadata URL>\"` header on your API's primary entry points, so an agent learns your auth requirements from one request instead of hunting for the well-known document. Point the metadata URL at /.well-known/oauth-protected-resource on the host that serves the API. Spec: https://github.com/workos/auth.md."
       },
       {
@@ -2782,7 +2783,7 @@
         "score": 0,
         "maxScore": 2,
         "details": "Not published",
-        "recommendation": "If you offer sign-in, list every scope an agent can request in scopes_supported, in your issuer's metadata, the protected resource metadata of your domain, or both. Describe each scope you offer agents, in auth.scopes (scope name to description) or in the OAuth security scheme of an OpenAPI document you list, so an agent can ask for only what a task needs. auth.scope_hints is optional; each entry you add has a changes value and a boolean personal_data. If you offer Mediated Sign-In, list it as mediated-sign-in with a version 1 entry holding its fields (each with name, label, and secret) and scopes, add https://personalagentprotocol.org/grant/mediated-sign-in to your issuer's grant_types_supported, and leave auth.disabled unset. Name the protocol's own extensions by their plain name and your own with a prefix from your domain. List each extension as a list with an entry per version you support: operations at version 3 and browser-control at version 1. An operations entry with an endpoint for website operations needs web.browser_session_endpoint, and browser-control is listed with it. Set web.disabled only with agent or apis and no browser_session_endpoint, and web.unscoped only with one. If you list web.browser_session_endpoint and offer sign-in, include poppy:browser-sign-in in scopes_supported, in your issuer's metadata or in the protected resource metadata of your domain (agents read both). A file that still declares 0.3 lists each extension as one object with a version, and operations at version 2. Spec: https://personalagentprotocol.org/docs/1.0/spec"
+        "recommendation": "If you offer sign-in, list every scope an agent can request in scopes_supported, in your issuer's metadata, the protected resource metadata of your domain, or both. Describe each scope you offer agents, in auth.scopes (scope name to description) or in the OAuth security scheme of an OpenAPI document you list, so an agent can ask for only what a task needs. auth.scope_hints is optional; each entry you add has a changes value and a boolean personal_data. Mediated Sign-In is a transitional step: offer it only until you can add Direct or Device Sign-In, since the protocol plans to retire it on March 17, 2027. If you offer it, list it as mediated-sign-in with a version 1 entry holding its fields (each with name, label, and secret) and scopes, add https://personalagentprotocol.org/grant/mediated-sign-in to your issuer's grant_types_supported, and leave auth.disabled unset. Name the protocol's own extensions by their plain name and your own with a prefix from your domain. List each extension as a list with an entry per version you support: operations at version 3 and browser-control at version 1. An operations entry with an endpoint for website operations needs web.browser_session_endpoint, and browser-control is listed with it. Set web.disabled only with agent or apis and no browser_session_endpoint, and web.unscoped only with one. If you list web.browser_session_endpoint and offer sign-in, include poppy:browser-sign-in in scopes_supported, in your issuer's metadata or in the protected resource metadata of your domain (agents read both). Spec: https://personalagentprotocol.org/docs/1.0/spec"
       },
       {
         "id": "pap-interfaces",
@@ -2790,7 +2791,7 @@
         "score": 0,
         "maxScore": 2,
         "details": "Not published",
-        "recommendation": "Complete every interface entry in poppy.json: each agent.protocols entry needs a type, an https:// endpoint and a description of what your agent there can help with, and each apis entry needs a type, a url, and a description. Set access to signed_in only when you have an issuer. Point OpenAPI entries at a document that parses as OpenAPI 3.0 or 3.1. An MCP server that offers account access publishes RFC 9728 protected resource metadata at its own well-known URL (or at the resource_metadata URL its 401 names), whose resource is the server's url and whose authorization_servers includes your OAuth issuer. To tell agents which tasks you do not offer, which skills you publish and where to send feedback, list tasks.endpoint, an https URL on a public host that answers per Session. A file that still declares 0.3 lists excluded_tasks.url instead, a JSON document whose tasks list gives each task a short phrase; an alternative carries instructions or references, and a reference of type openapi or mcp names an API the file lists. Spec: https://personalagentprotocol.org/docs/1.0/spec"
+        "recommendation": "Complete every interface entry in poppy.json: each agent.protocols entry needs a type, an https:// endpoint and a description of what your agent there can help with, and each apis entry needs a type, a url, and a description. If agent.protocols lists a ucp entry, its endpoint is your UCP profile at https://{your domain}/.well-known/ucp, on the host that serves poppy.json and with no redirect: list the UCP extension with a version 1 entry in extensions, and offer dev.ucp.common.ask in the profile's capabilities. Set access to signed_in only when you have an issuer. Point OpenAPI entries at a document that parses as OpenAPI 3.0 or 3.1. An MCP server that offers account access publishes RFC 9728 protected resource metadata at its own well-known URL (or at the resource_metadata URL its 401 names), whose resource is the server's url and whose authorization_servers includes your OAuth issuer. To tell agents which tasks you do not offer, which skills you publish and where to send feedback, list tasks.endpoint, an https URL on a public host that answers per Session. Spec: https://personalagentprotocol.org/docs/1.0/spec"
       },
       {
         "id": "pap-endpoint-enforcement",
@@ -2798,7 +2799,7 @@
         "score": 0,
         "maxScore": 2,
         "details": "Not published",
-        "recommendation": "Reject agents that send no credentials in the shape PAP defines. Your token endpoint answers a refresh_token grant carrying a refresh token you never issued with invalid_grant or invalid_client, never unsupported_grant_type, since every issuer supports that grant. Your conversation endpoint answers a request without the Poppy-Session header with 400 and `{\"error\": \"invalid_session\"}`. An MCP server that needs a token answers a request without one with 401 and a challenge carrying resource_metadata, the URL of its RFC 9728 metadata. Your browser_session_endpoint page, loaded with a plain GET, is an HTML form carrying a one-time code, sets a cookie tying the code to that browser with SameSite Strict or Lax and a __Host- name, so other hosts on your domain cannot set it, and sends Cache-Control: no-store, frame-ancestors 'none' or X-Frame-Options: DENY, and a Cross-Origin-Opener-Policy that severs the opener. That endpoint answers a form submitting a code it never issued with an error status and no cookie, and {browser_session_endpoint}/authorize answers a code sent without a Poppy-Session header with 400 invalid_session. If you list a website operations endpoint (operations version 3), it answers a request without the Poppy-Session header with 400 invalid_session too. When you rate-limit a request, answer 429 with a Retry-After header. Answer the token, revocation and device authorization endpoints, your APIs, {browser_session_endpoint}/authorize, and the conversation, tasks, feedback and extension endpoints at the address you publish, without redirects, since an agent sends no token, Session JWT, assertion or credentials to the URL one redirects to. A file that still declares Draft 0.1 or 0.2 is graded by that draft: the token endpoint rejects a junk JWT bearer grant with invalid_client (401) or invalid_grant (400), and the conversation, operations and feedback endpoints answer 401 with a `WWW-Authenticate: DPoP` challenge. Spec: https://personalagentprotocol.org/docs/1.0/spec"
+        "recommendation": "Reject agents that send no credentials in the shape PAP defines. Your token endpoint answers a refresh_token grant carrying a refresh token you never issued with invalid_grant or invalid_client, never unsupported_grant_type, since every issuer supports that grant. Your conversation endpoint answers a request without the Poppy-Session header with 400 and `{\"error\": \"invalid_session\"}`. An MCP server that needs a token answers a request without one with 401 and a challenge carrying resource_metadata, the URL of its RFC 9728 metadata. Your browser_session_endpoint page, loaded with a plain GET, is an HTML form carrying a one-time code, sets a cookie tying the code to that browser with SameSite Strict or Lax and a __Host- name, so other hosts on your domain cannot set it, and sends Cache-Control: no-store, frame-ancestors 'none' or X-Frame-Options: DENY, and a Cross-Origin-Opener-Policy that severs the opener. That endpoint answers a form submitting a code it never issued with an error status and no cookie, and {browser_session_endpoint}/authorize answers a code sent without a Poppy-Session header with 400 invalid_session. If you list a website operations endpoint (operations version 3), it answers a request without the Poppy-Session header with 400 invalid_session too. When you rate-limit a request, answer 429 with a Retry-After header. Answer the token, revocation and device authorization endpoints, your APIs, {browser_session_endpoint}/authorize, and the conversation, tasks, feedback and extension endpoints at the address you publish, without redirects, since an agent sends no token, Session JWT, assertion or credentials to the URL one redirects to. Spec: https://personalagentprotocol.org/docs/1.0/spec"
       },
       {
         "id": "pap-cross-protocol",
@@ -2806,7 +2807,7 @@
         "score": 0,
         "maxScore": 2,
         "details": "Not published",
-        "recommendation": "Keep poppy.json consistent with your other agent surfaces: list the same MCP server and organization as your ARD catalog (/.well-known/ard.json), and, when one issuer serves both PAP and auth.md, list every grant both protocols send to its token endpoint in grant_types_supported. Publish a poppy.json on every domain your issuer lists in protected_resources, naming no other issuer, and point every 401 at the same resource_metadata URL. A file declaring 0.1 or 0.2 also names the OAuth issuer that your protected resource metadata lists. Spec: https://personalagentprotocol.org/docs/1.0/spec"
+        "recommendation": "Keep poppy.json consistent with your other agent surfaces: list the same MCP server and organization as your ARD catalog (/.well-known/ard.json), and, when one issuer serves both PAP and auth.md, list every grant both protocols send to its token endpoint in grant_types_supported. Publish a poppy.json on every domain your issuer lists in protected_resources, naming no other issuer, and point every 401 at the same resource_metadata URL. Spec: https://personalagentprotocol.org/docs/1.0/spec"
       },
       {
         "id": "mcp-server",
@@ -3044,7 +3045,7 @@
       },
       {
         "id": "sandbox-environment",
-        "status": "na",
+        "status": "fail",
         "score": 0,
         "maxScore": 2,
         "details": "No sandbox or test environment found",
@@ -3097,7 +3098,7 @@
         "status": "warning",
         "score": 1,
         "maxScore": 2,
-        "details": "The nonexistent path https://sortmy.london/__ora-404-probe-bmg57ug2 correctly returns HTTP 404. Partial credit: no Markdown error body was detected.",
+        "details": "The nonexistent path https://sortmy.london/__ora-404-probe-14r8fygo correctly returns HTTP 404. Partial credit: no Markdown error body was detected.",
         "recommendation": "Keep the correct HTTP 404 status. The remaining requirement is a Markdown error body when agents request Accept: text/markdown. Include at least 20 characters explaining the error and a link to your docs, sitemap, or llms.txt. Verify with `curl -sS -L -i -H 'Accept: text/markdown' https://yourdomain.com/some-path-that-does-not-exist`. Check both the final 404 status and the Markdown body with Content-Type: text/markdown. Checking the status alone does not verify the missing requirement."
       },
       {

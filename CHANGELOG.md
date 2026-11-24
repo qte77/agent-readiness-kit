@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- Licensed under Apache-2.0: `LICENSE`, the `license` field in both `package.json` files, and a README section.
 - `scanOraAi(url, { fresh: true })` (#74): sends ora.ai's documented `force: true` field on
   `POST /api/scan`, so a scan right after a deploy runs live instead of returning a stored result
   from the freshness window. A complete 200 result is used directly; a 202 waits and reads

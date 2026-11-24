@@ -80,3 +80,7 @@ npm run site:build # node dist/scripts/buildSiteCli.js — builds site-dist/ (th
 
 See [CONTRIBUTING.md](CONTRIBUTING.md) for the full command set, branch/PR conventions, and
 release process.
+
+## License
+
+[Apache-2.0](LICENSE).

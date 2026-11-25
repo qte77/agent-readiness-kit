@@ -1,7 +1,7 @@
 {
   "propertyId": "qte77-github-io",
   "url": "https://qte77.github.io",
-  "scannedAt": "2026-11-16T06:21:05.717Z",
+  "scannedAt": "2026-11-23T06:19:34.877Z",
   "findings": [
     {
       "id": "wellKnown.agent-instruction",
@@ -254,7 +254,7 @@
       "evidence": {
         "level": 2,
         "levelName": "Bot-Aware",
-        "scannedAt": "2026-11-16T06:20:15.929Z",
+        "scannedAt": "2026-11-23T06:18:48.946Z",
         "checks": {
           "discoverability": {
             "robotsTxt": {
@@ -276,7 +276,7 @@
                     "statusText": "OK",
                     "headers": {
                       "content-type": "text/plain; charset=utf-8",
-                      "cf-ray": "a5b46367febe9614-SEA",
+                      "cf-ray": "a5ee0ee92a9828fe-MSP",
                       "cf-cache-status": "DYNAMIC",
                       "age": "0"
                     },
@@ -338,7 +338,7 @@
                     "statusText": "OK",
                     "headers": {
                       "content-type": "application/xml",
-                      "cf-ray": "a5b463685f979614-SEA",
+                      "cf-ray": "a5ee0ee99b9328fe-MSP",
                       "cf-cache-status": "DYNAMIC",
                       "age": "0"
                     }
@@ -357,7 +357,7 @@
                   }
                 }
               ],
-              "durationMs": 92
+              "durationMs": 56
             },
             "linkHeaders": {
               "status": "fail",
@@ -378,7 +378,7 @@
                     "statusText": "OK",
                     "headers": {
                       "content-type": "text/html; charset=utf-8",
-                      "cf-ray": "a5b4636939549614-SEA",
+                      "cf-ray": "a5ee0eeb486528fe-MSP",
                       "cf-cache-status": "DYNAMIC",
                       "age": "0"
                     }
@@ -397,7 +397,7 @@
                   }
                 }
               ],
-              "durationMs": 134
+              "durationMs": 275
             },
             "dnsAid": {
               "status": "fail",
@@ -442,7 +442,7 @@
                     "headers": {
                       "content-type": "application/dns-json"
                     },
-                    "bodyPreview": "{\"Status\":0,\"TC\":false,\"RD\":true,\"RA\":true,\"AD\":false,\"CD\":false,\"Question\":[{\"name\":\"_index._agents.qte77.github.io\",\"type\":64}],\"Authority\":[{\"name\":\"github.io\",\"type\":6,\"TTL\":900,\"data\":\"ns-1622.awsdns-10.co.uk. awsdns-hostmaster.amazon.com. 1 7200 900 1209600 86400\"}]}"
+                    "bodyPreview": "{\"Status\":0,\"TC\":false,\"RD\":true,\"RA\":true,\"AD\":false,\"CD\":false,\"Question\":[{\"name\":\"_index._agents.qte77.github.io\",\"type\":64}],\"Authority\":[{\"name\":\"github.io\",\"type\":6,\"TTL\":3600,\"data\":\"dns1.p05.nsone.net. hostmaster.nsone.net. 1647625169 43200 7200 1209600 3600\"}]}"
                   },
                   "finding": {
                     "outcome": "neutral",
@@ -488,7 +488,7 @@
                     "headers": {
                       "content-type": "application/dns-json"
                     },
-                    "bodyPreview": "{\"Status\":0,\"TC\":false,\"RD\":true,\"RA\":true,\"AD\":false,\"CD\":false,\"Question\":[{\"name\":\"_a2a._agents.qte77.github.io\",\"type\":64}],\"Authority\":[{\"name\":\"github.io\",\"type\":6,\"TTL\":900,\"data\":\"ns-1622.awsdns-10.co.uk. awsdns-hostmaster.amazon.com. 1 7200 900 1209600 86400\"}]}"
+                    "bodyPreview": "{\"Status\":0,\"TC\":false,\"RD\":true,\"RA\":true,\"AD\":false,\"CD\":false,\"Question\":[{\"name\":\"_a2a._agents.qte77.github.io\",\"type\":64}],\"Authority\":[{\"name\":\"github.io\",\"type\":6,\"TTL\":3600,\"data\":\"dns1.p05.nsone.net. hostmaster.nsone.net. 1647625169 43200 7200 1209600 3600\"}]}"
                   },
                   "finding": {
                     "outcome": "neutral",
@@ -511,7 +511,7 @@
                     "headers": {
                       "content-type": "application/dns-json"
                     },
-                    "bodyPreview": "{\"Status\":0,\"TC\":false,\"RD\":true,\"RA\":true,\"AD\":false,\"CD\":false,\"Question\":[{\"name\":\"_a2a._agents.qte77.github.io\",\"type\":65}],\"Authority\":[{\"name\":\"github.io\",\"type\":6,\"TTL\":900,\"data\":\"ns-1622.awsdns-10.co.uk. awsdns-hostmaster.amazon.com. 1 7200 900 1209600 86400\"}]}"
+                    "bodyPreview": "{\"Status\":0,\"TC\":false,\"RD\":true,\"RA\":true,\"AD\":false,\"CD\":false,\"Question\":[{\"name\":\"_a2a._agents.qte77.github.io\",\"type\":65}],\"Authority\":[{\"name\":\"github.io\",\"type\":6,\"TTL\":3600,\"data\":\"dns1.p05.nsone.net. hostmaster.nsone.net. 1647625169 43200 7200 1209600 3600\"}]}"
                   },
                   "finding": {
                     "outcome": "neutral",
@@ -534,7 +534,7 @@
                     "headers": {
                       "content-type": "application/dns-json"
                     },
-                    "bodyPreview": "{\"Status\":0,\"TC\":false,\"RD\":true,\"RA\":true,\"AD\":false,\"CD\":false,\"Question\":[{\"name\":\"_mcp._agents.qte77.github.io\",\"type\":64}],\"Authority\":[{\"name\":\"github.io\",\"type\":6,\"TTL\":900,\"data\":\"ns-1622.awsdns-10.co.uk. awsdns-hostmaster.amazon.com. 1 7200 900 1209600 86400\"}]}"
+                    "bodyPreview": "{\"Status\":0,\"TC\":false,\"RD\":true,\"RA\":true,\"AD\":false,\"CD\":false,\"Question\":[{\"name\":\"_mcp._agents.qte77.github.io\",\"type\":64}],\"Authority\":[{\"name\":\"github.io\",\"type\":6,\"TTL\":3600,\"data\":\"dns1.p05.nsone.net. hostmaster.nsone.net. 1647625169 43200 7200 1209600 3600\"}]}"
                   },
                   "finding": {
                     "outcome": "neutral",
@@ -557,7 +557,7 @@
                     "headers": {
                       "content-type": "application/dns-json"
                     },
-                    "bodyPreview": "{\"Status\":0,\"TC\":false,\"RD\":true,\"RA\":true,\"AD\":false,\"CD\":false,\"Question\":[{\"name\":\"_mcp._agents.qte77.github.io\",\"type\":65}],\"Authority\":[{\"name\":\"github.io\",\"type\":6,\"TTL\":900,\"data\":\"ns-1622.awsdns-10.co.uk. awsdns-hostmaster.amazon.com. 1 7200 900 1209600 86400\"}]}"
+                    "bodyPreview": "{\"Status\":0,\"TC\":false,\"RD\":true,\"RA\":true,\"AD\":false,\"CD\":false,\"Question\":[{\"name\":\"_mcp._agents.qte77.github.io\",\"type\":65}],\"Authority\":[{\"name\":\"github.io\",\"type\":6,\"TTL\":3600,\"data\":\"dns1.p05.nsone.net. hostmaster.nsone.net. 1647625169 43200 7200 1209600 3600\"}]}"
                   },
                   "finding": {
                     "outcome": "neutral",
@@ -604,7 +604,7 @@
                   }
                 }
               ],
-              "durationMs": 8
+              "durationMs": 30
             }
           },
           "contentAccessibility": {
@@ -650,7 +650,7 @@
                   }
                 }
               ],
-              "durationMs": 405
+              "durationMs": 261
             }
           },
           "botAccessControl": {
@@ -997,7 +997,7 @@
                     "statusText": "OK",
                     "headers": {
                       "content-type": "text/plain; charset=utf-8",
-                      "cf-ray": "a5b46367febe9614-SEA",
+                      "cf-ray": "a5ee0ee92a9828fe-MSP",
                       "cf-cache-status": "DYNAMIC",
                       "age": "0"
                     },
@@ -1058,7 +1058,7 @@
                     "statusText": "OK",
                     "headers": {
                       "content-type": "text/plain; charset=utf-8",
-                      "cf-ray": "a5b46367febe9614-SEA",
+                      "cf-ray": "a5ee0ee92a9828fe-MSP",
                       "cf-cache-status": "DYNAMIC",
                       "age": "0"
                     },
@@ -1112,7 +1112,7 @@
                     "statusText": "Not Found",
                     "headers": {
                       "content-type": "text/html; charset=utf-8",
-                      "cf-ray": "a5b463685f949614-SEA",
+                      "cf-ray": "a5ee0ee99b9228fe-MSP",
                       "cf-cache-status": "DYNAMIC",
                       "age": "0"
                     }
@@ -1131,7 +1131,7 @@
                   }
                 }
               ],
-              "durationMs": 6
+              "durationMs": 70
             }
           },
           "discovery": {
@@ -1157,7 +1157,7 @@
                     "statusText": "Not Found",
                     "headers": {
                       "content-type": "text/html; charset=utf-8",
-                      "cf-ray": "a5b46368d8709614-SEA",
+                      "cf-ray": "a5ee0eea2d5928fe-MSP",
                       "cf-cache-status": "DYNAMIC",
                       "age": "0"
                     }
@@ -1176,7 +1176,7 @@
                   }
                 }
               ],
-              "durationMs": 76
+              "durationMs": 268
             },
             "oauthDiscovery": {
               "status": "fail",
@@ -1197,7 +1197,7 @@
                     "statusText": "Not Found",
                     "headers": {
                       "content-type": "text/html; charset=utf-8",
-                      "cf-ray": "a5b463686fa79614-SEA",
+                      "cf-ray": "a5ee0ee99b9928fe-MSP",
                       "cf-cache-status": "DYNAMIC",
                       "age": "0"
                     }
@@ -1219,7 +1219,7 @@
                     "statusText": "Not Found",
                     "headers": {
                       "content-type": "text/html; charset=utf-8",
-                      "cf-ray": "a5b463686fad9614-SEA",
+                      "cf-ray": "a5ee0ee9abd128fe-MSP",
                       "cf-cache-status": "DYNAMIC",
                       "age": "0"
                     }
@@ -1238,7 +1238,7 @@
                   }
                 }
               ],
-              "durationMs": 100
+              "durationMs": 62
             },
             "oauthProtectedResource": {
               "status": "fail",
@@ -1247,28 +1247,6 @@
                 "code": "check.oauthProtectedResource.notFound"
               },
               "evidence": [
-                {
-                  "action": "fetch",
-                  "label": "GET /.well-known/oauth-protected-resource",
-                  "request": {
-                    "url": "https://qte77.github.io/.well-known/oauth-protected-resource",
-                    "method": "GET"
-                  },
-                  "response": {
-                    "status": 404,
-                    "statusText": "Not Found",
-                    "headers": {
-                      "content-type": "text/html; charset=utf-8",
-                      "cf-ray": "a5b463686faf9614-SEA",
-                      "cf-cache-status": "DYNAMIC",
-                      "age": "0"
-                    }
-                  },
-                  "finding": {
-                    "outcome": "negative",
-                    "summary": "Returned 404"
-                  }
-                },
                 {
                   "action": "fetch",
                   "label": "GET /",
@@ -1281,7 +1259,7 @@
                     "statusText": "OK",
                     "headers": {
                       "content-type": "text/html; charset=utf-8",
-                      "cf-ray": "a5b463687fd19614-SEA",
+                      "cf-ray": "a5ee0ee9dc6128fe-MSP",
                       "cf-cache-status": "DYNAMIC",
                       "age": "0"
                     }
@@ -1289,6 +1267,28 @@
                   "finding": {
                     "outcome": "neutral",
                     "summary": "Target resource returned 200 (no WWW-Authenticate header)"
+                  }
+                },
+                {
+                  "action": "fetch",
+                  "label": "GET /.well-known/oauth-protected-resource",
+                  "request": {
+                    "url": "https://qte77.github.io/.well-known/oauth-protected-resource",
+                    "method": "GET"
+                  },
+                  "response": {
+                    "status": 404,
+                    "statusText": "Not Found",
+                    "headers": {
+                      "content-type": "text/html; charset=utf-8",
+                      "cf-ray": "a5ee0ee9abd728fe-MSP",
+                      "cf-cache-status": "DYNAMIC",
+                      "age": "0"
+                    }
+                  },
+                  "finding": {
+                    "outcome": "negative",
+                    "summary": "Returned 404"
                   }
                 },
                 {
@@ -1300,7 +1300,7 @@
                   }
                 }
               ],
-              "durationMs": 31
+              "durationMs": 69
             },
             "authMd": {
               "status": "fail",
@@ -1324,7 +1324,7 @@
                     "statusText": "Not Found",
                     "headers": {
                       "content-type": "text/html; charset=utf-8",
-                      "cf-ray": "a5b463687fdc9614-SEA",
+                      "cf-ray": "a5ee0ee9ec9128fe-MSP",
                       "cf-cache-status": "DYNAMIC",
                       "age": "0"
                     }
@@ -1343,7 +1343,7 @@
                   }
                 }
               ],
-              "durationMs": 32
+              "durationMs": 202
             },
             "mcpServerCard": {
               "status": "fail",
@@ -1364,7 +1364,7 @@
                     "statusText": "Not Found",
                     "headers": {
                       "content-type": "text/html; charset=utf-8",
-                      "cf-ray": "a5b463689ffe9614-SEA",
+                      "cf-ray": "a5ee0ee9ec9428fe-MSP",
                       "cf-cache-status": "DYNAMIC",
                       "age": "0"
                     }
@@ -1372,28 +1372,6 @@
                   "finding": {
                     "outcome": "negative",
                     "summary": "/.well-known/mcp/server-card.json returned 404"
-                  }
-                },
-                {
-                  "action": "fetch",
-                  "label": "GET /.well-known/mcp/server-cards.json",
-                  "request": {
-                    "url": "https://qte77.github.io/.well-known/mcp/server-cards.json",
-                    "method": "GET"
-                  },
-                  "response": {
-                    "status": 404,
-                    "statusText": "Not Found",
-                    "headers": {
-                      "content-type": "text/html; charset=utf-8",
-                      "cf-ray": "a5b4636898009614-SEA",
-                      "cf-cache-status": "DYNAMIC",
-                      "age": "0"
-                    }
-                  },
-                  "finding": {
-                    "outcome": "negative",
-                    "summary": "/.well-known/mcp/server-cards.json returned 404"
                   }
                 },
                 {
@@ -1408,7 +1386,7 @@
                     "statusText": "Not Found",
                     "headers": {
                       "content-type": "text/html; charset=utf-8",
-                      "cf-ray": "a5b46368a81c9614-SEA",
+                      "cf-ray": "a5ee0ee9fcc728fe-MSP",
                       "cf-cache-status": "DYNAMIC",
                       "age": "0"
                     }
@@ -1416,6 +1394,28 @@
                   "finding": {
                     "outcome": "negative",
                     "summary": "/.well-known/mcp.json returned 404"
+                  }
+                },
+                {
+                  "action": "fetch",
+                  "label": "GET /.well-known/mcp/server-cards.json",
+                  "request": {
+                    "url": "https://qte77.github.io/.well-known/mcp/server-cards.json",
+                    "method": "GET"
+                  },
+                  "response": {
+                    "status": 404,
+                    "statusText": "Not Found",
+                    "headers": {
+                      "content-type": "text/html; charset=utf-8",
+                      "cf-ray": "a5ee0ee9eca928fe-MSP",
+                      "cf-cache-status": "DYNAMIC",
+                      "age": "0"
+                    }
+                  },
+                  "finding": {
+                    "outcome": "negative",
+                    "summary": "/.well-known/mcp/server-cards.json returned 404"
                   }
                 },
                 {
@@ -1427,7 +1427,7 @@
                   }
                 }
               ],
-              "durationMs": 122
+              "durationMs": 102
             },
             "a2aAgentCard": {
               "status": "pass",
@@ -1478,7 +1478,7 @@
                     "statusText": "OK",
                     "headers": {
                       "content-type": "application/json; charset=utf-8",
-                      "cf-ray": "a5b46368c8409614-SEA",
+                      "cf-ray": "a5ee0eea0ce928fe-MSP",
                       "cf-cache-status": "DYNAMIC",
                       "age": "0"
                     },
@@ -1514,7 +1514,7 @@
                   }
                 }
               ],
-              "durationMs": 66
+              "durationMs": 266
             },
             "agentSkills": {
               "status": "fail",
@@ -1535,7 +1535,7 @@
                     "statusText": "Not Found",
                     "headers": {
                       "content-type": "text/html; charset=utf-8",
-                      "cf-ray": "a5b46368c8579614-SEA",
+                      "cf-ray": "a5ee0eea0cef28fe-MSP",
                       "cf-cache-status": "DYNAMIC",
                       "age": "0"
                     }
@@ -1557,7 +1557,7 @@
                     "statusText": "Not Found",
                     "headers": {
                       "content-type": "text/html; charset=utf-8",
-                      "cf-ray": "a5b4636949729614-SEA",
+                      "cf-ray": "a5ee0eeb587228fe-MSP",
                       "cf-cache-status": "DYNAMIC",
                       "age": "0"
                     }
@@ -1576,7 +1576,7 @@
                   }
                 }
               ],
-              "durationMs": 217
+              "durationMs": 312
             },
             "webMcp": {
               "status": "fail",
@@ -1622,7 +1622,7 @@
                   }
                 }
               ],
-              "durationMs": 4632
+              "durationMs": 4326
             },
             "ard": {
               "status": "fail",
@@ -1662,7 +1662,7 @@
                     "statusText": "Not Found",
                     "headers": {
                       "content-type": "text/html; charset=utf-8",
-                      "cf-ray": "a5b463685f929614-SEA",
+                      "cf-ray": "a5ee0ee99b8f28fe-MSP",
                       "cf-cache-status": "DYNAMIC",
                       "age": "0"
                     }
@@ -1688,7 +1688,7 @@
                     "headers": {
                       "content-type": "application/dns-json"
                     },
-                    "bodyPreview": "{\"Status\":0,\"TC\":false,\"RD\":true,\"RA\":true,\"AD\":false,\"CD\":false,\"Question\":[{\"name\":\"_catalog._agents.qte77.github.io\",\"type\":16}],\"Authority\":[{\"name\":\"github.io\",\"type\":6,\"TTL\":900,\"data\":\"ns-1622.awsdns-10.co.uk. awsdns-hostmaster.amazon.com. 1 7200 900 1209600 86400\"}]}"
+                    "bodyPreview": "{\"Status\":0,\"TC\":false,\"RD\":true,\"RA\":true,\"AD\":false,\"CD\":false,\"Question\":[{\"name\":\"_catalog._agents.qte77.github.io\",\"type\":16}],\"Authority\":[{\"name\":\"github.io\",\"type\":6,\"TTL\":3600,\"data\":\"dns1.p05.nsone.net. hostmaster.nsone.net. 1647625169 43200 7200 1209600 3600\"}]}"
                   },
                   "finding": {
                     "outcome": "neutral",
@@ -1731,7 +1731,7 @@
                 "discoveryMechanisms": [],
                 "searchEndpoints": []
               },
-              "durationMs": 59
+              "durationMs": 43
             },
             "personalAgentProtocol": {
               "status": "fail",
@@ -1759,7 +1759,7 @@
                     "statusText": "Not Found",
                     "headers": {
                       "content-type": "text/html; charset=utf-8",
-                      "cf-ray": "a5b46367febb9614-SEA",
+                      "cf-ray": "a5ee0ee92a9528fe-MSP",
                       "cf-cache-status": "DYNAMIC",
                       "age": "0"
                     }
@@ -1774,7 +1774,7 @@
                   }
                 }
               ],
-              "durationMs": 121
+              "durationMs": 76
             }
           },
           "commerce": {
@@ -1803,7 +1803,7 @@
                     "statusText": "OK",
                     "headers": {
                       "content-type": "text/html; charset=utf-8",
-                      "cf-ray": "a5b46368f8bc9614-SEA",
+                      "cf-ray": "a5ee0eeadf3a28fe-MSP",
                       "cf-cache-status": "DYNAMIC",
                       "age": "0"
                     }
@@ -1825,7 +1825,7 @@
                     "statusText": "Not Found",
                     "headers": {
                       "content-type": "text/html; charset=utf-8",
-                      "cf-ray": "a5b4636908d39614-SEA",
+                      "cf-ray": "a5ee0eeaef5b28fe-MSP",
                       "cf-cache-status": "DYNAMIC",
                       "age": "0"
                     }
@@ -1847,7 +1847,7 @@
                     "statusText": "Not Found",
                     "headers": {
                       "content-type": "text/html; charset=utf-8",
-                      "cf-ray": "a5b4636908e59614-SEA",
+                      "cf-ray": "a5ee0eeb485028fe-MSP",
                       "cf-cache-status": "DYNAMIC",
                       "age": "0"
                     }
@@ -1869,7 +1869,7 @@
                     "statusText": "OK",
                     "headers": {
                       "content-type": "application/json",
-                      "cf-ray": "a5b46368e8869614-SEA",
+                      "cf-ray": "a5ee0eea3d7628fe-MSP",
                       "cf-cache-status": "DYNAMIC"
                     }
                   }
@@ -1895,7 +1895,7 @@
                   }
                 }
               ],
-              "durationMs": 417
+              "durationMs": 512
             },
             "mpp": {
               "status": "neutral",
@@ -1922,7 +1922,7 @@
                     "statusText": "OK",
                     "headers": {
                       "content-type": "application/json; charset=utf-8",
-                      "cf-ray": "a5b4636929329614-SEA",
+                      "cf-ray": "a5ee0eeb485728fe-MSP",
                       "cf-cache-status": "DYNAMIC",
                       "age": "0"
                     }
@@ -1941,7 +1941,7 @@
                   }
                 }
               ],
-              "durationMs": 126
+              "durationMs": 319
             },
             "ucp": {
               "status": "neutral",
@@ -1968,7 +1968,7 @@
                     "statusText": "Not Found",
                     "headers": {
                       "content-type": "text/html; charset=utf-8",
-                      "cf-ray": "a5b46368d8799614-SEA",
+                      "cf-ray": "a5ee0eea3d6f28fe-MSP",
                       "cf-cache-status": "DYNAMIC",
                       "age": "0"
                     }
@@ -1987,7 +1987,7 @@
                   }
                 }
               ],
-              "durationMs": 146
+              "durationMs": 270
             },
             "acp": {
               "status": "neutral",
@@ -2014,7 +2014,7 @@
                     "statusText": "Not Found",
                     "headers": {
                       "content-type": "text/html; charset=utf-8",
-                      "cf-ray": "a5b4636939449614-SEA",
+                      "cf-ray": "a5ee0eeb485e28fe-MSP",
                       "cf-cache-status": "DYNAMIC",
                       "age": "0"
                     }
@@ -2033,7 +2033,7 @@
                   }
                 }
               ],
-              "durationMs": 196
+              "durationMs": 312
             },
             "ap2": {
               "status": "neutral",
@@ -2096,24 +2096,15 @@
       "id": "mcpA2aProbe.a2a-agent-card",
       "category": "Agent-to-Agent",
       "source": "mcpA2aProbe",
-      "status": "warn",
-      "summary": "https://agenthud-api.abizz.dev/a2a speaks JSON-RPC 2.0 but SendMessage returned an error response",
-      "remediation": "Investigate the SendMessage error at https://agenthud-api.abizz.dev/a2a — the endpoint responds correctly to JSON-RPC but this probe call did not succeed.",
+      "status": "pass",
+      "summary": "Live SendMessage round trip against https://agenthud-api.abizz.dev/a2a succeeded",
       "evidence": {
         "endpoint": "https://agenthud-api.abizz.dev/a2a",
-        "httpStatus": 200,
-        "body": {
-          "jsonrpc": "2.0",
-          "id": "agent-readiness-kit-probe",
-          "error": {
-            "code": -32601,
-            "message": "Method not found: SendMessage"
-          }
-        }
+        "httpStatus": 200
       }
     }
   ],
-  "score": 41,
+  "score": 47,
   "grade": "D",
   "oraAiChecks": {
     "mapped": 6,
@@ -2160,10 +2151,10 @@
       },
       {
         "id": "brand-search-accuracy",
-        "status": "fail",
-        "score": 0,
+        "status": "pass",
+        "score": 3,
         "maxScore": 3,
-        "details": "qte77.github.io was not in the top 10 for \"Recap on ML — AI Agents & Dev Tooling by qte77 Claude Code\" or \"Recap on ML — AI Agents & Dev Tooling by qte77 lab automation\"",
+        "details": "qte77.github.io ranks #1 for \"Recap on ML — AI Agents & Dev Tooling by qte77 lab automation\" but is not in the top 10 for \"Recap on ML — AI Agents & Dev Tooling by qte77 Claude Code\"",
         "recommendation": "Make sure your own domain ranks in the top results when people search your brand together with your main product (for example \"Acme payments API\"). Ora first reads product terms from your homepage's JSON-LD keywords or knowsAbout, or its meta keywords tag. If none qualifies, it checks the main service's serviceType in JSON-LD, then a short product phrase in the page title. If those do not qualify, it checks product names in the homepage business's JSON-LD offers. Use clear product terms that also appear on the page. If no term qualifies, Ora searches your brand name alone. If your domain does not rank, your brand may be too generic, conflict with a more established term, or not yet indexed. Strengthen it by describing your main product clearly in your homepage title and headings, earning press mentions that link to your domain, and avoiding redirect chains that mask your main domain in search results."
       },
       {
@@ -2199,11 +2190,11 @@
       },
       {
         "id": "agent-plugins-repo",
-        "status": "fail",
+        "status": "warning",
         "score": 0,
         "maxScore": 1,
-        "details": "No Agent Plugins manifest (plugin.json) found in discovered repos",
-        "recommendation": "Bundle your agent skills and MCP servers as an Agent Plugin: add a plugin.json manifest with the agent-plugins.org $schema and a name. See https://agent-plugins.org/specification"
+        "details": "Plugin manifest found without the Agent Plugins $schema identifier: github.com/qte77/claude-code-plugins/blob/HEAD/plugins/python-dev/.claude-plugin/plugin.json (listed in .claude-plugin/marketplace.json)",
+        "recommendation": "Declare conformance by adding \"$schema\": \"https://agent-plugins.org/schemas/1.0.0/plugin.schema.json\" to plugin.json"
       },
       {
         "id": "registry-branding",
@@ -2274,7 +2265,7 @@
         "status": "pass",
         "score": 1,
         "maxScore": 1,
-        "details": "60 official skills published on skills.sh - 137 total installs (skills.sh/qte77)",
+        "details": "60 official skills published on skills.sh - 139 total installs (skills.sh/qte77)",
         "recommendation": "Publish agent skills on skills.sh so AI agents can discover your product's capabilities. Create a SKILL.md in your GitHub repo and register it with 'npx skills add'. See skills.sh/docs."
       },
       {
@@ -2314,7 +2305,7 @@
         "status": "fail",
         "score": 0,
         "maxScore": 2,
-        "details": "Homepage does not support the .md suffix. Probed https://qte77.github.io/index.md and it did not return markdown (expected text/markdown content-type or a heading-led non-HTML body). Serve /index.md so agents can fetch one canonical markdown URL for the site root.",
+        "details": "Homepage does not support the .md suffix. Probed https://qte77.github.io/index.md and it did not return markdown (expected a text/markdown content-type or a non-HTML body with markdown structure). Serve /index.md so agents can fetch one canonical markdown URL for the site root.",
         "recommendation": "Let agents fetch markdown by appending .md to page URLs. Required for any credit: serve a markdown homepage at /index.md. For full credit (2/2): also serve a .md twin for each content page (e.g. /docs/auth -> /docs/auth.md). Content-Type should be text/markdown and the body should start with a top-level heading (not HTML)."
       },
       {
@@ -2378,7 +2369,7 @@
         "status": "warning",
         "score": 1,
         "maxScore": 2,
-        "details": "Skills.sh presence exists but limited - 137 installs (goal: 200+)",
+        "details": "Skills.sh presence exists but limited - 139 installs (goal: 200+)",
         "recommendation": "Expand your skills.sh presence with multiple skill repos covering different use cases. Add descriptive skill names, clear SKILL.md files, and organize by capability area."
       },
       {
@@ -2386,8 +2377,8 @@
         "status": "warning",
         "score": 0.5,
         "maxScore": 1,
-        "details": "Entity linking to github.com  - add more authority profiles (Wikipedia, Wikidata, LinkedIn, GitHub)",
-        "recommendation": "Add sameAs links in your JSON-LD structured data pointing to your Wikipedia page, Wikidata entry, GitHub org, and social profiles. This helps AI disambiguate your brand from similarly named entities."
+        "details": "Entity linking to github.com  - add more authority profiles (Wikipedia, Wikidata, LinkedIn, Crunchbase or GitHub)",
+        "recommendation": "Add sameAs links in your JSON-LD structured data pointing to your profiles on Wikipedia, Wikidata, LinkedIn, Crunchbase or GitHub. This helps AI disambiguate your brand from similarly named entities."
       },
       {
         "id": "metadata-completeness",
@@ -2602,7 +2593,7 @@
         "status": "warning",
         "score": 1,
         "maxScore": 2,
-        "details": "Verified live: GET https://agenthud-api.abizz.dev/.well-known/agent-card.json answered 200 without credentials (zero-auth access)",
+        "details": "Onboarding signals described but not verified live: zero-auth access",
         "recommendation": "Offer a free tier or trial, self-serve API key generation, and a sandbox environment. Agents can't fill out 'contact sales' forms."
       },
       {
@@ -2650,7 +2641,7 @@
         "status": "fail",
         "score": 0,
         "maxScore": 1,
-        "details": "No 401 with WWW-Authenticate: Bearer resource_metadata=... found. Probed [https://qte77.github.io/api, https://qte77.github.io/api/v1, https://qte77.github.io/v1, https://qte77.github.io/v2, https://qte77.github.io/agent/identity, https://qte77.github.io/agent/auth, https://qte77.github.io/openapi.json, https://api.qte77.github.io/api, https://api.qte77.github.io/api/v1, https://api.qte77.github.io/v1, https://api.qte77.github.io/v2, https://api.qte77.github.io/agent/identity, https://api.qte77.github.io/agent/auth].",
+        "details": "No 401 with WWW-Authenticate: Bearer resource_metadata=... found. Probed [https://qte77.github.io/agenthud-agui-a2ui/, https://qte77.github.io/openapi.json, https://api.qte77.github.io/].",
         "recommendation": "Return a 401 carrying a spec-shaped `WWW-Authenticate: Bearer resource_metadata=\"<your protected-resource metadata URL>\"` header on your API's primary entry points, so an agent learns your auth requirements from one request instead of hunting for the well-known document. Point the metadata URL at /.well-known/oauth-protected-resource on the host that serves the API. Spec: https://github.com/workos/auth.md."
       },
       {
@@ -2683,7 +2674,7 @@
         "score": 0,
         "maxScore": 2,
         "details": "Not published",
-        "recommendation": "If you offer sign-in, list every scope an agent can request in scopes_supported, in your issuer's metadata, the protected resource metadata of your domain, or both. Describe each scope you offer agents, in auth.scopes (scope name to description) or in the OAuth security scheme of an OpenAPI document you list, so an agent can ask for only what a task needs. auth.scope_hints is optional; each entry you add has a changes value and a boolean personal_data. If you offer Mediated Sign-In, list it as mediated-sign-in with a version 1 entry holding its fields (each with name, label, and secret) and scopes, add https://personalagentprotocol.org/grant/mediated-sign-in to your issuer's grant_types_supported, and leave auth.disabled unset. Name the protocol's own extensions by their plain name and your own with a prefix from your domain. List each extension as a list with an entry per version you support: operations at version 3 and browser-control at version 1. An operations entry with an endpoint for website operations needs web.browser_session_endpoint, and browser-control is listed with it. Set web.disabled only with agent or apis and no browser_session_endpoint, and web.unscoped only with one. If you list web.browser_session_endpoint and offer sign-in, include poppy:browser-sign-in in scopes_supported, in your issuer's metadata or in the protected resource metadata of your domain (agents read both). A file that still declares 0.3 lists each extension as one object with a version, and operations at version 2. Spec: https://personalagentprotocol.org/docs/1.0/spec"
+        "recommendation": "If you offer sign-in, list every scope an agent can request in scopes_supported, in your issuer's metadata, the protected resource metadata of your domain, or both. Describe each scope you offer agents, in auth.scopes (scope name to description) or in the OAuth security scheme of an OpenAPI document you list, so an agent can ask for only what a task needs. auth.scope_hints is optional; each entry you add has a changes value and a boolean personal_data. Mediated Sign-In is a transitional step: offer it only until you can add Direct or Device Sign-In, since the protocol plans to retire it on March 17, 2027. If you offer it, list it as mediated-sign-in with a version 1 entry holding its fields (each with name, label, and secret) and scopes, add https://personalagentprotocol.org/grant/mediated-sign-in to your issuer's grant_types_supported, and leave auth.disabled unset. Name the protocol's own extensions by their plain name and your own with a prefix from your domain. List each extension as a list with an entry per version you support: operations at version 3 and browser-control at version 1. An operations entry with an endpoint for website operations needs web.browser_session_endpoint, and browser-control is listed with it. Set web.disabled only with agent or apis and no browser_session_endpoint, and web.unscoped only with one. If you list web.browser_session_endpoint and offer sign-in, include poppy:browser-sign-in in scopes_supported, in your issuer's metadata or in the protected resource metadata of your domain (agents read both). Spec: https://personalagentprotocol.org/docs/1.0/spec"
       },
       {
         "id": "pap-interfaces",
@@ -2691,7 +2682,7 @@
         "score": 0,
         "maxScore": 2,
         "details": "Not published",
-        "recommendation": "Complete every interface entry in poppy.json: each agent.protocols entry needs a type, an https:// endpoint and a description of what your agent there can help with, and each apis entry needs a type, a url, and a description. Set access to signed_in only when you have an issuer. Point OpenAPI entries at a document that parses as OpenAPI 3.0 or 3.1. An MCP server that offers account access publishes RFC 9728 protected resource metadata at its own well-known URL (or at the resource_metadata URL its 401 names), whose resource is the server's url and whose authorization_servers includes your OAuth issuer. To tell agents which tasks you do not offer, which skills you publish and where to send feedback, list tasks.endpoint, an https URL on a public host that answers per Session. A file that still declares 0.3 lists excluded_tasks.url instead, a JSON document whose tasks list gives each task a short phrase; an alternative carries instructions or references, and a reference of type openapi or mcp names an API the file lists. Spec: https://personalagentprotocol.org/docs/1.0/spec"
+        "recommendation": "Complete every interface entry in poppy.json: each agent.protocols entry needs a type, an https:// endpoint and a description of what your agent there can help with, and each apis entry needs a type, a url, and a description. If agent.protocols lists a ucp entry, its endpoint is your UCP profile at https://{your domain}/.well-known/ucp, on the host that serves poppy.json and with no redirect: list the UCP extension with a version 1 entry in extensions, and offer dev.ucp.common.ask in the profile's capabilities. Set access to signed_in only when you have an issuer. Point OpenAPI entries at a document that parses as OpenAPI 3.0 or 3.1. An MCP server that offers account access publishes RFC 9728 protected resource metadata at its own well-known URL (or at the resource_metadata URL its 401 names), whose resource is the server's url and whose authorization_servers includes your OAuth issuer. To tell agents which tasks you do not offer, which skills you publish and where to send feedback, list tasks.endpoint, an https URL on a public host that answers per Session. Spec: https://personalagentprotocol.org/docs/1.0/spec"
       },
       {
         "id": "pap-endpoint-enforcement",
@@ -2699,7 +2690,7 @@
         "score": 0,
         "maxScore": 2,
         "details": "Not published",
-        "recommendation": "Reject agents that send no credentials in the shape PAP defines. Your token endpoint answers a refresh_token grant carrying a refresh token you never issued with invalid_grant or invalid_client, never unsupported_grant_type, since every issuer supports that grant. Your conversation endpoint answers a request without the Poppy-Session header with 400 and `{\"error\": \"invalid_session\"}`. An MCP server that needs a token answers a request without one with 401 and a challenge carrying resource_metadata, the URL of its RFC 9728 metadata. Your browser_session_endpoint page, loaded with a plain GET, is an HTML form carrying a one-time code, sets a cookie tying the code to that browser with SameSite Strict or Lax and a __Host- name, so other hosts on your domain cannot set it, and sends Cache-Control: no-store, frame-ancestors 'none' or X-Frame-Options: DENY, and a Cross-Origin-Opener-Policy that severs the opener. That endpoint answers a form submitting a code it never issued with an error status and no cookie, and {browser_session_endpoint}/authorize answers a code sent without a Poppy-Session header with 400 invalid_session. If you list a website operations endpoint (operations version 3), it answers a request without the Poppy-Session header with 400 invalid_session too. When you rate-limit a request, answer 429 with a Retry-After header. Answer the token, revocation and device authorization endpoints, your APIs, {browser_session_endpoint}/authorize, and the conversation, tasks, feedback and extension endpoints at the address you publish, without redirects, since an agent sends no token, Session JWT, assertion or credentials to the URL one redirects to. A file that still declares Draft 0.1 or 0.2 is graded by that draft: the token endpoint rejects a junk JWT bearer grant with invalid_client (401) or invalid_grant (400), and the conversation, operations and feedback endpoints answer 401 with a `WWW-Authenticate: DPoP` challenge. Spec: https://personalagentprotocol.org/docs/1.0/spec"
+        "recommendation": "Reject agents that send no credentials in the shape PAP defines. Your token endpoint answers a refresh_token grant carrying a refresh token you never issued with invalid_grant or invalid_client, never unsupported_grant_type, since every issuer supports that grant. Your conversation endpoint answers a request without the Poppy-Session header with 400 and `{\"error\": \"invalid_session\"}`. An MCP server that needs a token answers a request without one with 401 and a challenge carrying resource_metadata, the URL of its RFC 9728 metadata. Your browser_session_endpoint page, loaded with a plain GET, is an HTML form carrying a one-time code, sets a cookie tying the code to that browser with SameSite Strict or Lax and a __Host- name, so other hosts on your domain cannot set it, and sends Cache-Control: no-store, frame-ancestors 'none' or X-Frame-Options: DENY, and a Cross-Origin-Opener-Policy that severs the opener. That endpoint answers a form submitting a code it never issued with an error status and no cookie, and {browser_session_endpoint}/authorize answers a code sent without a Poppy-Session header with 400 invalid_session. If you list a website operations endpoint (operations version 3), it answers a request without the Poppy-Session header with 400 invalid_session too. When you rate-limit a request, answer 429 with a Retry-After header. Answer the token, revocation and device authorization endpoints, your APIs, {browser_session_endpoint}/authorize, and the conversation, tasks, feedback and extension endpoints at the address you publish, without redirects, since an agent sends no token, Session JWT, assertion or credentials to the URL one redirects to. Spec: https://personalagentprotocol.org/docs/1.0/spec"
       },
       {
         "id": "pap-cross-protocol",
@@ -2707,7 +2698,7 @@
         "score": 0,
         "maxScore": 2,
         "details": "Not published",
-        "recommendation": "Keep poppy.json consistent with your other agent surfaces: list the same MCP server and organization as your ARD catalog (/.well-known/ard.json), and, when one issuer serves both PAP and auth.md, list every grant both protocols send to its token endpoint in grant_types_supported. Publish a poppy.json on every domain your issuer lists in protected_resources, naming no other issuer, and point every 401 at the same resource_metadata URL. A file declaring 0.1 or 0.2 also names the OAuth issuer that your protected resource metadata lists. Spec: https://personalagentprotocol.org/docs/1.0/spec"
+        "recommendation": "Keep poppy.json consistent with your other agent surfaces: list the same MCP server and organization as your ARD catalog (/.well-known/ard.json), and, when one issuer serves both PAP and auth.md, list every grant both protocols send to its token endpoint in grant_types_supported. Publish a poppy.json on every domain your issuer lists in protected_resources, naming no other issuer, and point every 401 at the same resource_metadata URL. Spec: https://personalagentprotocol.org/docs/1.0/spec"
       },
       {
         "id": "mcp-server",
@@ -2998,7 +2989,7 @@
         "status": "warning",
         "score": 1,
         "maxScore": 2,
-        "details": "The nonexistent path https://qte77.github.io/__ora-404-probe-uphjurwo correctly returns HTTP 404. Partial credit: no Markdown error body was detected.",
+        "details": "The nonexistent path https://qte77.github.io/__ora-404-probe-najpdwql correctly returns HTTP 404. Partial credit: no Markdown error body was detected.",
         "recommendation": "Keep the correct HTTP 404 status. The remaining requirement is a Markdown error body when agents request Accept: text/markdown. Include at least 20 characters explaining the error and a link to your docs, sitemap, or llms.txt. Verify with `curl -sS -L -i -H 'Accept: text/markdown' https://yourdomain.com/some-path-that-does-not-exist`. Check both the final 404 status and the Markdown body with Content-Type: text/markdown. Checking the status alone does not verify the missing requirement."
       },
       {
